@@ -4,11 +4,17 @@ class RegularExpression {
     public value: string;
 
     constructor(value: string) {
-        this.value = value
+        const regex = this.augmentRegEx(value)
+        this.value = regex
     }
-
+ 
     public convertToDFA() {
         
+    }
+
+    private augmentRegEx(regex: string): string {
+        let augmentedRegEx = regex
+        return augmentedRegEx
     }
 
     private convertToNFA() {

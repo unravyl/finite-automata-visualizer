@@ -12,7 +12,9 @@ export default function Page() {
 
   const handleGenerateSyntaxTreeButton = (regex_value: string) => {
     const regex = new RegularExpression(regex_value)
+    console.log(regex.value)
     const tree = regex.generateSyntaxTree()
+    console.log(tree)
   }
 
   return <div>
