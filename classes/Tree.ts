@@ -76,3 +76,5 @@ class Tree {
         return undefined
     }
 }
+
+export default Tree
