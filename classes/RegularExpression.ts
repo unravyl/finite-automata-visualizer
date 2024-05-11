@@ -1,19 +1,21 @@
 import regjsparser from 'regjsparser'
 
 class RegularExpression {
-    public value: string;
+    private augmentedRegEx: string;
+    public regExString: string
 
-    constructor(value: string) {
-        const regex = this.augmentRegEx(value)
-        this.value = regex
+    constructor(inputString: string) {
+        const augmentedRegEx = this.augmentRegEx(inputString)
+        this.augmentedRegEx = augmentedRegEx
+        this.regExString = inputString
     }
  
     public convertToDFA() {
         
     }
 
-    private augmentRegEx(regex: string): string {
-        let augmentedRegEx = regex
+    private augmentRegEx(inputString: string): string {
+        let augmentedRegEx = inputString
         return augmentedRegEx
     }
 
@@ -21,9 +23,9 @@ class RegularExpression {
 
     }
 
-    public generateSyntaxTree() {
-        const syntaxTree = regjsparser.parse(this.value,'')
-        return syntaxTree
+    public parseAugmentedRegEx() {
+        const parsedAugmentedRegEx = regjsparser.parse(this.augmentedRegEx,'')
+        return parsedAugmentedRegEx
     }
 
 }

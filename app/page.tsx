@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react'
 import RegularExpression from '../classes/RegularExpression'
+import SyntaxTree from '../classes/SyntaxTree'
 
 export default function Page() {
   const [regex, setRegex] = useState<string>('')
@@ -10,11 +11,9 @@ export default function Page() {
     setRegex(e.target.value)
   }
 
-  const handleGenerateSyntaxTreeButton = (regex_value: string) => {
-    const regex = new RegularExpression(regex_value)
-    console.log(regex.value)
-    const tree = regex.generateSyntaxTree()
-    console.log(tree)
+  const handleGenerateSyntaxTreeButton = (inputString: string) => {
+    const syntaxTree = new SyntaxTree(inputString)
+    console.log(syntaxTree.generateSyntaxTree())
   }
 
   return <div>
