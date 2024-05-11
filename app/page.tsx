@@ -1,5 +1,22 @@
-import React from 'react'
+'use client'
+
+import React, { useState } from 'react'
+import RegularExpression from '../classes/RegularExpression'
 
 export default function Page() {
-    return <h1>Hello, Next.js!</h1>
+  const [regex, setRegex] = useState<string>('')
+
+  const handleRegexInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setRegex(e.target.value)
+  }
+
+  const handleGenerateSyntaxTreeButton = (regex_value: string) => {
+    const regex = new RegularExpression(regex_value)
+    const tree = regex.generateSyntaxTree()
+  }
+
+  return <div>
+    <input type="text" value={regex} onChange={e => handleRegexInputChange(e)}/>
+    <button onClick={() => handleGenerateSyntaxTreeButton(regex)}>Generate</button>
+  </div>
   }
