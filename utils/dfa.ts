@@ -1,6 +1,6 @@
 import { Node } from "./ast";
 
-export function computeFunctions(node: Node) {
+export const computeFunctions = (node: Node) => {
     switch (node.kind) {
       case "Symbol":
         node.nullable = false;
@@ -37,10 +37,10 @@ export function computeFunctions(node: Node) {
     }
   }
 
-export function calculateFollowpos(root: Node): Map<number, number[]> {
+export const calculateFollowpos = (root: Node): Map<number, number[]> => {
     const followpos = new Map<number, number[]>();
   
-    function traverse(node: Node) {
+    const traverse = (node: Node) => {
       switch (node.kind) {
         case "Concat":
           // Rule 1: If A.B then lastpos(A) is in followpos(B)
@@ -67,7 +67,7 @@ export function calculateFollowpos(root: Node): Map<number, number[]> {
       }
     }
   
-    function addFollowpos(id: number, set: number[]) {
+    const addFollowpos = (id: number, set: number[]) => {
       if (!followpos.has(id)) {
         followpos.set(id, []);
       }
