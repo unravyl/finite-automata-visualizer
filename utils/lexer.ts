@@ -4,7 +4,8 @@ export enum TokenType {
     Kleene,
     Concat,
     OpenParen,
-    CloseParen
+    CloseParen,
+    EOL
 }
 
 export interface Token {
@@ -36,8 +37,10 @@ export const tokenize = (string: string): Token[] => {
             tokens.push(token(src.shift(), TokenType.Kleene))
         } else if (src[0] == ".") {
             tokens.push(token(src.shift(), TokenType.Concat))
-        } else if (isLetter(src[0]) || src[0] == "#") {
+        } else if (isLetter(src[0])) {
             tokens.push(token(src.shift(), TokenType.Symbol))
+        } else if (src[0] == "#") {
+            tokens.push(token(src.shift(), TokenType.EOL))
         }
     }
 
