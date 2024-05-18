@@ -21,6 +21,17 @@ export default class Parser {
         return prev
     }
 
+    private expect = (type: TokenType, err: any) => {
+        const prev = this.tokens.shift() as Token
+
+        if (!prev || prev.type != type) {
+            console.error("Parser Error:\n", err, prev, "Expecting: ", type)
+            process.exit()
+        }
+
+        return prev
+    }
+
     public produceAST = (str:string) => {
         this.tokens = tokenize(str)
 
@@ -86,8 +97,15 @@ export default class Parser {
                 return { kind: "Or", operator: this.eat().value} as Or
             case TokenType.Kleene:
                 return { kind: "Kleene", operator: this.eat().value} as Kleene
+            case TokenType.OpenParen: {
+                this.eat()
+                const value = this.parseExpr()
+                this.expect(TokenType.CloseParen, "Unexpected token found inside parenthesized expression. Expected closing parenthesis.")
+                return value
+            }
             default:
-                return {} as Node
+                console.error("Unexpected token found during parsing!", this.at())
+                process.exit()
         }
     }
 }
