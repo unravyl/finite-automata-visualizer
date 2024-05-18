@@ -5,7 +5,6 @@ export interface Node {
     nullable: any
     firstpos: any
     lastpos: any
-    followpos: any
     value: string
     left: Node | null
     right: Node | null
