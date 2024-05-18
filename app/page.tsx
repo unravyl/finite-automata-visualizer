@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useState } from 'react'
-import RegularExpression from '../classes/RegularExpression'
 import SyntaxTree from '../classes/SyntaxTree'
 
 export default function Page() {
