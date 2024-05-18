@@ -1,22 +1,34 @@
 'use client'
 
 import React, { useState } from 'react'
-import SyntaxTree from '../classes/SyntaxTree'
+import Parser from '../classes/Parser'
+import { computeFunctions, calculateFollowpos } from '../utils/dfa'
 
 export default function Page() {
   const [regex, setRegex] = useState<string>('')
+  const [followPos, setFollowPos] = useState(new Map)
 
   const handleRegexInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRegex(e.target.value)
   }
 
-  const handleGenerateSyntaxTreeButton = (inputString: string) => {
-    const syntaxTree = new SyntaxTree(inputString)
-    console.log(syntaxTree.generateSyntaxTree())
+  const generateDFA = (inputString: string) => {
+    const parser = new Parser()
+    const ast = parser.produceAST(inputString)
+    computeFunctions(ast.body)
+    setFollowPos(calculateFollowpos(ast.body))
   }
 
   return <div>
     <input type="text" value={regex} onChange={e => handleRegexInputChange(e)}/>
-    <button onClick={() => handleGenerateSyntaxTreeButton(regex)}>Generate</button>
+    <button onClick={() => generateDFA(regex)}>Generate</button>
+    <h2>Nodes:</h2>
+      <ul>
+        {Array.from(followPos).map(([key, values]) => (
+          <li key={key}>
+            {key}: {values.join(", ")}
+          </li>
+        ))}
+      </ul>
   </div>
   }
