@@ -14,10 +14,8 @@ const repl = async () => {
             process.exit()
         }
 
-        console.log(input)
-
         const ast = parser.produceAST(input)
-        console.log(ast)
+        console.log(JSON.stringify(ast))
     }
 }
 

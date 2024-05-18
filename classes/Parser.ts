@@ -11,7 +11,9 @@ export default class Parser {
     }
 
     private at = () => {
-        return this.tokens[0] as Token
+        if (this.tokens[0]){
+            return this.tokens[0] as Token
+        }
     }
 
     private eat = () => {
@@ -21,7 +23,6 @@ export default class Parser {
 
     public produceAST = (str:string) => {
         this.tokens = tokenize(str)
-        console.log(this.tokens)
 
         const tree = {
             body: []
@@ -36,7 +37,41 @@ export default class Parser {
     }
 
     private parseExpr = () => {
-        return this.parsePrimaryExpression()
+        return this.parseOrExpr()
+    }
+
+    private parseOrExpr = () => {
+        let left = this.parseConcatExpr()
+
+        while (this.at() && this.at().value == "|") {
+            const operator = this.eat().value
+            const right = this.parseConcatExpr()
+            left = {
+                kind: "Or",
+                left,
+                right,
+                operator
+            } as Or
+        }
+
+        return left
+    }
+
+    private parseConcatExpr = () => {
+        let left = this.parsePrimaryExpression()
+
+        while (this.at() && this.at().value == ".") {
+            const operator = this.eat().value
+            const right = this.parsePrimaryExpression()
+            left = {
+                kind: "Concat",
+                left,
+                right,
+                operator
+            } as Concat
+        }
+
+        return left
     }
 
     private parsePrimaryExpression = () => {

@@ -13,18 +13,18 @@ export interface BinaryExpr extends Expr {
 
 export interface Concat extends BinaryExpr {
     kind: "Concat"
-    operator: "."
+    operator: string
 }
 
 export interface Or extends BinaryExpr {
     kind: "Or"
-    operator: "|"
+    operator: string
 }
 
 export interface Kleene extends Node {
     kind: "Kleene"
     body: Expr | null
-    operator: "*"
+    operator: string
 }
 
 export interface Symbol extends Node {
