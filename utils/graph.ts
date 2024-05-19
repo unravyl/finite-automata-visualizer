@@ -1,11 +1,11 @@
 import { FollowposResult } from './dfa';
 
-interface NodeInterface {
+export interface NodeInterface {
     id: number;
     values: number[];
 }
 
-interface LinkInterface {
+export interface LinkInterface {
     source: number;
     target: number;
     transition: string;
@@ -78,7 +78,7 @@ const generateNode = (id, values) => {
     return { id, values };
 };
 
-export const generateDFA = (
+export const generateNodesAndLinks = (
     firstpos: number[],
     followpos: FollowposResult[]
 ) => {
