@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+}
+
+.side-panel {
+    .slide-enter {
+        transform: translateX(-100%);
+    }
+    .slide-enter-active {
+        transform: translateX(0);
+        transition:
+            transform 300ms,
+            opacity 300ms;
+    }
+    .slide-exit {
+        transform: translateX(0);
+    }
+    .slide-exit-active {
+        transform: translateX(-100%);
+        transition:
+            transform 300ms,
+            opacity 300ms;
+    }
+}
