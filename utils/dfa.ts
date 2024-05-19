@@ -97,5 +97,7 @@ export const calculateFollowpos = (root: Node): FollowposResult[] => {
 
     result.sort((a, b) => a.number - b.number);
 
+    result.push({ symbol: '#', followpos: [], number: result.length });
+
     return result;
 };

@@ -110,10 +110,6 @@ function SidePanel(props) {
         return inputDate.getDate() < today.getDate() - 7;
     });
 
-    console.log(inputsToday, 'today');
-    console.log(inputsSevenDays, 'seven days');
-    console.log(oldInputs, 'old inputs');
-
     return (
         <div className="side-panel">
             <CSSTransition
