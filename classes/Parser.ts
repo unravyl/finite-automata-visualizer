@@ -34,7 +34,8 @@ export default class Parser {
     };
 
     public produceAST = (str: string) => {
-        this.tokens = tokenize(str);
+        const augmentedStr = str.concat('.#');
+        this.tokens = tokenize(augmentedStr);
 
         const tree = {
             body: null,
