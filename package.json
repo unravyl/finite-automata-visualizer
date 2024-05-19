@@ -1,24 +1,25 @@
 {
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "@types/readline-sync": "^1.4.8",
-    "d3": "^7.9.0",
-    "next": "^14.2.3",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-flow": "^1.0.3",
-    "react-flow-renderer": "^10.3.17",
-    "readline-sync": "^1.4.10",
-    "regjsparser": "^0.10.0"
-  },
-  "devDependencies": {
-    "@types/node": "20.12.11",
-    "@types/react": "18.3.1",
-    "typescript": "5.4.5"
-  }
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "start": "next start",
+        "lint": "next lint"
+    },
+    "dependencies": {
+        "@types/readline-sync": "^1.4.8",
+        "d3": "^7.9.0",
+        "next": "^14.2.3",
+        "react": "^18.3.1",
+        "react-dom": "^18.3.1",
+        "react-flow": "^1.0.3",
+        "react-flow-renderer": "^10.3.17",
+        "readline-sync": "^1.4.10",
+        "regjsparser": "^0.10.0"
+    },
+    "devDependencies": {
+        "@types/node": "20.12.11",
+        "@types/react": "18.3.1",
+        "prettier": "3.2.5",
+        "typescript": "5.4.5"
+    }
 }
