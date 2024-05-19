@@ -20,9 +20,9 @@ const repl = async () => {
 
         console.log(JSON.stringify(ast));
 
-        const followPos = calculateFollowpos(ast.body);
+        const followpos = calculateFollowpos(ast.body);
 
-        console.log(followPos);
+        console.log(followpos);
     }
 };
 

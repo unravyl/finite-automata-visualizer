@@ -37,10 +37,18 @@ export const computeFunctions = (node: Node) => {
     }
 };
 
-export const calculateFollowpos = (root: Node): Map<number, number[]> => {
+interface FollowposResult {
+    symbol: string;
+    followpos: number[];
+    number: number;
+}
+
+export const calculateFollowpos = (root: Node): FollowposResult[] => {
     const followpos = new Map<number, number[]>();
+    const symbolMap = new Map<number, string>();
 
     const traverse = (node: Node) => {
+        symbolMap.set(node.id, node.value);
         switch (node.kind) {
             case 'Concat':
                 // Rule 1: If A.B then lastpos(A) is in followpos(B)
@@ -81,5 +89,13 @@ export const calculateFollowpos = (root: Node): Map<number, number[]> => {
         followpos.set(id, Array.from(new Set(set)));
     }
 
-    return followpos;
+    const result: FollowposResult[] = [];
+    for (const [id, set] of Array.from(followpos.entries())) {
+        const symbol = symbolMap.get(id);
+        result.push({ symbol, followpos: set, number: id }); // Add number field
+    }
+
+    result.sort((a, b) => a.number - b.number);
+
+    return result;
 };
