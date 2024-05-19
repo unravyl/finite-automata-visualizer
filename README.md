@@ -18,18 +18,6 @@
 
 ## Contributors
 
-<style>
-.photos {
-  display: inline-block;
-  position: relative;
-  width: 200px;
-  height: 200px;
-  overflow: hidden;
-  border-radius: 50%;
-}
-</style>
-<div class="photos">
-<a href="https://github.com/maxellmilay/finite-automata-visualizer/graphs/contributors"> 
+<a href="https://github.com/maxellmilay">
   <img src="https://contrib.rocks/image?repo=maxellmilay/finite-automata-visualizer" />
-</a> 
-</div>
+</a>
