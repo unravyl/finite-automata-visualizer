@@ -21,3 +21,15 @@
 <a href="https://github.com/maxellmilay">
   <img src="https://contrib.rocks/image?repo=maxellmilay/finite-automata-visualizer" />
 </a>
+
+<a href="https://github.com/cup-noodlehS">
+  <img src="https://contrib.rocks/image?repo=cup-noodlehS/CampGo" />
+</a>
+
+<a href="https://github.com/yunjin08">
+  <img src="https://contrib.rocks/image?repo=yunjin08/LearnAI-Prompts" />
+</a>
+
+<a href="https://github.com/jourdancatarina3">
+  <img src="https://contrib.rocks/image?repo=jourdancatarina3/admin-dashboard" />
+</a>
