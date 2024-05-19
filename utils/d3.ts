@@ -1,3 +1,5 @@
+import { FollowposResult } from './dfa';
+
 interface NodeInterface {
     id: number;
     values: number[];
@@ -25,47 +27,33 @@ const arraysEqual = (a, b) => {
 
 export const generateNodeAndLinks = (
     firstpos: number[],
-    followpos: Map<number, number[]>
+    followpos: FollowposResult[]
 ) => {
     let nodes: NodeInterface[] = [{ id: 1, values: firstpos }];
     let links: LinkInterface[] = [];
 
     let nodeCount = 2;
 
-    // followpos.forEach((value, key) => {
-    //     let isPresent = false;
+    let currentIndex = 0;
 
-    //     nodes.forEach((node) => {
-    //         if (arraysEqual(node.values, value)) {
-    //             isPresent = true;
-    //         }
-    //     });
-
-    //     if (isPresent) {
-    //         return;
-    //     }
-
-    //     nodes.push({ id: nodeCount, values: value });
-    //     nodeCount += 1;
-    // });
-
-    let currentNode = 0;
-
-    while (true) {}
+    while (true) {
+        const currentNode = nodes[currentIndex];
+        currentNode.values.forEach((value) => {});
+    }
 
     nodes.forEach((node) => {
         console.log(node.values);
     });
 };
 
-const sampleMap = new Map([
-    [1, [1, 2, 3]],
-    [2, [1, 2, 3]],
-    [3, [4]],
-    [4, [5]],
-    [5, [6]],
-]);
+const sampleFollowPos = [
+    { symbol: 'a', followpos: [3, 1, 2], number: 1 },
+    { symbol: 'b', followpos: [3, 1, 2], number: 2 },
+    { symbol: 'a', followpos: [4], number: 3 },
+    { symbol: 'b', followpos: [5], number: 4 },
+    { symbol: 'b', followpos: [6], number: 5 },
+];
 
 const sampleFirstPos = [1, 2, 3];
 
-generateNodeAndLinks(sampleFirstPos, sampleMap);
+generateNodeAndLinks(sampleFirstPos, sampleFollowPos);

@@ -37,7 +37,7 @@ export const computeFunctions = (node: Node) => {
     }
 };
 
-interface FollowposResult {
+export interface FollowposResult {
     symbol: string;
     followpos: number[];
     number: number;
