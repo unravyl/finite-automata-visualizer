@@ -35,7 +35,9 @@ export default function Page() {
                 value={regex}
                 onChange={(e) => handleRegexInputChange(e)}
             />
-            <button onClick={() => generateDFA(regex)}>Generate</button>
+            <button onClick={() => generateDFA(regex)} className="font-bold">
+                Generate
+            </button>
             {followPos && (
                 <div>
                     <h2>Nodes:</h2>

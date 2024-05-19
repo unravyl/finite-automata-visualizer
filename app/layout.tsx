@@ -1,5 +1,5 @@
 import React from 'react';
-import '../styles/global.css';
+import '../styles/global.scss';
 
 export default function RootLayout({
     children,
@@ -9,6 +9,8 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body>{children}</body>
+            <title>Regex Parser</title>
+            <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         </html>
     );
 }

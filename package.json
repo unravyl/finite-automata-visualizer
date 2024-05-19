@@ -14,7 +14,8 @@
         "react-flow": "^1.0.3",
         "react-flow-renderer": "^10.3.17",
         "readline-sync": "^1.4.10",
-        "regjsparser": "^0.10.0"
+        "regjsparser": "^0.10.0",
+        "sass": "^1.77.2"
     },
     "devDependencies": {
         "@types/node": "20.12.11",
