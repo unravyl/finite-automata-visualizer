@@ -6,8 +6,8 @@ interface NodeInterface {
 }
 
 interface LinkInterface {
-    source: NodeInterface;
-    target: NodeInterface;
+    source: number;
+    target: number;
     transition: string;
 }
 
@@ -34,16 +34,79 @@ export const generateNodeAndLinks = (
 
     let nodeCount = 2;
 
-    let currentIndex = 0;
+    for (
+        let currentIndex = 0;
+        currentIndex < followpos.length;
+        currentIndex++
+    ) {
+        let a = [];
+        let b = [];
+        let currentNode = nodes[currentIndex];
+        currentNode.values.forEach((value) => {
+            if (followpos[value - 1].symbol === 'a') {
+                if (a.length == 0) {
+                    a = followpos[value - 1].followpos;
+                } else {
+                    a = [...a, ...followpos[value - 1].followpos];
+                }
+                a = a.filter((item, index, self) => {
+                    return self.indexOf(item) === index;
+                });
+            } else if (followpos[value - 1].symbol === 'b') {
+                if (b.length == 0) {
+                    b = followpos[value - 1].followpos;
+                } else {
+                    b = [...b, ...followpos[value - 1].followpos];
+                }
+                b = b.filter((item, index, self) => {
+                    return self.indexOf(item) === index;
+                });
+            }
+        });
 
-    while (true) {
-        const currentNode = nodes[currentIndex];
-        currentNode.values.forEach((value) => {});
+        console.log(a);
+        console.log(b);
+
+        nodes.forEach((node) => {
+            let createdNewNode = false;
+            let newNode = {} as NodeInterface;
+            if (!arraysEqual(a, node.values)) {
+                createdNewNode = true;
+                newNode = { id: nodeCount, values: a };
+                nodes.push(newNode);
+                // console.log('New Node created from A');
+                nodeCount += 1;
+                links.push({
+                    source: currentNode.id,
+                    target: newNode.id,
+                    transition: 'a',
+                });
+            }
+
+            if (!arraysEqual(b, node.values)) {
+                if (createdNewNode && !arraysEqual(a, b)) {
+                    currentNode = newNode;
+                }
+                newNode = { id: nodeCount, values: b };
+                nodes.push(newNode);
+                // console.log('New Node created from B');
+                nodeCount += 1;
+                links.push({
+                    source: currentNode.id,
+                    target: newNode.id,
+                    transition: 'b',
+                });
+            }
+        });
     }
 
-    nodes.forEach((node) => {
-        console.log(node.values);
-    });
+    // nodes.forEach((node) => {
+    //     console.log(node.id, node.values);
+    // });
+
+    // links.forEach((link) => {
+    //     console.log(link.source, link.target, link.transition);
+    // });
 };
 
 const sampleFollowPos = [
