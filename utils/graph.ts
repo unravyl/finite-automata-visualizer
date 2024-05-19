@@ -11,18 +11,20 @@ interface LinkInterface {
     transition: string;
 }
 
-const arraysEqual = (a, b) => {
-    if (a === b) return true;
-    if (a == null || b == null) return false;
-    if (a.length !== b.length) return false;
+const findIdByTargetValues = (
+    target: number[],
+    nodes: NodeInterface[]
+): number | null => {
+    const targetSet = new Set(target);
 
-    a.sort();
-    b.sort();
-
-    for (var i = 0; i < a.length; ++i) {
-        if (a[i] !== b[i]) return false;
+    for (const node of nodes) {
+        const nodeSet = new Set(node.values);
+        if (target.every((val) => nodeSet.has(val))) {
+            return node.id;
+        }
     }
-    return true;
+
+    return null;
 };
 
 const getNewNodes = (
@@ -60,6 +62,22 @@ const getNewNodes = (
     return { a, b };
 };
 
+const isArrayPresent = (target: number[], base: NodeInterface[]): boolean => {
+    const stringifiedTarget = JSON.stringify(target.sort());
+    return base.some((node) => {
+        const stringifiedValues = JSON.stringify(node.values.sort());
+        return stringifiedValues === stringifiedTarget;
+    });
+};
+
+const generateLink = (source, target, transition) => {
+    return { source, target, transition };
+};
+
+const generateNode = (id, values) => {
+    return { id, values };
+};
+
 export const generateDFA = (
     firstpos: number[],
     followpos: FollowposResult[]
@@ -70,73 +88,45 @@ export const generateDFA = (
 
     let nodeCount = 2;
 
-    for (
-        let currentIndex = 0;
-        currentIndex < followpos.length;
-        currentIndex++
-    ) {
-        let currentNode = nodes[currentIndex];
+    while (queue.length > 0) {
+        const currentNode = queue.pop();
 
         const { a, b } = getNewNodes(currentNode, followpos);
 
-        nodes.forEach((node) => {
-            let createdNewNode = false;
-            let newNode = {} as NodeInterface;
-            if (!arraysEqual(a, node.values)) {
-                createdNewNode = true;
-                newNode = { id: nodeCount, values: a };
-                nodes.push(newNode);
-                // console.log('New Node created from A');
-                nodeCount += 1;
-                links.push({
-                    source: currentNode.id,
-                    target: newNode.id,
-                    transition: 'a',
-                });
-            }
+        const potentialNewNodes = [
+            {
+                transition: 'a',
+                list: a,
+            },
+            {
+                transition: 'b',
+                list: b,
+            },
+        ];
 
-            if (!arraysEqual(b, node.values)) {
-                if (createdNewNode && !arraysEqual(a, b)) {
-                    currentNode = newNode;
-                }
-                newNode = { id: nodeCount, values: b };
-                nodes.push(newNode);
-                // console.log('New Node created from B');
+        potentialNewNodes.forEach((potential) => {
+            if (isArrayPresent(potential.list, nodes)) {
+                const targetId = findIdByTargetValues(potential.list, nodes);
+                const newLink = generateLink(
+                    currentNode.id,
+                    targetId,
+                    potential.transition
+                );
+                links.push(newLink);
+            } else {
+                const newNode = generateNode(nodeCount, potential.list);
                 nodeCount += 1;
-                links.push({
-                    source: currentNode.id,
-                    target: newNode.id,
-                    transition: 'b',
-                });
+                nodes.push(newNode);
+                queue.push(newNode);
+                const newLink = generateLink(
+                    currentNode.id,
+                    newNode.id,
+                    potential.transition
+                );
+                links.push(newLink);
             }
         });
     }
 
-    // nodes.forEach((node) => {
-    //     console.log(node.id, node.values);
-    // });
-
-    // links.forEach((link) => {
-    //     console.log(link.source, link.target, link.transition);
-    // });
+    return { nodes, links };
 };
-
-const sampleFollowPos = [
-    { symbol: 'a', followpos: [3, 1, 2], number: 1 },
-    { symbol: 'b', followpos: [3, 1, 2], number: 2 },
-    { symbol: 'a', followpos: [4], number: 3 },
-    { symbol: 'b', followpos: [5], number: 4 },
-    { symbol: 'b', followpos: [6], number: 5 },
-    { symbol: '#', followpos: [], number: 6 },
-];
-
-const sampleFirstPos = [1, 2, 3];
-
-const sampleCurrentNode = { id: 1, values: [1, 2, 3, 6] };
-
-// const { nodes, links } = generateDFA(sampleFollowPos, sampleFirstPos);
-
-const { a, b } = getNewNodes(sampleCurrentNode, sampleFollowPos);
-
-console.log('A', a);
-console.log('B', b);
