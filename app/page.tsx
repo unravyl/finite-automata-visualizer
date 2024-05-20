@@ -12,6 +12,7 @@ import {
     NodeInterface,
     generateNodesAndLinks,
 } from '../utils/graph';
+
 import GraphSummary from '../components/GraphSummary';
 import SidePanel from '../components/SidePanel';
 
