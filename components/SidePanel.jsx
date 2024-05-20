@@ -6,86 +6,100 @@ import { mdiResistorNodes } from '@mdi/js';
 import { mdiChevronDown } from '@mdi/js';
 import { mdiCheckAll } from '@mdi/js';
 import { mdiRocketLaunchOutline } from '@mdi/js';
+import { parse } from 'path';
+
+const inputs = [
+    {
+        id: 0,
+        regex: '(a+b).(aa+b).(b.b).',
+        when: '2024-05-19T14:08:57.601Z',
+    },
+    {
+        id: 1,
+        regex: '(a+b).(aa+b).(b.b).',
+        when: '2024-05-19T14:08:57.601Z',
+    },
+    {
+        id: 2,
+        regex: '(a+b).(aa+b).(b.b).',
+        when: '2024-05-19T14:08:57.601Z',
+    },
+    {
+        id: 3,
+        regex: '(a+b).(aa+b).(b.b).',
+        when: '2024-05-19T14:08:57.601Z',
+    },
+    {
+        id: 4,
+        regex: '(a+b).(aa+b).(b.b).',
+        when: '2024-05-19T14:08:57.601Z',
+    },
+    {
+        id: 5,
+        regex: '(a+b).(aa+b).(b.b).',
+        when: '2024-05-19T14:08:57.601Z',
+    },
+    {
+        id: 6,
+        regex: '(a+b).(aa+b).(b.b).',
+        when: '2024-05-19T14:08:57.601Z',
+    },
+    {
+        id: 7,
+        regex: '(a+b).(aa+b).(b.b).',
+        when: '2024-05-19T14:08:57.601Z',
+    },
+    {
+        id: 8,
+        regex: '(a+b).(aa+b).(b.b).',
+        when: '2024-05-19T14:08:57.601Z',
+    },
+    {
+        id: 9,
+        regex: '(a+b).(aa+b).(b.b).',
+        when: '2024-05-15T14:08:57.601Z',
+    },
+    {
+        id: 10,
+        regex: '(a+b).(aa+b).(b.b).',
+        when: '2024-05-15T14:08:57.601Z',
+    },
+    {
+        id: 11,
+        regex: '(a+b).(aa+b).(b.b)',
+        when: '2024-05-10T14:08:57.601Z',
+    },
+    {
+        id: 12,
+        regex: '(a+b).(aa+b).(b.b)',
+        when: '2024-05-10T14:08:57.601Z',
+    },
+    {
+        id: 13,
+        regex: '(a+b).(aa+b).(b.b)',
+        when: '2024-04-10T14:08:57.601Z',
+    },
+];
+
+const apps = {
+    0: {
+        title: 'Regex to DFA',
+        placeholder: 'Enter regex',
+    },
+    1: {
+        title: 'String Checker',
+        placeholder: 'Enter string',
+    },
+};
 
 function SidePanel(props) {
     const { show } = props;
     const [showAppsDropdown, setShowAppsDropdown] = useState(false);
+    const [selectedApp, setSelectedApp] = useState(0);
     const [selectedInput, setSelectedInput] = useState(null);
-    const [showNewInput, setShowNewInput] = useState(true);
+    const [inputString, setInputString] = useState('');
 
-    const inputs = [
-        {
-            id: 0,
-            regex: '(a+b).(aa+b).(b.b).',
-            when: '2024-05-19T14:08:57.601Z',
-        },
-        {
-            id: 1,
-            regex: '(a+b).(aa+b).(b.b).',
-            when: '2024-05-19T14:08:57.601Z',
-        },
-        {
-            id: 2,
-            regex: '(a+b).(aa+b).(b.b).',
-            when: '2024-05-19T14:08:57.601Z',
-        },
-        {
-            id: 3,
-            regex: '(a+b).(aa+b).(b.b).',
-            when: '2024-05-19T14:08:57.601Z',
-        },
-        {
-            id: 4,
-            regex: '(a+b).(aa+b).(b.b).',
-            when: '2024-05-19T14:08:57.601Z',
-        },
-        {
-            id: 5,
-            regex: '(a+b).(aa+b).(b.b).',
-            when: '2024-05-19T14:08:57.601Z',
-        },
-        {
-            id: 6,
-            regex: '(a+b).(aa+b).(b.b).',
-            when: '2024-05-19T14:08:57.601Z',
-        },
-        {
-            id: 7,
-            regex: '(a+b).(aa+b).(b.b).',
-            when: '2024-05-19T14:08:57.601Z',
-        },
-        {
-            id: 8,
-            regex: '(a+b).(aa+b).(b.b).',
-            when: '2024-05-19T14:08:57.601Z',
-        },
-        {
-            id: 9,
-            regex: '(a+b).(aa+b).(b.b).',
-            when: '2024-05-15T14:08:57.601Z',
-        },
-        {
-            id: 10,
-            regex: '(a+b).(aa+b).(b.b).',
-            when: '2024-05-15T14:08:57.601Z',
-        },
-        {
-            id: 11,
-            regex: '(a+b).(aa+b).(b.b)',
-            when: '2024-05-10T14:08:57.601Z',
-        },
-        {
-            id: 12,
-            regex: '(a+b).(aa+b).(b.b)',
-            when: '2024-05-10T14:08:57.601Z',
-        },
-        {
-            id: 13,
-            regex: '(a+b).(aa+b).(b.b)',
-            when: '2024-04-10T14:08:57.601Z',
-        },
-    ];
-
+    // computed
     const inputsToday = inputs.filter((input) => {
         const inputDate = new Date(input.when);
         const today = new Date();
@@ -110,6 +124,18 @@ function SidePanel(props) {
         return inputDate.getDate() < today.getDate() - 7;
     });
 
+    const disableInputButton =
+        inputString.trim().length === 0 ||
+        (selectedApp === 1 && !selectedInput);
+
+    // methods
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log(inputString);
+    };
+
+    //hooks
+
     return (
         <div className="side-panel">
             <CSSTransition
@@ -120,10 +146,10 @@ function SidePanel(props) {
             >
                 <div className="flex flex-col gap-5 absolute top-0 left-0 py-2 px-3 w-[215px] h-full bg-gray-50 z-10">
                     <div className="flex flex-col w-full text-sky-500 mt-10">
-                        <h1 className="flex items-center justify-between text-lg font-bold px-2">
+                        <h1 className="flex items-center justify-between text-md font-bold px-2">
                             <div className="flex items-center gap-2">
                                 <Icon path={mdiResistorNodes} size={1} />
-                                <span>Regex to DFA</span>
+                                <span>{apps[selectedApp].title}</span>
                             </div>
                             <button
                                 onClick={() =>
@@ -137,24 +163,48 @@ function SidePanel(props) {
                         <div className="relative">
                             {showAppsDropdown && (
                                 <div className="absolute w-full bg-white p-2">
-                                    <button className="flex gap-2 items-center p-2 rounded-md w-full hover:bg-gray-100">
-                                        <Icon path={mdiCheckAll} size={1} />
-                                        <span>String Checker</span>
-                                    </button>
+                                    {Object.keys(apps).map(
+                                        (app) =>
+                                            parseInt(app) !== selectedApp && (
+                                                <button
+                                                    key={app}
+                                                    onClick={() => {
+                                                        setSelectedApp(
+                                                            parseInt(app)
+                                                        );
+                                                        setShowAppsDropdown(
+                                                            false
+                                                        );
+                                                    }}
+                                                    className="flex gap-2 items-center p-2 rounded-md w-full hover:bg-gray-100"
+                                                >
+                                                    <Icon
+                                                        path={mdiCheckAll}
+                                                        size={1}
+                                                    />
+                                                    <span>
+                                                        {apps[app].title}
+                                                    </span>
+                                                </button>
+                                            )
+                                    )}
                                 </div>
                             )}
                         </div>
                     </div>
 
-                    <form className="flex items-center">
+                    <form onSubmit={handleSubmit} className="flex items-center">
                         <input
                             type="text"
-                            placeholder="Enter regex"
+                            placeholder={apps[selectedApp].placeholder}
                             className="rounded-l-md h-full w-full p-2 border border-gray-200 focus:outline-none focus:border-sky-500"
+                            onChange={(e) => setInputString(e.target.value)}
                         />
                         <button
                             type="submit"
-                            className="rounded-r-md h-full p-2 bg-sky-500 text-white hover:bg-sky-600 transition duration-200"
+                            className={`rounded-r-md h-full p-2 bg-sky-500 text-white hover:bg-sky-600 transition duration-200
+                                        ${disableInputButton && 'cursor-no-drop'}`}
+                            disabled={disableInputButton}
                         >
                             <Icon path={mdiRocketLaunchOutline} size={1} />
                         </button>
