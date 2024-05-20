@@ -85,10 +85,12 @@ const apps = {
     0: {
         title: 'Regex to DFA',
         placeholder: 'Enter regex',
+        icon: mdiResistorNodes,
     },
     1: {
         title: 'String Checker',
         placeholder: 'Enter string',
+        icon: mdiCheckAll,
     },
 };
 
@@ -148,7 +150,7 @@ function SidePanel(props) {
                     <div className="flex flex-col w-full text-sky-500 mt-10">
                         <h1 className="flex items-center justify-between text-md font-bold px-2">
                             <div className="flex items-center gap-2">
-                                <Icon path={mdiResistorNodes} size={1} />
+                                <Icon path={apps[selectedApp].icon} size={1} />
                                 <span>{apps[selectedApp].title}</span>
                             </div>
                             <button
@@ -179,7 +181,7 @@ function SidePanel(props) {
                                                     className="flex gap-2 items-center p-2 rounded-md w-full hover:bg-gray-100"
                                                 >
                                                     <Icon
-                                                        path={mdiCheckAll}
+                                                        path={apps[app].icon}
                                                         size={1}
                                                     />
                                                     <span>
@@ -210,11 +212,29 @@ function SidePanel(props) {
                         </button>
                     </form>
 
-                    <div className="flex flex-col gap-3 w-full text-gray-500">
+                    <div className="flex flex-col gap-3 w-full text-gray-500 overflow-y-auto">
                         {inputsToday.length > 0 && (
                             <div className="flex flex-col gap-1 w-full">
                                 <h1 className="text-xs text-sky-500">Today</h1>
                                 {inputsToday.map((input) => (
+                                    <button
+                                        key={input.id}
+                                        onClick={() =>
+                                            setSelectedInput(input.id)
+                                        }
+                                        className={`flex items-center gap-2 p-2 rounded-md hover:bg-sky-100 hover:text-sky-500 ${selectedInput === input.id && 'bg-sky-100 text-sky-500'}`}
+                                    >
+                                        <span>{input.regex}</span>
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+                        {inputsSevenDays.length > 0 && (
+                            <div className="flex flex-col gap-1 w-full">
+                                <h1 className="text-xs text-sky-500">
+                                    Previous 7 days
+                                </h1>
+                                {inputsSevenDays.map((input) => (
                                     <button
                                         key={input.id}
                                         onClick={() =>
