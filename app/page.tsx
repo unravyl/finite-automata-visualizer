@@ -12,6 +12,7 @@ import {
     NodeInterface,
     generateNodesAndLinks,
 } from '../utils/graph';
+
 import GraphSummary from '../components/GraphSummary';
 import SidePanel from '../components/SidePanel';
 
@@ -53,26 +54,29 @@ export default function Page() {
                 </button>
             </div>
             <GraphSummary nodes={nodes} links={links} />
-            <button
-                className="text-gray-800 absolute z-20 ml-2 mt-2.5 top-0 left-0 p-1 rounded-md hover:bg-black/[.05] transition duration-200"
-                onClick={() => setShowSidePanel(!showSidePanel)}
-            >
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="#6B7280"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+
+            <section>
+                <button
+                    className="text-gray-800 absolute z-20 ml-2 mt-2.5 top-0 left-0 p-1 rounded-md hover:bg-black/[.05] transition duration-200"
+                    onClick={() => setShowSidePanel(!showSidePanel)}
                 >
-                    <rect x="3" y="3" width="18" height="18" rx="2" />
-                    <path d="M9 3v18" />
-                </svg>
-            </button>
-            <SidePanel show={showSidePanel} />
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="#0ea5e9"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                    >
+                        <rect x="3" y="3" width="18" height="18" rx="2" />
+                        <path d="M9 3v18" />
+                    </svg>
+                </button>
+                <SidePanel show={showSidePanel} />
+            </section>
         </div>
     );
 }
