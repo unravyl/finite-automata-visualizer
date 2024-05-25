@@ -1,5 +1,5 @@
 import Parser from '../classes/Parser';
-import { calculateFollowpos, computeFunctions } from './dfa';
+import { calculateFollowpos, computeFunctions } from '../utils/dfa';
 
 const readline = require('readline-sync');
 
