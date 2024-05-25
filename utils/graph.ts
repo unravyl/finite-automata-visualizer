@@ -1,11 +1,13 @@
+import { SimulationLinkDatum, SimulationNodeDatum } from 'd3';
 import { FollowposResult } from './dfa';
 
-export interface NodeInterface {
+export interface NodeInterface extends SimulationNodeDatum {
     id: number;
     values: number[];
+    group: number;
 }
 
-export interface LinkInterface {
+export interface LinkInterface extends SimulationLinkDatum<NodeInterface> {
     source: number;
     target: number;
     transition: string;
@@ -74,17 +76,17 @@ const generateLink = (source, target, transition) => {
     return { source, target, transition };
 };
 
-const generateNode = (id, values) => {
-    return { id, values };
+const generateNode = (id, values, group) => {
+    return { id, values, group };
 };
 
 export const generateNodesAndLinks = (
     firstpos: number[],
     followpos: FollowposResult[]
 ) => {
-    let nodes: NodeInterface[] = [{ id: 1, values: firstpos }];
+    let nodes: NodeInterface[] = [{ id: 1, values: firstpos, group: 1 }];
     let links: LinkInterface[] = [];
-    let queue: NodeInterface[] = [{ id: 1, values: firstpos }];
+    let queue: NodeInterface[] = [{ id: 1, values: firstpos, group: 1 }];
 
     let nodeCount = 2;
 
@@ -114,7 +116,7 @@ export const generateNodesAndLinks = (
                 );
                 links.push(newLink);
             } else {
-                const newNode = generateNode(nodeCount, potential.list);
+                const newNode = generateNode(nodeCount, potential.list, 1);
                 nodeCount += 1;
                 nodes.push(newNode);
                 queue.push(newNode);
