@@ -1,9 +1,23 @@
-import { Concat, Kleene, Node, Or, Symbol } from '../utils/ast';
-import { Token, TokenType, tokenize } from '../utils/lexer';
+import {
+    AbstractSyntaxTreeInterface,
+    FollowPosInterface,
+} from '../interfaces/ast';
+import { Concat, Kleene, Or, Symbol, Node } from '../interfaces/ast';
+import { Token, TokenType } from '../interfaces/lexer';
+import { tokenize } from '../utils/lexer';
 
 export default class Parser {
     private tokens = [] as Token[];
     private idCount = 0;
+    public firstPos = [] as number[];
+    public followPos = [] as FollowPosInterface[];
+    public tree = {} as AbstractSyntaxTreeInterface;
+    public string = null;
+
+    constructor(str: string) {
+        this.string = str;
+        this.produceAST(str);
+    }
 
     private notEOL = () => {
         if (this.tokens[0]) {
@@ -32,23 +46,112 @@ export default class Parser {
         return prev;
     };
 
+    private computeASTFunctions = (node = this.tree.body) => {
+        switch (node.kind) {
+            case 'Symbol':
+                node.nullable = false;
+                node.firstpos = [node.id!];
+                node.lastpos = [node.id!];
+                break;
+            case 'Concat':
+                this.computeASTFunctions(node.left);
+                this.computeASTFunctions(node.right);
+
+                node.nullable = node.left.nullable && node.right.nullable;
+                node.firstpos = node.left.nullable
+                    ? node.left.firstpos.concat(node.right.firstpos)
+                    : node.left.firstpos;
+                node.lastpos = node.right.nullable
+                    ? node.right.lastpos.concat(node.left!.lastpos)
+                    : node.right.lastpos;
+                break;
+            case 'Or':
+                this.computeASTFunctions(node.left);
+                this.computeASTFunctions(node.right);
+
+                node.nullable = node.left.nullable || node.right.nullable;
+                node.firstpos = node.left.firstpos.concat(node.right.firstpos);
+                node.lastpos = node.left.lastpos.concat(node.right.lastpos);
+                break;
+            case 'Kleene':
+                this.computeASTFunctions(node.body);
+
+                node.nullable = true;
+                node.firstpos = node.body.firstpos;
+                node.lastpos = node.body.lastpos;
+                break;
+        }
+    };
+
+    private computeFollowPos = (root = this.tree.body) => {
+        const followpos = new Map<number, number[]>();
+        const symbolMap = new Map<number, string>();
+
+        const traverse = (node: Node) => {
+            symbolMap.set(node.id, node.value);
+            switch (node.kind) {
+                case 'Concat':
+                    for (const i of node.left.lastpos) {
+                        addFollowpos(i, node.right.firstpos);
+                    }
+                    traverse(node.left);
+                    traverse(node.right);
+                    break;
+                case 'Kleene':
+                    for (const i of node.lastpos) {
+                        addFollowpos(i, node.firstpos);
+                    }
+                    traverse(node.body);
+                    break;
+                case 'Or':
+                    traverse(node.left);
+                    traverse(node.right);
+                    break;
+                case 'Symbol':
+                    break;
+            }
+        };
+
+        const addFollowpos = (id: number, set: number[]) => {
+            if (!followpos.has(id)) {
+                followpos.set(id, []);
+            }
+            followpos.get(id).push(...set);
+        };
+
+        traverse(root);
+
+        for (const [id, set] of Array.from(followpos.entries())) {
+            followpos.set(id, Array.from(new Set(set)));
+        }
+
+        const result: FollowPosInterface[] = [];
+        for (const [id, set] of Array.from(followpos.entries())) {
+            const symbol = symbolMap.get(id);
+            result.push({ symbol, followpos: set, number: id });
+        }
+
+        result.sort((a, b) => a.number - b.number);
+
+        result.push({ symbol: '#', followpos: [], number: result.length + 1 });
+
+        return result;
+    };
+
     public produceAST = (str: string) => {
         let augmentedStr = '('.concat(str);
         augmentedStr = augmentedStr.concat(').#');
+
         this.tokens = tokenize(augmentedStr);
 
-        const tree = {
-            body: null,
-        };
-
-        // Parse Until End of Line
         while (this.notEOL()) {
-            tree.body = this.parseExpr();
+            this.tree.body = this.parseExpr();
         }
 
-        console.log('LOG AST', tree);
+        this.computeASTFunctions();
 
-        return tree;
+        this.firstPos = this.tree.body.firstpos;
+        this.followPos = this.computeFollowPos();
     };
 
     private parseExpr = () => {
