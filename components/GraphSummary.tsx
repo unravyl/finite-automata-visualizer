@@ -40,9 +40,9 @@ const GraphSummary = (props: PropsInterface) => {
         const labelPosition = isVerticalEdge ? '0%' : '50%';
 
         return {
-            id: `e${link.source}-${link.target}`,
-            source: link.source.toString(),
-            target: link.target.toString(),
+            id: `e${link.source.id}-${link.target.id}`,
+            source: link.source.id.toString(),
+            target: link.target.id.toString(),
             sourceHandle: sourcePoint,
             targetHandle: targetPoint,
             type: 'bezier',
