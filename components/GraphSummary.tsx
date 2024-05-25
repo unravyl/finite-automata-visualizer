@@ -29,7 +29,9 @@ const GraphSummary = (props: PropsInterface) => {
                       ? 'Final'
                       : node.id === 1
                         ? 'Start'
-                        : `State ${index + 1}`,
+                        : node.id === -1
+                          ? 'Dead'
+                          : `State ${node.id}`,
               },
               position: { x: index * 200, y: index % 2 === 0 ? 100 : 300 },
           }))
