@@ -1,4 +1,4 @@
-import { LinkInterface, NodeInterface } from '../utils/graph';
+import { LinkInterface, NodeInterface } from '../interfaces/graph';
 
 export const testLog = (nodes: NodeInterface[], links: LinkInterface[]) => {
     console.log('LOG NODES');

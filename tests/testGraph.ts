@@ -1,14 +1,13 @@
 import { getNewValues } from '../utils/graph';
-import { FollowposResult } from '../utils/dfa';
+import { FollowPosInterface } from '../interfaces/ast';
 import {
-    NodeInterface,
-    LinkInterface,
     getNewNodes,
     isArrayPresent,
     findNodeByTargetValues,
     generateLink,
     generateNode,
 } from '../utils/graph';
+import { NodeInterface, LinkInterface } from '../interfaces/graph';
 
 const firstpos = [1, 3];
 // const potentialList = [2, 3];
@@ -71,7 +70,7 @@ const target = [5];
 
 const generateNodesAndLinks = (
     firstpos: number[],
-    followpos: FollowposResult[]
+    followpos: FollowPosInterface[]
 ) => {
     let nodes: NodeInterface[] = [
         { id: 1, values: firstpos, group: 1, isFinalState: false },
