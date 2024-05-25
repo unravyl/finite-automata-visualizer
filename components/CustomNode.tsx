@@ -1,7 +1,14 @@
 import React from 'react';
 import { Handle, Position } from 'react-flow-renderer';
 
-const CustomNode = ({ data }: any) => {
+interface PropsInterface {
+    data: {
+        label: string;
+    };
+}
+
+const CustomNode = (props: PropsInterface) => {
+    const { data } = props;
     return (
         <div
             style={{
