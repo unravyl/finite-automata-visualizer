@@ -7,22 +7,23 @@ export interface NodeInterface extends SimulationNodeDatum {
     group: number;
 }
 
-export interface LinkInterface extends SimulationLinkDatum<NodeInterface> {
-    source: number;
-    target: number;
+export interface LinkInterface
+    extends SimulationLinkDatum<SimulationNodeDatum> {
+    source: NodeInterface;
+    target: NodeInterface;
     transition: string;
 }
 
-const findIdByTargetValues = (
+const findNodeByTargetValues = (
     target: number[],
     nodes: NodeInterface[]
-): number | null => {
+): NodeInterface => {
     const targetSet = new Set(target);
 
     for (const node of nodes) {
         const nodeSet = new Set(node.values);
         if (target.every((val) => nodeSet.has(val))) {
-            return node.id;
+            return node;
         }
     }
 
@@ -108,10 +109,13 @@ export const generateNodesAndLinks = (
 
         potentialNewNodes.forEach((potential) => {
             if (isArrayPresent(potential.list, nodes)) {
-                const targetId = findIdByTargetValues(potential.list, nodes);
+                const targetNode = findNodeByTargetValues(
+                    potential.list,
+                    nodes
+                );
                 const newLink = generateLink(
-                    currentNode.id,
-                    targetId,
+                    currentNode,
+                    targetNode,
                     potential.transition
                 );
                 links.push(newLink);
@@ -121,8 +125,8 @@ export const generateNodesAndLinks = (
                 nodes.push(newNode);
                 queue.push(newNode);
                 const newLink = generateLink(
-                    currentNode.id,
-                    newNode.id,
+                    currentNode,
+                    newNode,
                     potential.transition
                 );
                 links.push(newLink);
