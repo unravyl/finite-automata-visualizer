@@ -23,7 +23,11 @@ const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({ data }) => {
 
         // The force simulation mutates links and nodes, so create a copy
         // so that re-evaluating this cell produces the same result.
-        const links = data.links.map((d) => ({ ...d }));
+        const links = data.links.map((d) => ({
+            ...d,
+            source: d.source.id,
+            target: d.target.id,
+        }));
         const nodes = data.nodes.map((d) => ({ ...d }));
 
         // Create a simulation with several forces.
@@ -39,7 +43,7 @@ const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({ data }) => {
 
         // Create the SVG container.
         const svg = d3
-            .create('svg')
+            .select(svgRef.current)
             .attr('width', width)
             .attr('height', height)
             .attr('viewBox', [0, 0, width, height])
@@ -48,16 +52,17 @@ const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({ data }) => {
         // Add a line for each link, and a circle for each node.
         const link = svg
             .append('g')
-            .attr('stroke', '#999')
-            .attr('stroke-opacity', 0.6)
+            .attr('stroke', '#000')
+            .attr('stroke-opacity', 1)
             .selectAll()
             .data(links)
             .join('line')
-            .attr('stroke-width', '#000');
+            .attr('stroke-width', 1)
+            .attr('fill', '#000');
 
         const node = svg
             .append('g')
-            .attr('stroke', '#fff')
+            .attr('stroke', '#000')
             .attr('stroke-width', 1.5)
             .selectAll()
             .data(nodes)
