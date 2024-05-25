@@ -1,4 +1,5 @@
 import { Node } from './ast';
+import { testFollowPos } from '../tests/testLog';
 
 export const computeFunctions = (node: Node) => {
     switch (node.kind) {
@@ -97,7 +98,9 @@ export const calculateFollowpos = (root: Node): FollowposResult[] => {
 
     result.sort((a, b) => a.number - b.number);
 
-    result.push({ symbol: '#', followpos: [], number: result.length });
+    result.push({ symbol: '#', followpos: [], number: result.length + 1 });
+
+    testFollowPos(result);
 
     return result;
 };
