@@ -5,7 +5,7 @@ import Parser from '../classes/Parser';
 import { generateNodesAndLinks } from '../utils/graph';
 import { NodeInterface, LinkInterface } from '../interfaces/graph';
 
-import GraphSummary from '../components/GraphSummary';
+import DFA from '../components/DFA';
 import SidePanel from '../components/SidePanel';
 import { testLog } from '../tests/log';
 
@@ -47,7 +47,7 @@ export default function Page() {
                     </button>
                 </div>
 
-                {nodes && links && <GraphSummary nodes={nodes} links={links} />}
+                {nodes && links && <DFA nodes={nodes} links={links} />}
 
                 <section>
                     <button
