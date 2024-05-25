@@ -20,13 +20,17 @@ const GraphSummary = (props: PropsInterface) => {
     const { nodes, links } = props;
     const validLinks = Array.isArray(links) ? links : [links];
 
-    const nodeIds = nodes.map((node) => node.id);
-
-    const Nodes = Array.isArray(nodeIds)
-        ? nodeIds.map((id, index) => ({
-              id: id.toString(),
+    const Nodes = Array.isArray(nodes)
+        ? nodes.map((node, index) => ({
+              id: node.id.toString(),
               type: 'custom',
-              data: { label: `State ${index + 1}` },
+              data: {
+                  label: node.isFinalState
+                      ? 'Final'
+                      : node.id === 1
+                        ? 'Start'
+                        : `State ${index + 1}`,
+              },
               position: { x: index * 200, y: index % 2 === 0 ? 100 : 300 },
           }))
         : [];
