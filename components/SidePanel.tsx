@@ -24,7 +24,11 @@ const apps = {
     },
 };
 
-function SidePanel(props) {
+interface PropsInterface {
+    show: boolean;
+}
+
+function SidePanel(props: PropsInterface) {
     const { fetchDfaFromIdb, addDfaToIdb } = useDfaStore();
     const { show } = props;
 
