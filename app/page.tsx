@@ -2,16 +2,8 @@
 
 import React, { useState } from 'react';
 import Parser from '../classes/Parser';
-import {
-    computeFunctions,
-    calculateFollowpos,
-    FollowposResult,
-} from '../utils/dfa';
-import {
-    LinkInterface,
-    NodeInterface,
-    generateNodesAndLinks,
-} from '../utils/graph';
+import { generateNodesAndLinks } from '../utils/graph';
+import { NodeInterface, LinkInterface } from '../interfaces/graph';
 
 import GraphSummary from '../components/GraphSummary';
 import SidePanel from '../components/SidePanel';
@@ -29,11 +21,9 @@ export default function Page() {
     };
 
     const generateDFA = (inputString: string) => {
-        const parser = new Parser();
-        const ast = parser.produceAST(inputString);
-        computeFunctions(ast.body);
-        const followPos = calculateFollowpos(ast.body);
-        const firstPos = ast.body.firstpos;
+        const parser = new Parser(inputString);
+        const firstPos = parser.firstPos;
+        const followPos = parser.followPos;
         const { nodes, links } = generateNodesAndLinks(firstPos, followPos);
         setNodes(nodes);
         setLinks(links);
