@@ -8,6 +8,10 @@
 
 -   User can input a regular expression, and the application will generate a definite finite automaton representation of it
 
+<p align="center">
+  <img src="./public/conversion_demo.png"/>
+</p>
+
 2. **String Validation**
 
 -   User can input a string and regular expresson, and the application will check if the input string is a member of the regular expression
