@@ -1,5 +1,5 @@
 import React from 'react';
-import { LinkInterface, NodeInterface } from '../utils/graph';
+import { NodeInterface, LinkInterface } from '../interfaces/graph';
 import ReactFlow, { MarkerType } from 'react-flow-renderer';
 import CustomNode from './CustomNode';
 
