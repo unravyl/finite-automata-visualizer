@@ -125,7 +125,7 @@ export const generateNodesAndLinks = (
     while (queue.length > 0) {
         const currentNode = queue.shift();
 
-        const currentSymbol = followpos[currentNode.id - 1].symbol;
+        const currentSymbol = followpos[currentNode.id].symbol;
 
         const { a, b } = getNewNodes(currentNode, followpos);
 
@@ -138,13 +138,13 @@ export const generateNodesAndLinks = (
             });
         } else if (currentSymbol !== '#') {
             if (deadState === null) {
+                const deadStateId = -1;
                 const newDeadState = generateNode(
-                    nodeCount,
-                    [nodeCount],
+                    deadStateId,
+                    [],
                     1,
                     finalState
                 );
-                nodeCount += 1;
                 deadState = newDeadState;
                 nodes.push(deadState);
                 const deadA = generateLink(deadState, deadState, 'a');
@@ -162,13 +162,13 @@ export const generateNodesAndLinks = (
             });
         } else if (currentSymbol !== '#') {
             if (deadState === null) {
+                const deadStateId = -1;
                 const newDeadState = generateNode(
-                    nodeCount,
-                    [nodeCount],
+                    deadStateId,
+                    [],
                     1,
                     finalState
                 );
-                nodeCount += 1;
                 deadState = newDeadState;
                 nodes.push(deadState);
                 const deadA = generateLink(deadState, deadState, 'a');
@@ -178,8 +178,6 @@ export const generateNodesAndLinks = (
             const newLink = generateLink(currentNode, deadState, 'b');
             links.push(newLink);
         }
-
-        console.log('LOG POTENTIAL', currentNode.id, potentialNewNodes);
 
         potentialNewNodes.forEach((potential) => {
             if (isArrayPresent(potential.list, nodes)) {
@@ -194,8 +192,6 @@ export const generateNodesAndLinks = (
                 );
                 links.push(newLink);
             } else {
-                // const newValues = getNewValues(potential.list, followpos);
-                // console.log(newValues);
                 const newNode = generateNode(
                     nodeCount,
                     potential.list,
@@ -205,7 +201,6 @@ export const generateNodesAndLinks = (
                 nodeCount += 1;
                 nodes.push(newNode);
                 queue.push(newNode);
-                console.log('LOG LINK TO ADD', currentNode.id, newNode.id);
                 const newLink = generateLink(
                     currentNode,
                     newNode,
