@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 
-import { NodeInterface, LinkInterface } from '../interfaces/graph';
+import { NodeInterface, LinkInterface } from '../../interfaces/graph';
 
 interface ForceDirectedGraphProps {
     data: {
@@ -74,10 +74,10 @@ const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({ data }) => {
         );
 
         function ticked() {
-            link.attr('x1', (d) => d.source.x)
-                .attr('y1', (d) => d.source.y)
-                .attr('x2', (d) => d.target.x)
-                .attr('y2', (d) => d.target.y);
+            // link.attr('x1', (d) => d.source.x)
+            //     .attr('y1', (d) => d.source.y)
+            //     .attr('x2', (d) => d.target.x)
+            //     .attr('y2', (d) => d.target.y);
 
             node.attr('cx', (d) => d.x).attr('cy', (d) => d.y);
         }
