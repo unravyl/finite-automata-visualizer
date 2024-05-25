@@ -1,19 +1,5 @@
-import { SimulationLinkDatum, SimulationNodeDatum } from 'd3';
-import { FollowposResult } from './dfa';
-
-export interface NodeInterface extends SimulationNodeDatum {
-    id: number;
-    values: number[];
-    group: number;
-    isFinalState: boolean;
-}
-
-export interface LinkInterface
-    extends SimulationLinkDatum<SimulationNodeDatum> {
-    source: NodeInterface;
-    target: NodeInterface;
-    transition: string;
-}
+import { NodeInterface, LinkInterface } from '../interfaces/graph';
+import { FollowPosInterface } from '../interfaces/ast';
 
 export const findNodeByTargetValues = (
     target: number[],
@@ -31,7 +17,7 @@ export const findNodeByTargetValues = (
 
 export const getNewNodes = (
     currentNode: NodeInterface,
-    followpos: FollowposResult[]
+    followpos: FollowPosInterface[]
 ) => {
     let a = [];
     let b = [];
@@ -85,7 +71,7 @@ export const generateNode = (id, values, group, finalState) => {
 
 export const getNewValues = (
     potentialList: number[],
-    followpos: FollowposResult[]
+    followpos: FollowPosInterface[]
 ) => {
     let newValues = [];
 
@@ -106,7 +92,7 @@ export const getNewValues = (
 
 export const generateNodesAndLinks = (
     firstpos: number[],
-    followpos: FollowposResult[]
+    followpos: FollowPosInterface[]
 ) => {
     let nodes: NodeInterface[] = [
         { id: 1, values: firstpos, group: 1, isFinalState: false },
