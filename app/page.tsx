@@ -15,6 +15,8 @@ import {
 
 import GraphSummary from '../components/GraphSummary';
 import SidePanel from '../components/SidePanel';
+import ForceDirectedGraph from '../components/FDG';
+import { testLog } from '../tests/testLog';
 
 export default function Page() {
     const [regex, setRegex] = useState<string>('');
@@ -35,12 +37,11 @@ export default function Page() {
         const { nodes, links } = generateNodesAndLinks(firstPos, followPos);
         setNodes(nodes);
         setLinks(links);
+        testLog(nodes, links);
     };
 
     return (
-        <div
-            className="flex justify-center items-center min-h-screen"
-        >
+        <div className="flex justify-center items-center min-h-screen">
             <div className="p-10 flex flex-col items-center">
                 <div className="flex gap-3">
                     <input
@@ -56,7 +57,11 @@ export default function Page() {
                         Generate
                     </button>
                 </div>
-                <GraphSummary nodes={nodes} links={links} />
+
+                {nodes && links && (
+                    <GraphSummary nodes={nodes} links={links} />
+                    // <ForceDirectedGraph data={{ nodes, links }} />
+                )}
 
                 <section>
                     <button
