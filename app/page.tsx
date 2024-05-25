@@ -7,8 +7,7 @@ import { NodeInterface, LinkInterface } from '../interfaces/graph';
 
 import GraphSummary from '../components/GraphSummary';
 import SidePanel from '../components/SidePanel';
-import ForceDirectedGraph from '../components/FDG';
-import { testLog } from '../tests/testLog';
+import { testLog } from '../tests/log';
 
 export default function Page() {
     const [regex, setRegex] = useState<string>('');
@@ -27,7 +26,7 @@ export default function Page() {
         const { nodes, links } = generateNodesAndLinks(firstPos, followPos);
         setNodes(nodes);
         setLinks(links);
-        testLog(nodes, links);
+        testLog(nodes, links, followPos);
     };
 
     return (
@@ -48,10 +47,7 @@ export default function Page() {
                     </button>
                 </div>
 
-                {nodes && links && (
-                    <GraphSummary nodes={nodes} links={links} />
-                    // <ForceDirectedGraph data={{ nodes, links }} />
-                )}
+                {nodes && links && <GraphSummary nodes={nodes} links={links} />}
 
                 <section>
                     <button
