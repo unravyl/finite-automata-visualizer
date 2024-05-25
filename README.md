@@ -18,18 +18,24 @@
 
 ## Contributors
 
-<a href="https://github.com/maxellmilay">
-  <img src="https://contrib.rocks/image?repo=maxellmilay/finite-automata-visualizer" />
-</a>
+<div style="display:flex;gap:10px">
+  <a href="https://github.com/maxellmilay" style="display:flex;flex-direction:column;align-items:center;gap:5px">
+    <img src="https://avatars.githubusercontent.com/u/82187749?v=4" width=75 height=75 style="border-radius:50%"/>
+    <p>Maxell Milay</p>
+  </a>
 
-<a href="https://github.com/cup-noodlehS">
-  <img src="https://contrib.rocks/image?repo=cup-noodlehS/CampGo" />
-</a>
+  <a href="https://github.com/cup-noodlehS" style="display:flex;flex-direction:column;align-items:center;gap:5px">
+    <img src="https://avatars.githubusercontent.com/u/93570629?v=4" width=75 height=75 style="border-radius:50%"/>
+    <p>Sheldon Sagrado</p>
+  </a>
 
-<a href="https://github.com/yunjin08">
-  <img src="https://contrib.rocks/image?repo=yunjin08/LearnAI-Prompts" />
-</a>
+  <a href="https://github.com/yunjin08" style="display:flex;flex-direction:column;align-items:center;gap:5px">
+    <img src="https://avatars.githubusercontent.com/u/125939827?v=4" width=75 height=75 style="border-radius:50%"/>
+    <p>Jed Donaire</p>
+  </a>
 
-<a href="https://github.com/jourdancatarina3">
-  <img src="https://contrib.rocks/image?repo=jourdancatarina3/admin-dashboard" />
-</a>
+  <a href="https://github.com/jourdancatarina3" style="display:flex;flex-direction:column;align-items:center;gap:5px">
+    <img src="https://avatars.githubusercontent.com/u/80801376?v=4" width=75 height=75 style="border-radius:50%"/>
+    <p>Jourdan Catarina</p>
+  </a>
+<div>
