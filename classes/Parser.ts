@@ -27,14 +27,14 @@ export default class Parser {
 
         if (!prev || prev.type != type) {
             console.error('Parser Error:\n', err, prev, 'Expecting: ', type);
-            process.exit();
         }
 
         return prev;
     };
 
     public produceAST = (str: string) => {
-        const augmentedStr = str.concat('.#');
+        let augmentedStr = '('.concat(str);
+        augmentedStr = augmentedStr.concat(').#');
         this.tokens = tokenize(augmentedStr);
 
         const tree = {
@@ -45,6 +45,8 @@ export default class Parser {
         while (this.notEOL()) {
             tree.body = this.parseExpr();
         }
+
+        console.log('LOG AST', tree);
 
         return tree;
     };
@@ -140,7 +142,6 @@ export default class Parser {
                     'Unexpected token found during parsing!',
                     this.at()
                 );
-                process.exit();
         }
     };
 }
