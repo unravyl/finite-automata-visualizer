@@ -8,16 +8,7 @@ import { mdiCheckAll } from '@mdi/js';
 import { mdiRocketLaunchOutline } from '@mdi/js';
 
 import Parser from '../classes/Parser';
-import {
-    computeFunctions,
-    calculateFollowpos,
-    FollowposResult,
-} from '../utils/dfa';
-import {
-    LinkInterface,
-    NodeInterface,
-    generateNodesAndLinks,
-} from '../utils/graph';
+import { generateNodesAndLinks } from '../utils/graph';
 import { useDfaStore } from '../store/dfaStore';
 
 const apps = {
@@ -44,7 +35,6 @@ function SidePanel(props) {
     const [selectedInput, setSelectedInput] = useState(null);
     const [inputString, setInputString] = useState('');
 
-    // computed
     const inputsToday = inputs.filter((input) => {
         const inputDate = new Date(input.when);
         const today = new Date();
@@ -88,7 +78,6 @@ function SidePanel(props) {
         inputString.trim().length === 0 ||
         (selectedApp === 1 && !selectedInput);
 
-    // methods
     const handleSubmit = (e) => {
         e.preventDefault();
         if (disableInputButton) {
@@ -102,11 +91,9 @@ function SidePanel(props) {
     };
 
     const generateDFA = async (inputString) => {
-        const parser = new Parser();
-        const ast = parser.produceAST(inputString);
-        computeFunctions(ast.body);
-        const followPos = calculateFollowpos(ast.body);
-        const firstPos = ast.body.firstpos;
+        const parser = new Parser(inputString);
+        const firstPos = parser.firstPos;
+        const followPos = parser.followPos;
         const { nodes, links } = generateNodesAndLinks(firstPos, followPos);
 
         const data = {
@@ -128,7 +115,6 @@ function SidePanel(props) {
         setIsFetching(false);
     };
 
-    //hooks
     useEffect(() => {
         getInputsFromIdb();
     }, []);
