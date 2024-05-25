@@ -1,17 +1,4 @@
-export enum TokenType {
-    Symbol,
-    Or,
-    Kleene,
-    Concat,
-    OpenParen,
-    CloseParen,
-    EOL,
-}
-
-export interface Token {
-    value: string;
-    type: TokenType;
-}
+import { TokenType, Token } from '../interfaces/lexer';
 
 const token = (value = '', type: TokenType): Token => {
     return { value, type };
@@ -25,7 +12,6 @@ export const tokenize = (string: string): Token[] => {
     const tokens = [] as Token[];
     const src = string.split('');
 
-    // Build each token until end of string
     while (src.length > 0) {
         if (src[0] == '(') {
             tokens.push(token(src.shift(), TokenType.OpenParen));
