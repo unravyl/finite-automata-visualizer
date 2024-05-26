@@ -1,6 +1,6 @@
 import { NodeInterface, LinkInterface } from './graph';
 
-interface DFAStoreData {
+export interface DFAStoreData {
     id: number;
     when: string;
     nodes: NodeInterface[];

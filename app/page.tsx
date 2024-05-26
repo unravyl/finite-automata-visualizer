@@ -12,7 +12,7 @@ export default function Page() {
 
     return (
         <div className="flex justify-center items-center min-h-screen min-w-screen">
-            <div className="flex flex-col items-center w-full h-full">
+            <div className="flex flex-col items-center w-full h-lvh">
                 {nodes && links && <DFA nodes={nodes} links={links} />}
                 <section>
                     <button
