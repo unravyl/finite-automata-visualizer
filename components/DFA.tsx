@@ -50,11 +50,13 @@ const DFA = (props: PropsInterface) => {
         } as Edge;
     });
 
-    console.log(diagramNodes);
-    console.log(diagramEdges);
-
     const [nodeState, setNodeState] = useState(diagramNodes);
     const [edgeState, setEdgeState] = useState(diagramEdges);
+
+    useEffect(() => {
+        setNodeState(diagramNodes);
+        setEdgeState(diagramEdges);
+    }, [nodes, links]);
 
     const onNodesChange = useCallback(
         (changes: NodeChange[]) =>
