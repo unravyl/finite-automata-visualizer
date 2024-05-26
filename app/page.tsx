@@ -13,7 +13,6 @@ export default function Page() {
     const [showSidePanel, setShowSidePanel] = useState<boolean>(true);
     const sidePanelRef = useRef<HTMLDivElement>(null);
 
-    // idk how to handle drag or swipe, stoopid reactjs
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
             if (
