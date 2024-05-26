@@ -15,7 +15,7 @@ import 'reactflow/dist/style.css';
 import { NodeInterface, LinkInterface } from '../interfaces/graph';
 import SelfConnectingEdge from './SelfConnectingEdge';
 import FloatingEdge from './FloatingEdge';
-import CircleNode from './CircleNode';
+import CircleNode from './DFANode';
 
 interface PropsInterface {
     nodes: NodeInterface[];
