@@ -24,6 +24,7 @@ export default function RootLayout({
                     content="FA Visualizer, finite automata, automata theory, DFA, NFA"
                 />
                 <meta name="author" content="Super Nigga" />
+                <meta property="og:image" content="/images/metapic.png" />
                 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
             </head>
             <body>{children}</body>
