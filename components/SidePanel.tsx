@@ -26,11 +26,13 @@ const apps = {
 
 interface PropsInterface {
     show: boolean;
+    setLinks: Function;
+    setNodes: Function;
 }
 
 function SidePanel(props: PropsInterface) {
-    const { fetchDfaFromIdb, addDfaToIdb } = useDfaStore();
-    const { show } = props;
+    const { fetchDfaFromIdb, addDfaToIdb, getDfaFromIdb } = useDfaStore();
+    const { show, setNodes, setLinks } = props;
 
     const [inputs, setInputs] = useState([]);
     const [isFetching, setIsFetching] = useState(false);
@@ -94,11 +96,14 @@ function SidePanel(props: PropsInterface) {
         generateDFA(inputString);
     };
 
-    const generateDFA = async (inputString) => {
+    const generateDFA = async (inputString: string) => {
         const parser = new Parser(inputString);
         const firstPos = parser.firstPos;
         const followPos = parser.followPos;
         const { nodes, links } = generateNodesAndLinks(firstPos, followPos);
+        setNodes(nodes);
+        setLinks(links);
+        setInputString('');
 
         const data = {
             regex: inputString,
@@ -117,6 +122,13 @@ function SidePanel(props: PropsInterface) {
         const all = await fetchDfaFromIdb();
         setInputs(all);
         setIsFetching(false);
+    };
+
+    const handleRegexClick = async (id: number) => {
+        setSelectedInput(id);
+        const dfaData = await getDfaFromIdb(id);
+        setNodes(dfaData.nodes);
+        setLinks(dfaData.links);
     };
 
     useEffect(() => {
@@ -186,6 +198,7 @@ function SidePanel(props: PropsInterface) {
                             placeholder={apps[selectedApp].placeholder}
                             className="rounded-l-md h-full w-full p-2 border border-gray-200 focus:outline-none focus:border-sky-500"
                             onChange={(e) => setInputString(e.target.value)}
+                            value={inputString}
                             onKeyDown={(e) => {
                                 if (e.key === 'Enter') {
                                     handleSubmit(e);
@@ -214,7 +227,7 @@ function SidePanel(props: PropsInterface) {
                                             <button
                                                 key={input.id}
                                                 onClick={() =>
-                                                    setSelectedInput(input.id)
+                                                    handleRegexClick(input.id)
                                                 }
                                                 className={`flex items-center gap-2 p-2 rounded-md hover:bg-sky-100 hover:text-sky-500 ${selectedInput === input.id && 'bg-sky-100 text-sky-500'}`}
                                             >
