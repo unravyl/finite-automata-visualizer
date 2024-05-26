@@ -22,6 +22,10 @@ Go to [our website](https://favisualizer.vercel.app/) and visualize your regular
 
 -   User can input a string and regular expresson, and the application will check if the input string is a member of the regular expression
 
+## Implementation Algorithm?
+
+-   To know how the RegEx to DFA Diagram conversion works in detail, check out our [wiki](https://github.com/maxellmilay/finite-automata-visualizer/wiki) !
+
 ## Techstack
 
 -   NextJS
