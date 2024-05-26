@@ -11,10 +11,9 @@ export default function Page() {
     const [showSidePanel, setShowSidePanel] = useState<boolean>(true);
 
     return (
-        <div className="flex justify-center items-center min-h-screen">
-            <div className="p-10 flex flex-col items-center">
+        <div className="flex justify-center items-center min-h-screen min-w-screen">
+            <div className="flex flex-col items-center w-full h-full">
                 {nodes && links && <DFA nodes={nodes} links={links} />}
-
                 <section>
                     <button
                         className="text-gray-800 absolute z-20 ml-2 mt-2.5 top-0 left-0 p-1 rounded-md hover:bg-black/[.05] transition duration-200"

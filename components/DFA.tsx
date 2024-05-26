@@ -81,12 +81,13 @@ const GraphSummary = (props: PropsInterface) => {
     });
 
     return (
-        <div className="flex flex-col my-5 gap-5">
-            <div className="w-[1000px] h-[500px] ">
+        <div className="flex flex-col w-full h-full">
+            <div className="w-full h-[1000px]">
                 <ReactFlow
                     nodes={Nodes}
                     edges={edges}
                     nodeTypes={{ custom: CustomNode }}
+                    fitView
                 />
                 <style jsx global>{`
                     .react-flow__edge-text {
