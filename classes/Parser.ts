@@ -16,7 +16,8 @@ export default class Parser {
 
     constructor(str: string) {
         this.string = str;
-        this.produceAST(str);
+        const augmentedString = str.replaceAll('+', '|');
+        this.produceAST(augmentedString);
     }
 
     private notEOL = () => {
