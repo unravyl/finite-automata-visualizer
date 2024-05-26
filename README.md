@@ -24,7 +24,7 @@ Go to [our website](https://favisualizer.vercel.app/) and visualize your regular
 
 ## Implementation Algorithm?
 
--   To know how the RegEx to DFA Diagram conversion works in detail, check out our [wiki](https://github.com/maxellmilay/finite-automata-visualizer/wiki) !
+-   To know how the RegEx to DFA Diagram conversion works in detail, check out our [wiki](https://github.com/maxellmilay/finite-automata-visualizer/wiki/Core-Algorithm-of-the-RegEx-to-DFA-Conversion) !
 
 ## Techstack
 
