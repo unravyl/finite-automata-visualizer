@@ -51,22 +51,14 @@ const DFA = (props: PropsInterface) => {
     });
 
     const [nodeState, setNodeState] = useState(diagramNodes);
-    const [edgeState, setEdgeState] = useState(diagramEdges);
 
     useEffect(() => {
         setNodeState(diagramNodes);
-        setEdgeState(diagramEdges);
-    }, [nodes, links]);
+    }, [nodes]);
 
     const onNodesChange = useCallback(
         (changes: NodeChange[]) =>
             setNodeState((nds) => applyNodeChanges(changes, nds)),
-        []
-    );
-
-    const onEdgesChange = useCallback(
-        (changes: EdgeChange[]) =>
-            setEdgeState((eds) => applyEdgeChanges(changes, eds)),
         []
     );
 
@@ -75,8 +67,7 @@ const DFA = (props: PropsInterface) => {
             <ReactFlow
                 nodes={nodeState}
                 onNodesChange={onNodesChange}
-                edges={edgeState}
-                onEdgesChange={onEdgesChange}
+                edges={diagramEdges}
                 fitView
             >
                 <Background />
