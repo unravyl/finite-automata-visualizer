@@ -22,12 +22,17 @@ interface PropsInterface {
     links: LinkInterface[];
 }
 
+const nodeTypes: NodeTypes = {
+    circle: CircleNode,
+};
+
+const edgeTypes: EdgeTypes = {
+    selfconnecting: SelfConnectingEdge,
+    floating: FloatingEdge,
+};
+
 const DFA = (props: PropsInterface) => {
     const { nodes, links } = props;
-
-    const nodeTypes: NodeTypes = {
-        circle: CircleNode,
-    };
 
     const diagramNodes = nodes.map((node, index) => {
         const label = node.isFinalState
@@ -47,11 +52,6 @@ const DFA = (props: PropsInterface) => {
             type: 'circle',
         } as Node;
     });
-
-    const edgeTypes: EdgeTypes = {
-        selfconnecting: SelfConnectingEdge,
-        floating: FloatingEdge,
-    };
 
     const diagramEdges = links.map((link) => {
         const edgeId = `${link.transition}-(${link.source.id})-(${link.target.id})`;
