@@ -138,9 +138,8 @@ export const generateNodesAndLinks = (
                 );
                 deadState = newDeadState;
                 nodes.push(deadState);
-                const deadA = generateLink(deadState, deadState, 'a');
-                const deadB = generateLink(deadState, deadState, 'b');
-                links.push(deadA, deadB);
+                const dead = generateLink(deadState, deadState, 'a,b');
+                links.push(dead);
             }
             const newLink = generateLink(currentNode, deadState, 'a');
             links.push(newLink);
@@ -162,9 +161,8 @@ export const generateNodesAndLinks = (
                 );
                 deadState = newDeadState;
                 nodes.push(deadState);
-                const deadA = generateLink(deadState, deadState, 'a');
-                const deadB = generateLink(deadState, deadState, 'b');
-                links.push(deadA, deadB);
+                const dead = generateLink(deadState, deadState, 'a,b');
+                links.push(dead);
             }
             const newLink = generateLink(currentNode, deadState, 'b');
             links.push(newLink);
