@@ -2,6 +2,8 @@
 
 ## How To Access?
 
+Go to [our website](https://favisualizer.vercel.app/) and visualize your regula expression into a diagram!
+
 ## Features
 
 1. **RegEx to DFA Generation**
