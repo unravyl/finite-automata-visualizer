@@ -1,5 +1,4 @@
-import { symbol } from 'd3';
-import { FollowposResult } from './dfa';
+import { FollowPosInterface } from '../../interfaces/ast';
 
 interface NodeInterface {
     id: number;
@@ -28,7 +27,7 @@ const arraysEqual = (a, b) => {
 
 export const generateDFA = (
     firstpos: number[],
-    followpos: FollowposResult[]
+    followpos: FollowPosInterface[]
 ) => {
     let nodes: NodeInterface[] = [{ id: 1, values: firstpos }];
     let links: LinkInterface[] = [];
