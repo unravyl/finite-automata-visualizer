@@ -32,5 +32,3 @@ Go to [our website](https://favisualizer.vercel.app/) and visualize your regular
 [<img src="https://avatars.githubusercontent.com/u/93570629?v=4" width=75 height=75 hspace=5/>](https://github.com/cup-noodlehS)
 [<img src="https://avatars.githubusercontent.com/u/125939827?v=4" width=75 height=75 hspace=5/>](https://github.com/yunjin08)
 [<img src="https://avatars.githubusercontent.com/u/80801376?v=4" width=75 height=75/ hspace=5>](https://github.com/jourdancatarina3)
-
-![alt text](image.png)
