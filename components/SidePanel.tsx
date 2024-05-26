@@ -11,6 +11,7 @@ import Parser from '../classes/Parser';
 import { generateNodesAndLinks } from '../utils/graph';
 import { useDfaStore } from '../store/dfaStore';
 import { testLog } from '../tests/log';
+import { DFAStoreData } from '../interfaces/store';
 
 const apps = {
     0: {
@@ -35,7 +36,7 @@ function SidePanel(props: PropsInterface) {
     const { fetchDfaFromIdb, addDfaToIdb, getDfaFromIdb } = useDfaStore();
     const { show, setNodes, setLinks } = props;
 
-    const [inputs, setInputs] = useState([]);
+    const [inputs, setInputs] = useState<DFAStoreData[]>([]);
     const [isFetching, setIsFetching] = useState(false);
     const [showAppsDropdown, setShowAppsDropdown] = useState(false);
     const [selectedApp, setSelectedApp] = useState(0);
@@ -98,6 +99,15 @@ function SidePanel(props: PropsInterface) {
     };
 
     const generateDFA = async (inputString: string) => {
+        const existingRegex = inputs.filter((data) => {
+            return data.regex === inputString;
+        });
+        if (existingRegex.length > 0) {
+            setSelectedInput(existingRegex[0].id);
+            setNodes(existingRegex[0].nodes);
+            setLinks(existingRegex[0].links);
+            return;
+        }
         const parser = new Parser(inputString);
         const firstPos = parser.firstPos;
         const followPos = parser.followPos;
