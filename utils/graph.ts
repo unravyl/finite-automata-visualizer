@@ -97,6 +97,7 @@ export const generateNodesAndLinks = (
     let nodes: NodeInterface[] = [
         { id: 1, values: firstpos, group: 1, isFinalState: false },
     ];
+
     let links: LinkInterface[] = [];
     let queue: NodeInterface[] = [...nodes];
 
@@ -111,7 +112,7 @@ export const generateNodesAndLinks = (
     while (queue.length > 0) {
         const currentNode = queue.shift();
 
-        const currentSymbol = followpos[currentNode.id].symbol;
+        const currentSymbol = followpos[currentNode.id - 1].symbol;
 
         const { a, b } = getNewNodes(currentNode, followpos);
 
@@ -164,7 +165,7 @@ export const generateNodesAndLinks = (
             const newLink = generateLink(currentNode, deadState, 'b');
             links.push(newLink);
         }
-
+        console.log('LOG DEAD NODE B');
         potentialNewNodes.forEach((potential) => {
             if (isArrayPresent(potential.list, nodes)) {
                 const targetNode = findNodeByTargetValues(
