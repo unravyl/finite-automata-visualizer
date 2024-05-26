@@ -1,52 +1,18 @@
 'use client';
 
 import React, { useState } from 'react';
-import Parser from '../classes/Parser';
-import { generateNodesAndLinks } from '../utils/graph';
 import { NodeInterface, LinkInterface } from '../interfaces/graph';
-
 import DFA from '../components/DFA';
 import SidePanel from '../components/SidePanel';
-import { testLog } from '../tests/log';
 
 export default function Page() {
-    const [regex, setRegex] = useState<string>('');
     const [nodes, setNodes] = useState<NodeInterface[]>([]);
     const [links, setLinks] = useState<LinkInterface[]>([]);
     const [showSidePanel, setShowSidePanel] = useState<boolean>(true);
 
-    const handleRegexInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setRegex(e.target.value);
-    };
-
-    const generateDFA = (inputString: string) => {
-        const parser = new Parser(inputString);
-        const firstPos = parser.firstPos;
-        const followPos = parser.followPos;
-        const { nodes, links } = generateNodesAndLinks(firstPos, followPos);
-        setNodes(nodes);
-        setLinks(links);
-        testLog(nodes, links, followPos);
-    };
-
     return (
         <div className="flex justify-center items-center min-h-screen">
             <div className="p-10 flex flex-col items-center">
-                <div className="flex gap-3">
-                    <input
-                        type="text"
-                        value={regex}
-                        onChange={(e) => handleRegexInputChange(e)}
-                        className="border border-black p-2"
-                    />
-                    <button
-                        className="border border-black px-2 py-1"
-                        onClick={() => generateDFA(regex)}
-                    >
-                        Generate
-                    </button>
-                </div>
-
                 {nodes && links && <DFA nodes={nodes} links={links} />}
 
                 <section>
