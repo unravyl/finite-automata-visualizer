@@ -229,9 +229,12 @@ function SidePanel(props: PropsInterface) {
 
                     <div className="flex flex-col gap-3 w-full text-gray-500 overflow-y-auto">
                         {categorizedInputs.map(
-                            (item) =>
+                            (item, index) =>
                                 item.inputs.length > 0 && (
-                                    <div className="flex flex-col gap-1 w-full">
+                                    <div
+                                        className="flex flex-col gap-1 w-full"
+                                        key={`${index}-${item.title}`}
+                                    >
                                         <h1 className="text-xs text-sky-500">
                                             {item.title}
                                         </h1>
