@@ -69,7 +69,11 @@ export default function Page() {
                             <path d="M9 3v18" />
                         </svg>
                     </button>
-                    <SidePanel show={showSidePanel} />
+                    <SidePanel
+                        show={showSidePanel}
+                        setNodes={setNodes}
+                        setLinks={setLinks}
+                    />
                 </section>
             </div>
         </div>

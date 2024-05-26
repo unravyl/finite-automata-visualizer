@@ -1,7 +1,11 @@
+import { NodeInterface, LinkInterface } from './graph';
+
 interface DFAStoreData {
     id: number;
-    // ...other properties of your DFA (states, alphabet, transitions, etc.)
     when: string;
+    nodes: NodeInterface[];
+    links: LinkInterface[];
+    regex: string;
 }
 
 export interface DFAStoreState {
