@@ -10,6 +10,7 @@ import { mdiRocketLaunchOutline } from '@mdi/js';
 import Parser from '../classes/Parser';
 import { generateNodesAndLinks } from '../utils/graph';
 import { useDfaStore } from '../store/dfaStore';
+import { testLog } from '../tests/log';
 
 const apps = {
     0: {
@@ -103,6 +104,7 @@ function SidePanel(props: PropsInterface) {
         const { nodes, links } = generateNodesAndLinks(firstPos, followPos);
         setNodes(nodes);
         setLinks(links);
+        testLog(nodes, links, followPos);
         setInputString('');
 
         const data = {
