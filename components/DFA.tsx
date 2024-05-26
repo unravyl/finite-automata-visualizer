@@ -82,7 +82,7 @@ const GraphSummary = (props: PropsInterface) => {
 
     return (
         <div className="flex flex-col w-full h-full">
-            <div className="w-full h-[1000px]">
+            <div className="w-full h-full">
                 <ReactFlow
                     nodes={Nodes}
                     edges={edges}
