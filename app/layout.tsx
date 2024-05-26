@@ -27,7 +27,7 @@ export default function RootLayout({
                 <meta name="og:image" content="/images/metapic.png" />
                 <meta
                     name="og:title"
-                    content="FA Visualizer - a application for visualizing finite automata"
+                    content="FA Visualizer - an application for visualizing finite automata"
                 />
                 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
             </head>
