@@ -1,18 +1,21 @@
 'use client';
 
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import ReactFlow, {
     Background,
-    applyNodeChanges,
-    applyEdgeChanges,
+    useNodesState,
     Edge,
     Node,
-    NodeChange,
-    EdgeChange,
+    MarkerType,
+    ConnectionMode,
+    EdgeTypes,
+    NodeTypes,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
-
 import { NodeInterface, LinkInterface } from '../interfaces/graph';
+import SelfConnectingEdge from './SelfConnectingEdge';
+import FloatingEdge from './FloatingEdge';
+import CircleNode from './CircleNode';
 
 interface PropsInterface {
     nodes: NodeInterface[];
@@ -22,52 +25,64 @@ interface PropsInterface {
 const DFA = (props: PropsInterface) => {
     const { nodes, links } = props;
 
+    const nodeTypes: NodeTypes = {
+        circle: CircleNode,
+    };
+
     const diagramNodes = nodes.map((node, index) => {
         const label = node.isFinalState
-            ? 'Final'
+            ? 'F'
             : node.id === 1
-              ? 'Start'
+              ? 'S'
               : node.id === -1
-                ? 'Dead'
-                : `State ${node.id}`;
+                ? 'D'
+                : node.id.toString();
 
         return {
             id: node.id.toString(),
             data: {
                 label,
             },
-            position: { x: index * 200, y: index % 2 === 0 ? 100 : 300 },
+            position: { x: index * 200, y: index % 2 === 0 ? 100 : 350 },
+            type: 'circle',
         } as Node;
     });
 
+    const edgeTypes: EdgeTypes = {
+        selfconnecting: SelfConnectingEdge,
+        floating: FloatingEdge,
+    };
+
     const diagramEdges = links.map((link) => {
         const edgeId = `${link.transition}-(${link.source.id})-(${link.target.id})`;
+        const isLoop = link.source.id === link.target.id;
+
         return {
             id: edgeId,
             source: link.source.id.toString(),
             target: link.target.id.toString(),
             label: link.transition,
+            type: isLoop ? 'selfconnecting' : 'floating',
+            markerEnd: { type: MarkerType.ArrowClosed },
         } as Edge;
     });
 
-    const [nodeState, setNodeState] = useState(diagramNodes);
+    const [nodeState, setNodeState, onNodesChange] =
+        useNodesState(diagramNodes);
 
     useEffect(() => {
         setNodeState(diagramNodes);
-    }, [nodes]);
-
-    const onNodesChange = useCallback(
-        (changes: NodeChange[]) =>
-            setNodeState((nds) => applyNodeChanges(changes, nds)),
-        []
-    );
+    }, [nodes, links]);
 
     return (
         <div className="h-lvh w-full">
             <ReactFlow
                 nodes={nodeState}
+                nodeTypes={nodeTypes}
                 onNodesChange={onNodesChange}
                 edges={diagramEdges}
+                edgeTypes={edgeTypes}
+                connectionMode={ConnectionMode.Loose}
                 fitView
             >
                 <Background />
