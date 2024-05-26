@@ -1,7 +1,7 @@
 import React from 'react';
 import { NodeInterface, LinkInterface } from '../../interfaces/graph';
 import ReactFlow, { MarkerType } from 'react-flow-renderer';
-import CustomNode from '../CustomNode';
+import CustomNode from './OldCustomNode';
 
 interface PropsInterface {
     nodes: NodeInterface[];
