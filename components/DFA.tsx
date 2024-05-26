@@ -48,7 +48,10 @@ const DFA = (props: PropsInterface) => {
             data: {
                 label,
             },
-            position: { x: index * 200, y: index % 2 === 0 ? 100 : 350 },
+            position: {
+                x: 75 * index + 3.1 ** (index + 1),
+                y: index % 2 === 0 ? 100 : 350,
+            },
             type: 'circle',
         } as Node;
     });
