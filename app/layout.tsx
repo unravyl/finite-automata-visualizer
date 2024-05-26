@@ -9,7 +9,7 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body>{children}</body>
-            <title>Regex Parser</title>
+            <title>FA Visualizer</title>
             <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         </html>
     );
