@@ -2,7 +2,7 @@
 
 ## How To Access?
 
-Go to [our website](https://favisualizer.vercel.app/) and visualize your regula expression into a diagram!
+Go to [our website](https://favisualizer.vercel.app/) and visualize your regular expression into a diagram!
 
 ## Features
 
