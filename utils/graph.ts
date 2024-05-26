@@ -61,11 +61,20 @@ export const isArrayPresent = (
     });
 };
 
-export const generateLink = (source, target, transition) => {
+export const generateLink = (
+    source: NodeInterface,
+    target: NodeInterface,
+    transition: string
+) => {
     return { source, target, transition };
 };
 
-export const generateNode = (id, values, group, finalState) => {
+export const generateNode = (
+    id: number,
+    values: number[],
+    group: number,
+    finalState: number
+) => {
     return { id, values, group, isFinalState: values.includes(finalState) };
 };
 
@@ -88,6 +97,36 @@ export const getNewValues = (
     return newValues.filter((item, index) => {
         return newValues.indexOf(item) === index;
     });
+};
+
+const checkDuplicateLink = (
+    links: LinkInterface[],
+    source: NodeInterface,
+    target: NodeInterface
+) => {
+    const sourceId = source.id;
+    const targetId = target.id;
+
+    const duplicates = links.map((link, index) => {
+        const existingSourceId = link.source.id;
+        const existingTargetId = link.target.id;
+        if (sourceId === existingSourceId && targetId === existingTargetId) {
+            return index;
+        } else {
+            console.log();
+            return;
+        }
+    });
+
+    const filteredDuplicates = duplicates.filter(
+        (element) => element !== undefined
+    );
+
+    if (filteredDuplicates.length === 0) {
+        return null;
+    } else {
+        return filteredDuplicates;
+    }
 };
 
 export const generateNodesAndLinks = (
@@ -173,12 +212,28 @@ export const generateNodesAndLinks = (
                     potential.list,
                     nodes
                 );
-                const newLink = generateLink(
+
+                const duplicates = checkDuplicateLink(
+                    links,
                     currentNode,
-                    targetNode,
-                    potential.transition
+                    targetNode
                 );
-                links.push(newLink);
+
+                console.log('LOG DUPLICATES', duplicates);
+
+                if (duplicates !== null) {
+                    duplicates.forEach((duplicateIndex) => {
+                        const newTransition = `${potential.transition},${links[duplicateIndex].transition}`;
+                        links[duplicateIndex].transition = newTransition;
+                    });
+                } else {
+                    const newLink = generateLink(
+                        currentNode,
+                        targetNode,
+                        potential.transition
+                    );
+                    links.push(newLink);
+                }
             } else {
                 const newNode = generateNode(
                     nodeCount,
@@ -189,12 +244,26 @@ export const generateNodesAndLinks = (
                 nodeCount += 1;
                 nodes.push(newNode);
                 queue.push(newNode);
-                const newLink = generateLink(
+
+                const duplicates = checkDuplicateLink(
+                    links,
                     currentNode,
-                    newNode,
-                    potential.transition
+                    newNode
                 );
-                links.push(newLink);
+
+                if (duplicates !== null) {
+                    duplicates.forEach((duplicateIndex) => {
+                        const newTransition = `${potential.transition},${links[duplicateIndex].transition}`;
+                        links[duplicateIndex].transition = newTransition;
+                    });
+                } else {
+                    const newLink = generateLink(
+                        currentNode,
+                        newNode,
+                        potential.transition
+                    );
+                    links.push(newLink);
+                }
             }
         });
     }
