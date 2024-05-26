@@ -26,6 +26,12 @@ const apps = {
     },
 };
 
+const StringValidation = [
+    "Please enter a string for validation.",
+    "The provided string is not valid for ",
+    "The provided string is valid for "
+];
+
 interface PropsInterface {
     show: boolean;
     setLinks: Function;
@@ -42,6 +48,9 @@ function SidePanel(props: PropsInterface) {
     const [selectedApp, setSelectedApp] = useState(0);
     const [selectedInput, setSelectedInput] = useState(null);
     const [inputString, setInputString] = useState('');
+    const [isInputValid, setIsInputValid] = useState(true);
+    const [selectedRegex, setSelectedRegex] = useState('');
+    const [stringChecker, setStringChecker] = useState<false | true | null>(null);
 
     const inputsToday = inputs.filter((input) => {
         const inputDate = new Date(input.when);
@@ -84,7 +93,7 @@ function SidePanel(props: PropsInterface) {
 
     const disableInputButton =
         inputString.trim().length === 0 ||
-        (selectedApp === 1 && !selectedInput);
+        (selectedApp === 1 && (!inputString || !isInputValid));
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -94,9 +103,50 @@ function SidePanel(props: PropsInterface) {
             }
             return;
         }
-        setSelectedInput(null);
-        generateDFA(inputString);
+        if (selectedApp === 0){ 
+            generateDFA(inputString);
+        }
+        else if (selectedApp === 1){
+            setStringChecker(null)
+            const stringChecker = isValidRegex(inputString);
+            setStringChecker(stringChecker);
+        }
+
     };
+
+
+    const isValidRegex = (inputString: string): boolean => {
+        // Replace the parts of the selectedRegex
+        const regexPattern = selectedRegex.replace(/\./g, '+').replace(/e/g, '').replace(/ /g, '\\s*');
+        
+        // Replace the parts of the inputString
+        const inputStringProcessed = inputString.replace(/e/g, '');
+
+        const regex = new RegExp(`^${regexPattern}$`);
+
+        return regex.test(inputStringProcessed);
+    };
+
+    const isValidStringInput = (input) => {
+        const regex = /^[a-zA-Z\s]*$/; // Only allows alphabetic characters and spaces
+        return regex.test(input);
+    };
+
+    const handleInputChange = (e) => {
+
+        const input = e.target.value.toLowerCase();
+
+        if(input.trim() === '') {
+            setStringChecker(null)
+        }
+        if (selectedApp === 1 && !isValidStringInput(input)) {
+            setIsInputValid(false);
+        } else {
+            setIsInputValid(true);
+        }
+        setInputString(input);
+    };
+
 
     const generateDFA = async (inputString: string) => {
         const existingRegex = inputs.filter((data) => {
@@ -136,7 +186,8 @@ function SidePanel(props: PropsInterface) {
         setIsFetching(false);
     };
 
-    const handleRegexClick = async (id: number) => {
+    const handleRegexClick = async (id: number, regex: string) => {
+        setSelectedRegex(regex);
         setSelectedInput(id);
         const dfaData = await getDfaFromIdb(id);
         setNodes(dfaData.nodes);
@@ -203,31 +254,40 @@ function SidePanel(props: PropsInterface) {
                             )}
                         </div>
                     </div>
+                    <div className='relative z-[-1]'>
+                        <form onSubmit={handleSubmit} className="flex items-center">
+                            <input
+                                type="text"
+                                placeholder={apps[selectedApp].placeholder}
+                                className="rounded-l-md h-full w-full p-2 border border-gray-200 focus:outline-none focus:border-sky-500"
+                                onChange={handleInputChange}
+                                value={inputString}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                        handleSubmit(e);
+                                    }
+                                }}
+                            />
+                            <button
+                                type="submit"
+                                className={`rounded-r-md h-full p-2 bg-sky-500 text-white hover:bg-sky-600 transition duration-200
+                                            ${disableInputButton && 'cursor-no-drop'}`}
+                                disabled={disableInputButton}
+                            >
+                                <Icon path={mdiRocketLaunchOutline} size={1} />
+                            </button>
+                        </form>
+                        {!isInputValid && (<div className='text-red-500 absolute bottom-[-2rem] text-[0.7rem]'>Only alphabetic characters are allowed.</div>)}
+                    </div>
 
-                    <form onSubmit={handleSubmit} className="flex items-center">
-                        <input
-                            type="text"
-                            placeholder={apps[selectedApp].placeholder}
-                            className="rounded-l-md h-full w-full p-2 border border-gray-200 focus:outline-none focus:border-sky-500"
-                            onChange={(e) => setInputString(e.target.value)}
-                            value={inputString}
-                            onKeyDown={(e) => {
-                                if (e.key === 'Enter') {
-                                    handleSubmit(e);
-                                }
-                            }}
-                        />
-                        <button
-                            type="submit"
-                            className={`rounded-r-md h-full p-2 bg-sky-500 text-white hover:bg-sky-600 transition duration-200
-                                        ${disableInputButton && 'cursor-no-drop'}`}
-                            disabled={disableInputButton}
-                        >
-                            <Icon path={mdiRocketLaunchOutline} size={1} />
-                        </button>
-                    </form>
-
-                    <div className="flex flex-col gap-3 w-full text-gray-500 overflow-y-auto">
+                    <div className="flex flex-col gap-3 w-full mt-[1rem] [2rem] text-gray-500 overflow-y-auto">
+                        {selectedApp === 1 && (
+                            <div className={`text-xs ${(stringChecker === null) ? 'text-sky-500' : 
+                                (stringChecker === true )  ? "text-green-500" : 'text-red-500'} mb-[1rem]`}>
+                                    {(stringChecker === null) ? StringValidation[0] : (stringChecker === true) 
+                                    ? `${StringValidation[2]} ${selectedRegex}.` : `${StringValidation[1]} ${selectedRegex}.`}
+                            </div>
+                        )}
                         {categorizedInputs.map(
                             (item, index) =>
                                 item.inputs.length > 0 && (
@@ -238,19 +298,19 @@ function SidePanel(props: PropsInterface) {
                                         <h1 className="text-xs text-sky-500">
                                             {item.title}
                                         </h1>
-                                        {item.inputs.map((input) => (
-                                            <button
-                                                key={input.id}
-                                                onClick={() =>
-                                                    handleRegexClick(input.id)
-                                                }
-                                                className={`flex items-center gap-2 p-2 rounded-md hover:bg-sky-100 hover:text-sky-500 ${selectedInput === input.id && 'bg-sky-100 text-sky-500'}`}
-                                            >
-                                                <span>{input.regex}</span>
-                                            </button>
-                                        ))}
-                                    </div>
-                                )
+                                    {item.inputs.map((input) => (
+                                        <button
+                                            key={input.id}
+                                            onClick={() =>
+                                                handleRegexClick(input.id,input.regex)
+                                            }
+                                            className={`flex items-center gap-2 p-2 rounded-md hover:bg-sky-100 hover:text-sky-500 ${selectedInput === input.id && 'bg-sky-100 text-sky-500'}`}
+                                        >
+                                            <span>{input.regex}</span>
+                                        </button>
+                                    ))}
+                                </div>
+                            )
                         )}
                     </div>
 
