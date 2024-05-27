@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import { NodeInterface, LinkInterface } from '../interfaces/graph';
 import DFA from '../components/DFA';
 import SidePanel from '../components/SidePanel';
+import LegendPanel from '../components/LegendPanel';
 
 const mobileScreen = 640;
 
@@ -57,6 +58,7 @@ export default function Page() {
                         setNodes={setNodes}
                         setLinks={setLinks}
                     />
+                    <LegendPanel show={showSidePanel}/>
                 </section>
             </div>
         </div>
