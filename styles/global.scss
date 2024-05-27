@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
 @import 'sidepanel';
+@import 'legendpanel';
 
 @tailwind base;
 @tailwind components;
@@ -9,3 +10,13 @@ body {
     margin: 0;
     font-family: 'Inter', sans-serif;
 }
+
+.bg-custom-blue { background-color: #6CA0DC; }
+.bg-custom-gray { background-color: #C5C6D0; }
+.bg-custom-red { background-color: #BC544D; }
+.bg-custom-green { background-color: #99EDC3; }
+
+.border-custom-blue { border-color: #0000ff; }
+.border-custom-black { border-color: #000000; }
+.border-custom-red { border-color: #ff0000; }
+.border-custom-green { border-color: #008000; }

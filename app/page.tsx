@@ -12,14 +12,16 @@ export default function Page() {
     const [nodes, setNodes] = useState<NodeInterface[]>([]);
     const [links, setLinks] = useState<LinkInterface[]>([]);
     const [showSidePanel, setShowSidePanel] = useState<boolean>(true);
+    const [showLegendPanel, setShowLegendPanel] = useState<boolean>(true);
     const sidePanelRef = useRef<HTMLDivElement>(null);
+    const legendPanelRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
             if (
-                sidePanelRef.current &&
-                !sidePanelRef.current.contains(e.target as Node) &&
-                showSidePanel &&
+                (sidePanelRef.current) &&
+                (!sidePanelRef.current.contains(e.target as Node)) &&
+                (showSidePanel) &&
                 window.innerWidth < mobileScreen
             ) {
                 setShowSidePanel(false);
@@ -29,6 +31,7 @@ export default function Page() {
         return () => document.removeEventListener('click', handleClickOutside);
     }, []);
 
+    console.log(showLegendPanel);
     return (
         <div className="flex justify-center items-center min-h-screen min-w-screen">
             <div className="flex flex-col items-center w-full h-lvh">
@@ -58,7 +61,17 @@ export default function Page() {
                         setNodes={setNodes}
                         setLinks={setLinks}
                     />
-                    <LegendPanel show={showSidePanel}/>
+                    
+                </section>
+                <section ref={legendPanelRef}>
+                    {showLegendPanel ? (<i className='bx bx-exit text-sky-500 absolute top-10 z-[100] right-10 text-xl cursor-pointer'
+                        onClick={()=>setShowLegendPanel(false)}
+                        ></i>) : ( 
+                        <i className='bx bx-chevrons-left text-sky-500 absolute top-10 z-[100] right-10 text-2xl cursor-pointer'
+                        onClick={()=>setShowLegendPanel(true)}>
+                        </i>
+                    )}
+                    <LegendPanel show={showLegendPanel}/>
                 </section>
             </div>
         </div>
