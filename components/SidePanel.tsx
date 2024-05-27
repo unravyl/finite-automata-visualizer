@@ -115,6 +115,9 @@ function SidePanel(props: PropsInterface) {
 
     const isValidRegex = (inputString: string): boolean => {
         // Replace the parts of the selectedRegex
+        if (!selectedRegex) {
+            return;
+        }
         const regexPattern = selectedRegex
             .replace(/\./g, '+')
             .replace(/e/g, '')
