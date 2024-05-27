@@ -304,9 +304,9 @@ function SidePanel(props: PropsInterface) {
                                 <Icon path={mdiRocketLaunchOutline} size={1} />
                             </button>
                         </form>
-                        <div className="p-1 h-[35px]">
-                            {selectedApp === 1 &&
-                                (!selectedRegex ? (
+                        {selectedApp === 1 && (
+                            <div className="p-1 h-[35px]">
+                                {!selectedRegex ? (
                                     <p className="text-sky-500 text-xs">
                                         Please select a regex to check the
                                         string.
@@ -336,8 +336,9 @@ function SidePanel(props: PropsInterface) {
                                         />
                                         {`The provided string is not valid for ${selectedRegex}`}
                                     </p>
-                                ))}
-                        </div>
+                                )}
+                            </div>
+                        )}
                     </div>
 
                     <div className="flex flex-col gap-3 w-full mt-[1rem] [2rem] text-gray-500 overflow-y-auto">
