@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { CSSTransition } from 'react-transition-group';
 
 import Icon from '@mdi/react';
@@ -6,6 +6,8 @@ import { mdiResistorNodes } from '@mdi/js';
 import { mdiChevronDown } from '@mdi/js';
 import { mdiCheckAll } from '@mdi/js';
 import { mdiRocketLaunchOutline } from '@mdi/js';
+import { mdiCloseCircleOutline } from '@mdi/js';
+import { mdiCheckCircleOutline } from '@mdi/js';
 
 import Parser from '../classes/Parser';
 import { generateNodesAndLinks } from '../utils/graph';
@@ -26,12 +28,6 @@ const apps = {
     },
 };
 
-const StringValidation = [
-    "Please enter a string for validation.",
-    "The provided string is not valid for ",
-    "The provided string is valid for "
-];
-
 interface PropsInterface {
     show: boolean;
     setLinks: Function;
@@ -49,8 +45,13 @@ function SidePanel(props: PropsInterface) {
     const [selectedInput, setSelectedInput] = useState(null);
     const [inputString, setInputString] = useState('');
     const [isInputValid, setIsInputValid] = useState(true);
-    const [selectedRegex, setSelectedRegex] = useState('');
-    const [stringChecker, setStringChecker] = useState<false | true | null>(null);
+    const [selectedRegex, setSelectedRegex] = useState(null);
+    const [stringChecker, setStringChecker] = useState<false | true | null>(
+        null
+    );
+
+    const dropRef = useRef(null);
+    const dropBtnRef = useRef(null);
 
     const inputsToday = inputs.filter((input) => {
         const inputDate = new Date(input.when);
@@ -103,22 +104,22 @@ function SidePanel(props: PropsInterface) {
             }
             return;
         }
-        if (selectedApp === 0){ 
-            generateDFA(inputString);
-        }
-        else if (selectedApp === 1){
-            setStringChecker(null)
-            const stringChecker = isValidRegex(inputString);
+        if (selectedApp === 0) {
+            generateDFA(inputString.trim());
+        } else if (selectedApp === 1) {
+            setStringChecker(null);
+            const stringChecker = isValidRegex(inputString.trim());
             setStringChecker(stringChecker);
         }
-
     };
-
 
     const isValidRegex = (inputString: string): boolean => {
         // Replace the parts of the selectedRegex
-        const regexPattern = selectedRegex.replace(/\./g, '+').replace(/e/g, '').replace(/ /g, '\\s*');
-        
+        const regexPattern = selectedRegex
+            .replace(/\./g, '+')
+            .replace(/e/g, '')
+            .replace(/ /g, '\\s*');
+
         // Replace the parts of the inputString
         const inputStringProcessed = inputString.replace(/e/g, '');
 
@@ -133,23 +134,19 @@ function SidePanel(props: PropsInterface) {
     };
 
     const handleInputChange = (e) => {
-
         const input = e.target.value.toLowerCase();
-
-        if(input.trim() === '') {
-            setStringChecker(null)
-        }
         if (selectedApp === 1 && !isValidStringInput(input)) {
             setIsInputValid(false);
         } else {
             setIsInputValid(true);
         }
         setInputString(input);
+        setStringChecker(null);
     };
-
 
     const generateDFA = async (inputString: string) => {
         const existingRegex = inputs.filter((data) => {
+            setInputString('');
             return data.regex === inputString;
         });
         if (existingRegex.length > 0) {
@@ -187,6 +184,7 @@ function SidePanel(props: PropsInterface) {
     };
 
     const handleRegexClick = async (id: number, regex: string) => {
+        setStringChecker(null);
         setSelectedRegex(regex);
         setSelectedInput(id);
         const dfaData = await getDfaFromIdb(id);
@@ -197,6 +195,25 @@ function SidePanel(props: PropsInterface) {
     useEffect(() => {
         getInputsFromIdb();
     }, []);
+
+    useEffect(() => {
+        const handleClick = (e) => {
+            if (
+                dropRef.current &&
+                !dropRef.current.contains(e.target) &&
+                dropBtnRef.current &&
+                !dropBtnRef.current.contains(e.target)
+            ) {
+                setShowAppsDropdown(false);
+            }
+        };
+
+        document.addEventListener('click', handleClick);
+
+        return () => {
+            document.removeEventListener('click', handleClick);
+        };
+    });
 
     return (
         <div className="side-panel">
@@ -214,6 +231,7 @@ function SidePanel(props: PropsInterface) {
                                 <span>{apps[selectedApp].title}</span>
                             </div>
                             <button
+                                ref={dropBtnRef}
                                 onClick={() =>
                                     setShowAppsDropdown(!showAppsDropdown)
                                 }
@@ -224,7 +242,10 @@ function SidePanel(props: PropsInterface) {
                         </h1>
                         <div className="relative">
                             {showAppsDropdown && (
-                                <div className="absolute w-full bg-white p-2">
+                                <div
+                                    ref={dropRef}
+                                    className="absolute w-full bg-white p-2"
+                                >
                                     {Object.keys(apps).map(
                                         (app) =>
                                             parseInt(app) !== selectedApp && (
@@ -254,8 +275,11 @@ function SidePanel(props: PropsInterface) {
                             )}
                         </div>
                     </div>
-                    <div className='relative z-[-1]'>
-                        <form onSubmit={handleSubmit} className="flex items-center">
+                    <div className="relative z-[-1]">
+                        <form
+                            onSubmit={handleSubmit}
+                            className="flex items-center"
+                        >
                             <input
                                 type="text"
                                 placeholder={apps[selectedApp].placeholder}
@@ -277,17 +301,43 @@ function SidePanel(props: PropsInterface) {
                                 <Icon path={mdiRocketLaunchOutline} size={1} />
                             </button>
                         </form>
-                        {!isInputValid && (<div className='text-red-500 absolute bottom-[-2rem] text-[0.7rem]'>Only alphabetic characters are allowed.</div>)}
+                        <div className="p-1 h-[35px]">
+                            {selectedApp === 1 &&
+                                (!selectedRegex ? (
+                                    <p className="text-sky-500 text-xs">
+                                        Please select a regex to check the
+                                        string.
+                                    </p>
+                                ) : !isInputValid ? (
+                                    <p className="text-red-500 text-xs">
+                                        Only alphabetic characters are allowed.
+                                    </p>
+                                ) : stringChecker === null ? (
+                                    <p className="text-sky-500 text-xs">
+                                        {inputString.trim() === '' &&
+                                            'Please enter a string for validation'}
+                                    </p>
+                                ) : stringChecker === true ? (
+                                    <p className="text-green-500 text-xs flex gap-1">
+                                        <Icon
+                                            path={mdiCheckCircleOutline}
+                                            size={0.8}
+                                        />
+                                        {`The provided string is valid for ${selectedRegex}`}
+                                    </p>
+                                ) : (
+                                    <p className="text-red-500 text-xs flex gap-1">
+                                        <Icon
+                                            path={mdiCloseCircleOutline}
+                                            size={0.8}
+                                        />
+                                        {`The provided string is not valid for ${selectedRegex}`}
+                                    </p>
+                                ))}
+                        </div>
                     </div>
 
                     <div className="flex flex-col gap-3 w-full mt-[1rem] [2rem] text-gray-500 overflow-y-auto">
-                        {selectedApp === 1 && (
-                            <div className={`text-xs ${(stringChecker === null) ? 'text-sky-500' : 
-                                (stringChecker === true )  ? "text-green-500" : 'text-red-500'} mb-[1rem]`}>
-                                    {(stringChecker === null) ? StringValidation[0] : (stringChecker === true) 
-                                    ? `${StringValidation[2]} ${selectedRegex}.` : `${StringValidation[1]} ${selectedRegex}.`}
-                            </div>
-                        )}
                         {categorizedInputs.map(
                             (item, index) =>
                                 item.inputs.length > 0 && (
@@ -298,19 +348,22 @@ function SidePanel(props: PropsInterface) {
                                         <h1 className="text-xs text-sky-500">
                                             {item.title}
                                         </h1>
-                                    {item.inputs.map((input) => (
-                                        <button
-                                            key={input.id}
-                                            onClick={() =>
-                                                handleRegexClick(input.id,input.regex)
-                                            }
-                                            className={`flex items-center gap-2 p-2 rounded-md hover:bg-sky-100 hover:text-sky-500 ${selectedInput === input.id && 'bg-sky-100 text-sky-500'}`}
-                                        >
-                                            <span>{input.regex}</span>
-                                        </button>
-                                    ))}
-                                </div>
-                            )
+                                        {item.inputs.map((input) => (
+                                            <button
+                                                key={input.id}
+                                                onClick={() =>
+                                                    handleRegexClick(
+                                                        input.id,
+                                                        input.regex
+                                                    )
+                                                }
+                                                className={`flex items-center gap-2 p-2 rounded-md hover:bg-sky-100 hover:text-sky-500 ${selectedInput === input.id && 'bg-sky-100 text-sky-500'}`}
+                                            >
+                                                <span>{input.regex}</span>
+                                            </button>
+                                        ))}
+                                    </div>
+                                )
                         )}
                     </div>
 
