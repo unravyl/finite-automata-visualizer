@@ -1,4 +1,4 @@
-import create from 'zustand';
+import { create } from 'zustand';
 import { addData, getAllData, getData } from '../utils/db';
 import { DFAStoreState } from '../interfaces/store';
 
