@@ -18,7 +18,7 @@ export const LegendContents = [
         bgClass: 'bg-custom-red',
     },
     {
-        title: 'Start State',
+        title: 'Final State',
         description: 'F',
         borderClass: 'border-custom-green',
         bgClass: 'bg-custom-green',

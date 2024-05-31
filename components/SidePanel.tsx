@@ -46,9 +46,8 @@ function SidePanel(props: PropsInterface) {
     const [inputString, setInputString] = useState('');
     const [isInputValid, setIsInputValid] = useState(true);
     const [selectedRegex, setSelectedRegex] = useState(null);
-    const [stringChecker, setStringChecker] = useState<false | true | null>(
-        null
-    );
+    const [stringChecker, setStringChecker] = useState<false | true | null>(null);
+    const [regexError, setRegexError] = useState('');
 
     const dropRef = useRef(null);
     const dropBtnRef = useRef(null);
@@ -56,14 +55,12 @@ function SidePanel(props: PropsInterface) {
     const inputsToday = inputs.filter((input) => {
         const inputDate = new Date(input.when);
         const today = new Date();
-
         return inputDate.getDate() === today.getDate();
     });
 
     const inputsSevenDays = inputs.filter((input) => {
         const inputDate = new Date(input.when);
         const today = new Date();
-
         return (
             inputDate.getDate() >= today.getDate() - 7 &&
             inputDate.getDate() < today.getDate()
@@ -73,7 +70,6 @@ function SidePanel(props: PropsInterface) {
     const oldInputs = inputs.filter((input) => {
         const inputDate = new Date(input.when);
         const today = new Date();
-
         return inputDate.getDate() < today.getDate() - 7;
     });
 
@@ -93,8 +89,10 @@ function SidePanel(props: PropsInterface) {
     ];
 
     const disableInputButton =
-        inputString.trim().length === 0 ||
-        (selectedApp === 1 && (!inputString || !isInputValid));
+    inputString.trim().length === 0 ||
+    (selectedApp === 1 && (!inputString || !isInputValid)) ||
+    (selectedApp === 0 && (!inputString || !isInputValid || !!regexError));
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -113,21 +111,55 @@ function SidePanel(props: PropsInterface) {
         }
     };
 
+    const validateRegex = (regex) => {
+        if (!regex) {
+            return '';
+        }
+    
+        if (/^[.*|]/.test(regex)) {
+            return 'Invalid regex pattern: Cannot start with ".", "|", or "*"';
+        }
+    
+        if (/[^\Wa-b]/i.test(regex)) {
+            return 'Regex can only contain alphabet letters "a" or "b"';
+        }
+    
+        if (/[^ab.*|()]/.test(regex)) {
+            return 'Invalid regex pattern';
+        }
+    
+        if (!/[ab]/i.test(regex)) {
+            return 'Invalid regex pattern: At least one "a" or "b" is required';
+        }
+    
+        try {
+            new RegExp(regex);
+        } catch (e) {
+            return 'Invalid regex pattern';
+        }
+    
+        if (regex.length > 1) {
+            if (/ab|ba/.test(regex)) {
+                return 'Must be separated by "." for concatenation';
+            } else if (/(.)\1/.test(regex)) {
+                return 'Must be separated by "." for concatenation';
+            }
+        }
+        return '';
+    };
+    
+    
+
     const isValidRegex = (inputString: string): boolean => {
-        // Replace the parts of the selectedRegex
         if (!selectedRegex) {
-            return;
+            return false;
         }
         const regexPattern = selectedRegex
             .replace(/\./g, '+')
             .replace(/e/g, '')
             .replace(/ /g, '\\s*');
-
-        // Replace the parts of the inputString
         const inputStringProcessed = inputString.replace(/e/g, '');
-
         const regex = new RegExp(`^${regexPattern}$`);
-
         return regex.test(inputStringProcessed);
     };
 
@@ -138,7 +170,16 @@ function SidePanel(props: PropsInterface) {
 
     const handleInputChange = (e) => {
         const input = e.target.value.toLowerCase();
-        if (selectedApp === 1 && !isValidStringInput(input)) {
+        if (selectedApp === 0) {
+            const error = validateRegex(input);
+            if (error) {
+                setIsInputValid(false);
+                setRegexError(error);
+            } else {
+                setIsInputValid(true);
+                setRegexError('');
+            }
+        } else if (selectedApp === 1 && !isValidStringInput(input)) {
             setIsInputValid(false);
         } else {
             setIsInputValid(true);
@@ -304,6 +345,11 @@ function SidePanel(props: PropsInterface) {
                                 <Icon path={mdiRocketLaunchOutline} size={1} />
                             </button>
                         </form>
+                        {selectedApp === 0 && !isInputValid && (
+                            <p className="text-red-500 text-xs">
+                                {regexError}
+                            </p>
+                        )}
                         {selectedApp === 1 && (
                             <div className="p-1 h-[35px]">
                                 {!selectedRegex ? (
