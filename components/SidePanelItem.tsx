@@ -55,8 +55,13 @@ function SidePanelItem(props: SidePanelItemProps) {
                         <Icon path={mdiDotsVertical} size={1} />
                     </button>
                     <div className="relative w-full flex justify-end">
-                        {showMenu && (
-                            <div className="absolute py-2 px-4 -translate-x-2 -translate-y-2 flex flex-col gap-1 bg-white rounded-md shadow-md">
+                        <CSSTransition
+                            in={showMenu}
+                            timeout={100}
+                            classNames="slide"
+                            unmountOnExit
+                        >
+                            <div className="absolute py-2 px-4 flex flex-col gap-1 bg-white rounded-md shadow-md">
                                 <button
                                     onClick={() => {
                                         deleteDfaFromIdb(input.id);
@@ -88,7 +93,7 @@ function SidePanelItem(props: SidePanelItemProps) {
                                     share
                                 </button>
                             </div>
-                        )}
+                        </CSSTransition>
                     </div>
                 </div>
             </button>
