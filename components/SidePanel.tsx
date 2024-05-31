@@ -248,16 +248,11 @@ function SidePanel(props: PropsInterface) {
                 <div className="flex flex-col gap-5 absolute top-0 left-0 py-2 px-3 w-[215px] h-full bg-gray-50 z-10">
                     <div className="flex flex-col w-full text-sky-500 mt-10">
                         <h1 className="flex items-center justify-between text-md font-bold px-2">
-                            <div
-                                onClick={() =>
-                                    setShowAppsDropdown(!showAppsDropdown)
-                                }
-                                className="flex items-center gap-2 cursor-pointer"
-                            >
-                                <Icon path={apps[selectedApp].icon} size={1} />
-                                <span>{apps[selectedApp].title}</span>
+                            <div className="flex items-center gap-2 cursor-pointer">
+                                <Icon path={mdiResistorNodes} size={1} />
+                                <span>Regex to DFA</span>
                             </div>
-                            <button
+                            {/* <button
                                 ref={dropBtnRef}
                                 onClick={() =>
                                     setShowAppsDropdown(!showAppsDropdown)
@@ -265,7 +260,7 @@ function SidePanel(props: PropsInterface) {
                                 className="rounded-full hover:bg-black/[.05] transition duration-200"
                             >
                                 <Icon path={mdiChevronDown} size={1} />
-                            </button>
+                            </button> */}
                         </h1>
                         <div className="relative">
                             {showAppsDropdown && (
