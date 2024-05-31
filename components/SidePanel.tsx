@@ -32,11 +32,12 @@ interface PropsInterface {
     show: boolean;
     setLinks: Function;
     setNodes: Function;
+    setRegexHeader: Function;
 }
 
 function SidePanel(props: PropsInterface) {
     const { fetchDfaFromIdb, addDfaToIdb, getDfaFromIdb } = useDfaStore();
-    const { show, setNodes, setLinks } = props;
+    const { show, setNodes, setLinks, setRegexHeader } = props;
 
     const [inputs, setInputs] = useState<DFAStoreData[]>([]);
     const [isFetching, setIsFetching] = useState(false);
@@ -193,6 +194,7 @@ function SidePanel(props: PropsInterface) {
         const dfaData = await getDfaFromIdb(id);
         setNodes(dfaData.nodes);
         setLinks(dfaData.links);
+        setRegexHeader(regex);
     };
 
     useEffect(() => {

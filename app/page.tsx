@@ -13,15 +13,16 @@ export default function Page() {
     const [links, setLinks] = useState<LinkInterface[]>([]);
     const [showSidePanel, setShowSidePanel] = useState<boolean>(true);
     const [showLegendPanel, setShowLegendPanel] = useState<boolean>(true);
+    const [regexHeader, setRegexHeader] = useState<string>('');
     const sidePanelRef = useRef<HTMLDivElement>(null);
     const legendPanelRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
             if (
-                (sidePanelRef.current) &&
-                (!sidePanelRef.current.contains(e.target as Node)) &&
-                (showSidePanel) &&
+                sidePanelRef.current &&
+                !sidePanelRef.current.contains(e.target as Node) &&
+                showSidePanel &&
                 window.innerWidth < mobileScreen
             ) {
                 setShowSidePanel(false);
@@ -35,6 +36,11 @@ export default function Page() {
     return (
         <div className="flex justify-center items-center min-h-screen min-w-screen">
             <div className="flex flex-col items-center w-full h-lvh">
+                <div className="relative w-full flex justify-center">
+                    <h1 className="absolute translate-y-[100%] text-sky-500 text-xl font-bold z-10">
+                        {regexHeader}
+                    </h1>
+                </div>
                 {nodes && links && <DFA nodes={nodes} links={links} />}
                 <section ref={sidePanelRef}>
                     <button
@@ -60,18 +66,22 @@ export default function Page() {
                         show={showSidePanel}
                         setNodes={setNodes}
                         setLinks={setLinks}
+                        setRegexHeader={setRegexHeader}
                     />
-                    
                 </section>
                 <section ref={legendPanelRef}>
-                    {showLegendPanel ? (<i className='bx bx-exit text-sky-500 absolute top-10 z-[100] right-10 text-xl cursor-pointer'
-                        onClick={()=>setShowLegendPanel(false)}
-                        ></i>) : ( 
-                        <i className='bx bx-chevrons-left text-sky-500 absolute top-10 z-[100] right-10 text-2xl cursor-pointer'
-                        onClick={()=>setShowLegendPanel(true)}>
-                        </i>
+                    {showLegendPanel ? (
+                        <i
+                            className="bx bx-exit text-sky-500 absolute z-[100] top-3 right-5 text-3xl cursor-pointer"
+                            onClick={() => setShowLegendPanel(false)}
+                        ></i>
+                    ) : (
+                        <i
+                            className="bx bx-info-circle text-sky-500 absolute z-[100] right-5 top-3 text-3xl cursor-pointer"
+                            onClick={() => setShowLegendPanel(true)}
+                        ></i>
                     )}
-                    <LegendPanel show={showLegendPanel}/>
+                    <LegendPanel show={showLegendPanel} />
                 </section>
             </div>
         </div>
