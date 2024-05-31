@@ -26,7 +26,7 @@ export default function SelfConnecting(props: EdgeProps) {
                         padding: '5px 6px',
                         borderRadius: '50%',
                         boxShadow: active
-                            ? '0 0 150px 7px #fff, 0 0 25px 10px #0ff, 0 0 35px 22px #0ff'
+                            ? '0 0 150px 7px #fff, 0 0 10px 5px #0ff, 0 0 25px 12px #0ff'
                             : 'none',
                     }}
                     className="nodrag nopan"

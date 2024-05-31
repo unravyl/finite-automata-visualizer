@@ -32,7 +32,7 @@ function CircleNode(props) {
                 justifyContent: 'center',
                 alignItems: 'center',
                 boxShadow: active
-                    ? '0 0 150px 7px #fff, 0 0 25px 10px #0ff, 0 0 35px 22px #0ff'
+                    ? '0 0 150px 7px #fff, 0 0 10px 5px #0ff, 0 0 25px 12px #0ff'
                     : 'none',
             }}
         >
