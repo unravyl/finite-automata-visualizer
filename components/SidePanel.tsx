@@ -112,41 +112,50 @@ function SidePanel(props: PropsInterface) {
     };
 
     const validateRegex = (regex) => {
+        // Check if the input is empty
         if (!regex) {
             return '';
         }
     
+        // Check if the input starts with ".", "|", or "*"
         if (/^[.*|]/.test(regex)) {
             return 'Invalid regex pattern: Cannot start with ".", "|", or "*"';
         }
     
+        // Check if the input contains letters other than "a" or "b"
         if (/[^\Wa-b]/i.test(regex)) {
             return 'Regex can only contain alphabet letters "a" or "b"';
         }
     
+        // Check if the input contains characters other than "a", "b", ".", "*", "|", "(", ")"
         if (/[^ab.*|()]/.test(regex)) {
             return 'Invalid regex pattern';
         }
     
+        // Check if the input contains at least one "a" or "b"
         if (!/[ab]/i.test(regex)) {
             return 'Invalid regex pattern: At least one "a" or "b" is required';
         }
     
         try {
+            // Check if the input is a valid regular expression
             new RegExp(regex);
         } catch (e) {
             return 'Invalid regex pattern';
         }
     
         if (regex.length > 1) {
+            // Additional check for concatenation: "ab" or "ba"
             if (/ab|ba/.test(regex)) {
                 return 'Must be separated by "." for concatenation';
             } else if (/(.)\1/.test(regex)) {
                 return 'Invalid regex pattern';
             }
         }
+    
         return '';
     };
+    
     
     
 
