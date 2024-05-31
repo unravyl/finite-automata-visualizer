@@ -47,9 +47,8 @@ function SidePanel(props: PropsInterface) {
     const [inputString, setInputString] = useState('');
     const [isInputValid, setIsInputValid] = useState(true);
     const [selectedRegex, setSelectedRegex] = useState(null);
-    const [stringChecker, setStringChecker] = useState<false | true | null>(
-        null
-    );
+    const [stringChecker, setStringChecker] = useState<boolean | null>(null);
+    const [regexError, setRegexError] = useState('');
 
     const dropRef = useRef(null);
     const dropBtnRef = useRef(null);
@@ -57,14 +56,12 @@ function SidePanel(props: PropsInterface) {
     const inputsToday = inputs.filter((input) => {
         const inputDate = new Date(input.when);
         const today = new Date();
-
         return inputDate.getDate() === today.getDate();
     });
 
     const inputsSevenDays = inputs.filter((input) => {
         const inputDate = new Date(input.when);
         const today = new Date();
-
         return (
             inputDate.getDate() >= today.getDate() - 7 &&
             inputDate.getDate() < today.getDate()
@@ -74,7 +71,6 @@ function SidePanel(props: PropsInterface) {
     const oldInputs = inputs.filter((input) => {
         const inputDate = new Date(input.when);
         const today = new Date();
-
         return inputDate.getDate() < today.getDate() - 7;
     });
 
@@ -95,7 +91,8 @@ function SidePanel(props: PropsInterface) {
 
     const disableInputButton =
         inputString.trim().length === 0 ||
-        (selectedApp === 1 && (!inputString || !isInputValid));
+        (selectedApp === 1 && (!inputString || !isInputValid)) ||
+        (selectedApp === 0 && (!inputString || !isInputValid || !!regexError));
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -114,21 +111,61 @@ function SidePanel(props: PropsInterface) {
         }
     };
 
+    const validateRegex = (regex) => {
+        // Check if the input is empty
+        if (!regex) {
+            return '';
+        }
+
+        // Check if the input starts with ".", "|", or "*"
+        if (/^[.*|]/.test(regex)) {
+            return 'Invalid regex pattern: Cannot start with ".", "|", or "*"';
+        }
+
+        // Check if the input contains letters other than "a" or "b"
+        if (/[^\Wa-b]/i.test(regex)) {
+            return 'Regex can only contain alphabet letters "a" or "b"';
+        }
+
+        // Check if the input contains characters other than "a", "b", ".", "*", "|", "(", ")"
+        if (/[^ab.*|()]/.test(regex)) {
+            return 'Invalid regex pattern';
+        }
+
+        // Check if the input contains at least one "a" or "b"
+        if (!/[ab]/i.test(regex)) {
+            return 'Invalid regex pattern: At least one "a" or "b" is required';
+        }
+
+        try {
+            // Check if the input is a valid regular expression
+            new RegExp(regex);
+        } catch (e) {
+            return 'Invalid regex pattern';
+        }
+
+        if (regex.length > 1) {
+            // Additional check for concatenation: "ab" or "ba"
+            if (/ab|ba/.test(regex)) {
+                return 'Must be separated by "." for concatenation';
+            } else if (/(.)\1/.test(regex)) {
+                return 'Invalid regex pattern';
+            }
+        }
+
+        return '';
+    };
+
     const isValidRegex = (inputString: string): boolean => {
-        // Replace the parts of the selectedRegex
         if (!selectedRegex) {
-            return;
+            return false;
         }
         const regexPattern = selectedRegex
             .replace(/\./g, '+')
             .replace(/e/g, '')
             .replace(/ /g, '\\s*');
-
-        // Replace the parts of the inputString
         const inputStringProcessed = inputString.replace(/e/g, '');
-
         const regex = new RegExp(`^${regexPattern}$`);
-
         return regex.test(inputStringProcessed);
     };
 
@@ -139,7 +176,16 @@ function SidePanel(props: PropsInterface) {
 
     const handleInputChange = (e) => {
         const input = e.target.value.toLowerCase();
-        if (selectedApp === 1 && !isValidStringInput(input)) {
+        if (selectedApp === 0) {
+            const error = validateRegex(input);
+            if (error) {
+                setIsInputValid(false);
+                setRegexError(error);
+            } else {
+                setIsInputValid(true);
+                setRegexError('');
+            }
+        } else if (selectedApp === 1 && !isValidStringInput(input)) {
             setIsInputValid(false);
         } else {
             setIsInputValid(true);
@@ -235,7 +281,7 @@ function SidePanel(props: PropsInterface) {
                 classNames="slide"
                 unmountOnExit
             >
-                <div className="flex flex-col gap-5 absolute top-0 left-0 py-2 px-3 w-[215px] h-full bg-gray-50 z-10">
+                <div className="flex flex-col gap-3 absolute top-0 left-0 py-2 px-3 w-[215px] h-full bg-gray-50 z-10">
                     <div className="flex flex-col w-full text-sky-500 mt-10">
                         <h1 className="flex items-center justify-between text-md font-bold px-2">
                             <div className="flex items-center gap-2 cursor-pointer">
@@ -317,6 +363,11 @@ function SidePanel(props: PropsInterface) {
                                     />
                                 </button>
                             </form>
+                            {selectedApp === 0 && !isInputValid && (
+                                <p className="text-red-500 text-xs px-2 pt-2">
+                                    {regexError}
+                                </p>
+                            )}
                             {/* {selectedApp === 1 && (
                                 <div className="p-1 h-[35px]">
                                     {!selectedRegex ? (
