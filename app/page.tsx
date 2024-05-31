@@ -8,6 +8,8 @@ import LegendPanel from '../components/LegendPanel';
 
 import Icon from '@mdi/react';
 import { mdiRocketLaunchOutline } from '@mdi/js';
+import { mdiCloseCircleOutline } from '@mdi/js';
+import { mdiCheckCircleOutline } from '@mdi/js';
 
 const mobileScreen = 640;
 
@@ -19,12 +21,76 @@ export default function Page() {
     const [showAnimatePanel, setShowAnimatePanel] = useState<boolean>(false);
     const [regexHeader, setRegexHeader] = useState<string>('');
     const [stringInput, setStringInput] = useState<string>('');
+    const [inputMessageIndex, setInputMessageIndex] = useState<number | null>(
+        null
+    );
 
     const sidePanelRef = useRef<HTMLDivElement>(null);
     const legendPanelRef = useRef<HTMLDivElement>(null);
 
+    // computed
+
     const disableAnimateInput = regexHeader.length === 0;
     const disableAnimationButton = stringInput.length === 0;
+
+    const inputMessage = [
+        {
+            message: 'Only alphabetic characters are allowed.',
+            icon: mdiCloseCircleOutline,
+            color: 'red',
+        },
+        {
+            message: `String is valid for ${regexHeader}`,
+            icon: mdiCheckCircleOutline,
+            color: 'green',
+        },
+        {
+            message: `String is not valid for ${regexHeader}`,
+            icon: mdiCloseCircleOutline,
+            color: 'yellow',
+        },
+    ];
+
+    // functions
+    const isValidStringInput = (input: string) => {
+        const regex = /^[a-zA-Z\s]*$/;
+        return regex.test(input);
+    };
+
+    const isValidRegex = (inputString: string): boolean => {
+        if (!regexHeader) {
+            return;
+        }
+        const regexPattern = regexHeader
+            .replace(/\./g, '+')
+            .replace(/e/g, '')
+            .replace(/ /g, '\\s*');
+
+        const inputStringProcessed = inputString.replace(/e/g, '');
+
+        const regex = new RegExp(`^${regexPattern}$`);
+
+        return regex.test(inputStringProcessed);
+    };
+
+    // watchers
+    useEffect(() => {
+        setInputMessageIndex(null);
+        if (stringInput.length === 0) {
+            return;
+        }
+        if (!isValidStringInput(stringInput)) {
+            setInputMessageIndex(0);
+            return;
+        }
+        if (isValidRegex(stringInput)) {
+            setInputMessageIndex(1);
+        } else {
+            setInputMessageIndex(2);
+        }
+    }, [stringInput]);
+
+    // created
 
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
@@ -53,28 +119,56 @@ export default function Page() {
                 {nodes && links && <DFA nodes={nodes} links={links} />}
                 {showAnimatePanel && (
                     <section className="relative w-full flex justify-center">
-                        <div className="absolute bottom-5 w-[90%] max-w-[750px] h-[50px] border flex items-stretch gap-3 pl-5 pr-2 py-2 rounded-full bg-gray-50">
-                            <input
-                                onChange={(e) => setStringInput(e.target.value)}
-                                className="grow min-w-[150px] outline-none bg-gray-50"
-                                placeholder={
-                                    !disableAnimateInput
-                                        ? 'Enter string here'
-                                        : 'Please select a regex'
-                                }
-                                disabled={disableAnimateInput}
-                                type="text"
-                            />
-                            <button
-                                className={`flex items-center gap-1 bg-sky-500 text-white px-2 rounded-full ${disableAnimateInput || disableAnimationButton ? 'cursor-not-allowed' : ''}`}
-                                disabled={
-                                    disableAnimateInput ||
-                                    disableAnimationButton
-                                }
-                            >
-                                <Icon path={mdiRocketLaunchOutline} size={1} />
-                                Animate
-                            </button>
+                        <div className="absolute bottom-3 flex flex-col gap-2 w-[90%] max-w-[750px]">
+                            <div className="h-[50px] border flex items-stretch gap-3 pl-5 pr-2 py-2 rounded-full bg-gray-50">
+                                <input
+                                    onChange={(e) =>
+                                        setStringInput(e.target.value)
+                                    }
+                                    className="grow min-w-[150px] outline-none bg-gray-50"
+                                    placeholder={
+                                        !disableAnimateInput
+                                            ? 'Enter string here'
+                                            : 'Please select a regex'
+                                    }
+                                    disabled={disableAnimateInput}
+                                    type="text"
+                                />
+                                <button
+                                    className={`flex items-center gap-1 bg-sky-500 text-white px-2 rounded-full ${disableAnimateInput || disableAnimationButton ? 'cursor-not-allowed' : ''}`}
+                                    disabled={
+                                        disableAnimateInput ||
+                                        disableAnimationButton
+                                    }
+                                >
+                                    <Icon
+                                        path={mdiRocketLaunchOutline}
+                                        size={1}
+                                    />
+                                    Animate
+                                </button>
+                            </div>
+                            <div className="flex justify-center gap-1 h-3">
+                                {inputMessageIndex !== null && (
+                                    <div
+                                        className={`flex items-center gap-1 text-sm text-${inputMessage[inputMessageIndex].color}-500`}
+                                    >
+                                        <Icon
+                                            path={
+                                                inputMessage[inputMessageIndex]
+                                                    .icon
+                                            }
+                                            size={0.6}
+                                        />
+                                        <p>
+                                            {
+                                                inputMessage[inputMessageIndex]
+                                                    .message
+                                            }
+                                        </p>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </section>
                 )}
