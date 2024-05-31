@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { addData, getAllData, getData } from '../utils/db';
+import { addData, getAllData, getData, deleteData } from '../utils/db';
 import { DFAStoreState } from '../interfaces/store';
 
 /*
@@ -28,5 +28,9 @@ export const useDfaStore = create<DFAStoreState>((set) => ({
     getDfaFromIdb: async (id) => {
         const dfaData = await getData(id);
         return dfaData;
+    },
+
+    deleteDfaFromIdb: async (id) => {
+        await deleteData(id);
     },
 }));

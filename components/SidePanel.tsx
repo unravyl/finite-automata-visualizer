@@ -14,6 +14,7 @@ import { generateNodesAndLinks } from '../utils/graph';
 import { useDfaStore } from '../store/dfaStore';
 import { testLog } from '../tests/log';
 import { DFAStoreData } from '../interfaces/store';
+import SidePanelItem from './SidePanelItem';
 
 const apps = {
     0: {
@@ -228,6 +229,8 @@ function SidePanel(props: PropsInterface) {
     };
 
     const getInputsFromIdb = async () => {
+        setNodes([]);
+        setLinks([]);
         setIsFetching(true);
         const all = await fetchDfaFromIdb();
         setInputs(all);
@@ -239,8 +242,8 @@ function SidePanel(props: PropsInterface) {
         setSelectedInput(id);
         const dfaData = await getDfaFromIdb(id);
         console.log(dfaData);
-        setNodes(dfaData.nodes);
-        setLinks(dfaData.links);
+        setNodes(dfaData?.nodes || []);
+        setLinks(dfaData?.links || []);
         setRegexHeader(regex);
     };
 
@@ -408,7 +411,7 @@ function SidePanel(props: PropsInterface) {
                         </div>
                     )}
 
-                    <div className="flex flex-col gap-3 w-full mt-[1rem] [2rem] text-gray-500 overflow-y-auto">
+                    <div className="grow flex flex-col gap-3 w-full mt-[1rem] [2rem] text-gray-500 overflow-y-auto">
                         {categorizedInputs.map(
                             (item, index) =>
                                 item.inputs.length > 0 && (
@@ -420,18 +423,17 @@ function SidePanel(props: PropsInterface) {
                                             {item.title}
                                         </h1>
                                         {item.inputs.map((input) => (
-                                            <button
+                                            <SidePanelItem
                                                 key={input.id}
-                                                onClick={() =>
-                                                    handleRegexClick(
-                                                        input.id,
-                                                        input.regex
-                                                    )
+                                                input={input}
+                                                handleRegexClick={
+                                                    handleRegexClick
                                                 }
-                                                className={`flex items-center gap-2 p-2 rounded-md hover:bg-sky-100 hover:text-sky-500 ${selectedInput === input.id && 'bg-sky-100 text-sky-500'}`}
-                                            >
-                                                <span>{input.regex}</span>
-                                            </button>
+                                                selectedInput={selectedInput}
+                                                getInputsFromIdb={
+                                                    getInputsFromIdb
+                                                }
+                                            />
                                         ))}
                                     </div>
                                 )
