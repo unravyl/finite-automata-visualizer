@@ -19,7 +19,6 @@ export default function Page() {
     const [links, setLinks] = useState<LinkInterface[]>([]);
     const [showSidePanel, setShowSidePanel] = useState<boolean>(false);
     const [showLegendPanel, setShowLegendPanel] = useState<boolean>(false);
-    const [showAnimatePanel, setShowAnimatePanel] = useState<boolean>(false);
     const [regexHeader, setRegexHeader] = useState<string>('');
     const [stringInput, setStringInput] = useState<string>('');
     const [inputMessageIndex, setInputMessageIndex] = useState<number | null>(
@@ -27,16 +26,11 @@ export default function Page() {
     );
     const [isAnimating, setIsAnimating] = useState<boolean>(false);
     const [animationSpeed, setAnimationSpeed] = useState<number>(1);
-    const [nodesCopy, setNodesCopy] = useState<NodeInterface[]>([]);
-    const [linksCopy, setLinksCopy] = useState<LinkInterface[]>([]);
 
     const sidePanelRef = useRef<HTMLDivElement>(null);
     const legendPanelRef = useRef<HTMLDivElement>(null);
 
-    // computed
-
     const disableAnimateInput = regexHeader.length === 0;
-    const disableAnimationButton = stringInput.length === 0;
 
     const inputMessage = [
         {
@@ -56,11 +50,13 @@ export default function Page() {
         },
     ];
 
-    // functions
     const isValidStringInput = (input: string) => {
         const regex = /^[a-zA-Z\s]*$/;
         return regex.test(input);
     };
+
+    const disableAnimationButton =
+        stringInput.length === 0 || isValidStringInput(stringInput) === false;
 
     const isValidRegex = (inputString: string): boolean => {
         if (!regexHeader) {
@@ -81,6 +77,9 @@ export default function Page() {
     const pause = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
     const handleAnimate = async () => {
+        if (!isValidStringInput(stringInput)) {
+            return;
+        }
         setIsAnimating(true);
         const nodesCopy = [...nodes];
         const linksCopy = [...links];
@@ -296,7 +295,6 @@ export default function Page() {
                         setNodes={setNodes}
                         setLinks={setLinks}
                         setRegexHeader={setRegexHeader}
-                        setShowAnimatePanel={setShowAnimatePanel}
                     />
                 </section>
                 <section ref={legendPanelRef}>

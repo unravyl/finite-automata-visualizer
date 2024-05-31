@@ -33,13 +33,11 @@ interface PropsInterface {
     setLinks: Function;
     setNodes: Function;
     setRegexHeader: Function;
-    setShowAnimatePanel: Function;
 }
 
 function SidePanel(props: PropsInterface) {
     const { fetchDfaFromIdb, addDfaToIdb, getDfaFromIdb } = useDfaStore();
-    const { show, setNodes, setLinks, setRegexHeader, setShowAnimatePanel } =
-        props;
+    const { show, setNodes, setLinks, setRegexHeader } = props;
 
     const [inputs, setInputs] = useState<DFAStoreData[]>([]);
     const [isFetching, setIsFetching] = useState(false);
@@ -198,14 +196,6 @@ function SidePanel(props: PropsInterface) {
         setLinks(dfaData.links);
         setRegexHeader(regex);
     };
-
-    useEffect(() => {
-        if (selectedApp === 0) {
-            setShowAnimatePanel(false);
-        } else {
-            setShowAnimatePanel(true);
-        }
-    }, [selectedApp]);
 
     useEffect(() => {
         if (selectedInput?.regex) {
