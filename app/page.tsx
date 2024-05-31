@@ -82,8 +82,8 @@ export default function Page() {
 
     const handleAnimate = async () => {
         setIsAnimating(true);
-        setNodesCopy([...nodes]);
-        setLinksCopy([...links]);
+        const nodesCopy = [...nodes];
+        const linksCopy = [...links];
         const delay = 1000 / animationSpeed;
         let currNode = 1;
 
@@ -117,10 +117,12 @@ export default function Page() {
                 return link;
             });
             setLinks(tempLinks);
-            currNode = nextNode;
             await pause(delay);
             setLinks([...linksCopy]);
+
+            currNode = nextNode;
         }
+
         const tempNodes = nodes.map((node) => {
             if (node.id === currNode) {
                 return {
@@ -134,12 +136,6 @@ export default function Page() {
         await pause(delay);
         setNodes([...nodesCopy]);
         setIsAnimating(false);
-    };
-
-    const stopAnimation = () => {
-        setIsAnimating(false);
-        setNodes([...nodesCopy]);
-        setLinks([...linksCopy]);
     };
 
     // watchers
@@ -157,7 +153,7 @@ export default function Page() {
         } else {
             setInputMessageIndex(2);
         }
-    }, [stringInput]);
+    }, [stringInput, regexHeader]);
 
     // created
     useEffect(() => {
@@ -191,93 +187,90 @@ export default function Page() {
                     </h1>
                 </div>
                 {nodes && links && <DFA nodes={nodes} links={links} />}
-                {showAnimatePanel && (
-                    <section className="relative w-full flex justify-center">
-                        <div className="absolute bottom-3 flex flex-col gap-2 w-[90%] max-w-[750px]">
-                            <div className="grow h-[50px] border flex items-stretch gap-3 pl-5 pr-2 py-2 rounded-full bg-gray-50">
-                                <input
-                                    onChange={(e) =>
-                                        setStringInput(
-                                            e.target.value.toLowerCase()
-                                        )
+                <section className="relative w-full flex justify-center">
+                    <div className="absolute bottom-3 flex flex-col gap-2 w-[90%] max-w-[750px]">
+                        <div className="grow h-[50px] border flex items-stretch gap-3 pl-5 pr-2 py-2 rounded-full bg-gray-50">
+                            <input
+                                onChange={(e) =>
+                                    setStringInput(e.target.value.toLowerCase())
+                                }
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                        handleAnimate();
                                     }
-                                    onKeyDown={(e) => {
-                                        if (e.key === 'Enter') {
-                                            handleAnimate();
-                                        }
-                                    }}
-                                    className="grow min-w-[10px] outline-none bg-gray-50"
-                                    placeholder={
-                                        !disableAnimateInput
-                                            ? 'Enter string here'
-                                            : 'Please select a regex'
-                                    }
-                                    disabled={disableAnimateInput}
-                                    type="text"
-                                />
-                                {!isAnimating ? (
-                                    <div className="flex gap-1">
-                                        <button
-                                            onClick={handleAnimate}
-                                            className={`flex items-center gap-1 bg-sky-500 text-white px-2 rounded-full ${disableAnimateInput || disableAnimationButton ? 'cursor-not-allowed' : ''}`}
-                                            disabled={
-                                                disableAnimateInput ||
-                                                disableAnimationButton
-                                            }
-                                        >
-                                            <Icon
-                                                path={mdiRocketLaunchOutline}
-                                                size={1}
-                                            />
-                                            Animate
-                                        </button>
-                                        <button
-                                            onClick={() => {
-                                                const temp =
-                                                    (animationSpeed + 1) % 6;
-                                                setAnimationSpeed(
-                                                    temp === 0 ? 1 : temp
-                                                );
-                                            }}
-                                            className="text-xs w-[32px] flex items-center justify-center rounded-full border-2 bg-sky-50 border-sky-500 text-sky-500 px-3"
-                                        >
-                                            {animationSpeed}X
-                                        </button>
-                                    </div>
-                                ) : (
+                                }}
+                                className="grow min-w-[10px] outline-none bg-gray-50"
+                                placeholder={
+                                    !disableAnimateInput
+                                        ? 'Enter string here'
+                                        : 'Please select a regex'
+                                }
+                                disabled={disableAnimateInput}
+                                type="text"
+                            />
+                            {!isAnimating ? (
+                                <div className="flex gap-1">
                                     <button
-                                        onClick={stopAnimation}
-                                        className={`flex items-center gap-1 bg-sky-500 text-white px-2 rounded-full`}
-                                    >
-                                        <Icon path={mdiSquare} size={0.6} />
-                                        Stop
-                                    </button>
-                                )}
-                            </div>
-                            <div className="flex px-5 gap-1 h-3">
-                                {inputMessageIndex !== null && (
-                                    <div
-                                        className={`flex items-center gap-1 text-sm text-${inputMessage[inputMessageIndex].color}-500`}
+                                        onClick={handleAnimate}
+                                        className={`flex items-center gap-1 bg-sky-500 text-white px-2 rounded-full ${disableAnimateInput || disableAnimationButton ? 'cursor-not-allowed' : ''}`}
+                                        disabled={
+                                            disableAnimateInput ||
+                                            disableAnimationButton
+                                        }
                                     >
                                         <Icon
-                                            path={
-                                                inputMessage[inputMessageIndex]
-                                                    .icon
-                                            }
-                                            size={0.6}
+                                            path={mdiRocketLaunchOutline}
+                                            size={1}
                                         />
-                                        <p>
-                                            {
-                                                inputMessage[inputMessageIndex]
-                                                    .message
-                                            }
-                                        </p>
-                                    </div>
-                                )}
-                            </div>
+                                        Animate
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            const temp =
+                                                (animationSpeed + 1) % 6;
+                                            setAnimationSpeed(
+                                                temp === 0 ? 1 : temp
+                                            );
+                                        }}
+                                        className="text-xs w-[32px] flex items-center justify-center rounded-full border-2 bg-sky-50 border-sky-500 text-sky-500 px-3"
+                                    >
+                                        {animationSpeed}X
+                                    </button>
+                                </div>
+                            ) : (
+                                <button
+                                    onClick={() => {
+                                        window.location.reload();
+                                    }}
+                                    className={`flex items-center gap-1 bg-sky-500 text-white px-2 rounded-full`}
+                                >
+                                    <Icon path={mdiSquare} size={0.6} />
+                                    Stop
+                                </button>
+                            )}
                         </div>
-                    </section>
-                )}
+                        <div className="flex px-5 gap-1 h-3">
+                            {inputMessageIndex !== null && (
+                                <div
+                                    className={`flex items-center gap-1 text-sm text-${inputMessage[inputMessageIndex].color}-500`}
+                                >
+                                    <Icon
+                                        path={
+                                            inputMessage[inputMessageIndex].icon
+                                        }
+                                        size={0.6}
+                                    />
+                                    <p>
+                                        {
+                                            inputMessage[inputMessageIndex]
+                                                .message
+                                        }
+                                    </p>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </section>
                 <section ref={sidePanelRef}>
                     <button
                         className="text-gray-800 absolute z-20 ml-2 mt-2.5 top-0 left-0 p-1 rounded-md hover:bg-black/[.05] transition duration-200"
