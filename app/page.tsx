@@ -78,10 +78,62 @@ export default function Page() {
         return regex.test(inputStringProcessed);
     };
 
-    const handleAnimate = () => {
+    const pause = (ms: number) => new Promise((res) => setTimeout(res, ms));
+
+    const handleAnimate = async () => {
         setIsAnimating(true);
         setNodesCopy([...nodes]);
         setLinksCopy([...links]);
+        const delay = 1000 / animationSpeed;
+        let currNode = 1;
+
+        for (let i = 0; i < stringInput.length; i++) {
+            const tempNodes = nodes.map((node) => {
+                if (node.id === currNode) {
+                    return {
+                        ...node,
+                        active: true,
+                    };
+                }
+                return node;
+            });
+            setNodes(tempNodes);
+            await pause(delay);
+            setNodes([...nodesCopy]);
+
+            const char = stringInput[i];
+            let nextNode = null;
+            const tempLinks = links.map((link) => {
+                if (
+                    link.source.id === currNode &&
+                    (link.transition === char || link.transition === 'a,b')
+                ) {
+                    nextNode = link.target.id;
+                    return {
+                        ...link,
+                        active: true,
+                    };
+                }
+                return link;
+            });
+            setLinks(tempLinks);
+            currNode = nextNode;
+            await pause(delay);
+            setLinks([...linksCopy]);
+        }
+        const tempNodes = nodes.map((node) => {
+            if (node.id === currNode) {
+                return {
+                    ...node,
+                    active: true,
+                };
+            }
+            return node;
+        });
+        setNodes(tempNodes);
+        await pause(delay);
+        setNodes([...nodesCopy]);
+        setIsAnimating(false);
     };
 
     const stopAnimation = () => {
@@ -145,8 +197,15 @@ export default function Page() {
                             <div className="grow h-[50px] border flex items-stretch gap-3 pl-5 pr-2 py-2 rounded-full bg-gray-50">
                                 <input
                                     onChange={(e) =>
-                                        setStringInput(e.target.value)
+                                        setStringInput(
+                                            e.target.value.toLowerCase()
+                                        )
                                     }
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter') {
+                                            handleAnimate();
+                                        }
+                                    }}
                                     className="grow min-w-[10px] outline-none bg-gray-50"
                                     placeholder={
                                         !disableAnimateInput

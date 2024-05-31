@@ -191,9 +191,9 @@ function SidePanel(props: PropsInterface) {
 
     const handleRegexClick = async (id: number, regex: string) => {
         setStringChecker(null);
-        setSelectedRegex(regex);
         setSelectedInput(id);
         const dfaData = await getDfaFromIdb(id);
+        console.log(dfaData);
         setNodes(dfaData.nodes);
         setLinks(dfaData.links);
         setRegexHeader(regex);
@@ -206,6 +206,13 @@ function SidePanel(props: PropsInterface) {
             setShowAnimatePanel(true);
         }
     }, [selectedApp]);
+
+    useEffect(() => {
+        if (selectedInput?.regex) {
+            setSelectedRegex(selectedInput.regex);
+            setRegexHeader(selectedInput.regex);
+        }
+    }, [selectedInput]);
 
     useEffect(() => {
         getInputsFromIdb();
@@ -241,7 +248,12 @@ function SidePanel(props: PropsInterface) {
                 <div className="flex flex-col gap-5 absolute top-0 left-0 py-2 px-3 w-[215px] h-full bg-gray-50 z-10">
                     <div className="flex flex-col w-full text-sky-500 mt-10">
                         <h1 className="flex items-center justify-between text-md font-bold px-2">
-                            <div className="flex items-center gap-2">
+                            <div
+                                onClick={() =>
+                                    setShowAppsDropdown(!showAppsDropdown)
+                                }
+                                className="flex items-center gap-2 cursor-pointer"
+                            >
                                 <Icon path={apps[selectedApp].icon} size={1} />
                                 <span>{apps[selectedApp].title}</span>
                             </div>
