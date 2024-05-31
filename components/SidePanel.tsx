@@ -46,7 +46,7 @@ function SidePanel(props: PropsInterface) {
     const [inputString, setInputString] = useState('');
     const [isInputValid, setIsInputValid] = useState(true);
     const [selectedRegex, setSelectedRegex] = useState(null);
-    const [stringChecker, setStringChecker] = useState<false | true | null>(null);
+    const [stringChecker, setStringChecker] = useState<boolean | null>(null);
     const [regexError, setRegexError] = useState('');
 
     const dropRef = useRef(null);
