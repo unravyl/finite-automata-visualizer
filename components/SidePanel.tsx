@@ -142,7 +142,7 @@ function SidePanel(props: PropsInterface) {
             if (/ab|ba/.test(regex)) {
                 return 'Must be separated by "." for concatenation';
             } else if (/(.)\1/.test(regex)) {
-                return 'Must be separated by "." for concatenation';
+                return 'Invalid regex pattern';
             }
         }
         return '';
