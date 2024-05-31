@@ -272,7 +272,7 @@ export default function Page() {
                 </section>
                 <section ref={sidePanelRef}>
                     <button
-                        className="text-gray-800 absolute z-20 ml-2 mt-2.5 top-0 left-0 p-1 rounded-md hover:bg-black/[.05] transition duration-200"
+                        className={`text-gray-800 absolute z-20 ml-2 mt-2.5 top-0 left-0 p-1 rounded-md hover:bg-black/[.05] transition duration-200 ${regexHeader.length === 0 ? 'blink' : ''}`}
                         onClick={() => setShowSidePanel(!showSidePanel)}
                     >
                         <svg
