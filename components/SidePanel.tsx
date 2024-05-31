@@ -281,7 +281,7 @@ function SidePanel(props: PropsInterface) {
                 classNames="slide"
                 unmountOnExit
             >
-                <div className="flex flex-col gap-3 absolute top-0 left-0 py-2 px-3 w-[215px] h-full bg-gray-50 z-10">
+                <div className="flex flex-col gap-3 absolute top-0 left-0 py-2 px-3 w-[250px] h-full bg-gray-50 z-10">
                     <div className="flex flex-col w-full text-sky-500 mt-10">
                         <h1 className="flex items-center justify-between text-md font-bold px-2">
                             <div className="flex items-center gap-2">

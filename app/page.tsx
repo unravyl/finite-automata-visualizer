@@ -24,6 +24,7 @@ export default function Page() {
     const [inputMessageIndex, setInputMessageIndex] = useState<number | null>(
         null
     );
+    const [blinkSidePanel, setBlinkSidePanel] = useState<boolean>(false);
     const [isAnimating, setIsAnimating] = useState<boolean>(false);
     const [animationSpeed, setAnimationSpeed] = useState<number>(2);
 
@@ -171,6 +172,9 @@ export default function Page() {
     }, []);
 
     useEffect(() => {
+        setBlinkSidePanel(
+            regexHeader.length === 0 && window.innerWidth < mobileScreen
+        );
         if (window.innerWidth >= mobileScreen) {
             setShowSidePanel(true);
             setShowLegendPanel(true);
@@ -272,8 +276,13 @@ export default function Page() {
                 </section>
                 <section ref={sidePanelRef}>
                     <button
-                        className={`text-gray-800 absolute z-20 ml-2 mt-2.5 top-0 left-0 p-1 rounded-md hover:bg-black/[.05] transition duration-200 ${regexHeader.length === 0 ? 'blink' : ''}`}
-                        onClick={() => setShowSidePanel(!showSidePanel)}
+                        className={`text-gray-800 absolute z-20 ml-2 mt-2.5 top-0 left-0 p-1 rounded-md hover:bg-black/[.05] transition duration-200 ${blinkSidePanel ? 'blink' : ''}`}
+                        onClick={() => {
+                            setShowSidePanel(!showSidePanel);
+                            if (blinkSidePanel) {
+                                setBlinkSidePanel(false);
+                            }
+                        }}
                     >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
