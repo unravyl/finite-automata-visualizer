@@ -61,7 +61,7 @@ export default function Page() {
 
     const isValidRegex = (inputString: string): boolean => {
         if (!regexHeader) {
-            return;
+            return false;
         }
         const regexPattern = regexHeader
             .replace(/\./g, '+')

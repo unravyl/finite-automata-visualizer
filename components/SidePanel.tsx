@@ -223,6 +223,7 @@ function SidePanel(props: PropsInterface) {
         const dfaData = await addDfaToIdb(data);
         await getInputsFromIdb();
         setSelectedInput(dfaData.id);
+        setRegexHeader(inputString);
         setIsFetching(false);
     };
 
