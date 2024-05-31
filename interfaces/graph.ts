@@ -5,6 +5,7 @@ export interface NodeInterface extends SimulationNodeDatum {
     values: number[];
     group: number;
     isFinalState: boolean;
+    active?: boolean; // for highlighting (optional)
 }
 
 export interface LinkInterface
@@ -12,4 +13,5 @@ export interface LinkInterface
     source: NodeInterface;
     target: NodeInterface;
     transition: string;
+    active?: boolean;
 }

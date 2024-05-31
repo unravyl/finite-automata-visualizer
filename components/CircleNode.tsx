@@ -4,6 +4,7 @@ import { Handle, Position } from 'reactflow';
 function CircleNode(props) {
     const { data } = props;
     const label = data.label;
+    const active = data.active;
     return (
         <div
             style={{
@@ -24,10 +25,15 @@ function CircleNode(props) {
                           ? '#6CA0DC'
                           : label === 'D'
                             ? '#BC544D'
-                            : '#C5C6D0',
+                            : label === 'PTR'
+                              ? '#FFFFA7'
+                              : '#C5C6D0',
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
+                boxShadow: active
+                    ? '0 0 150px 7px #fff, 0 0 25px 10px #f0f, 0 0 35px 22px #0ff'
+                    : 'none',
             }}
         >
             <Handle type="target" position={Position.Right} />
