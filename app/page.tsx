@@ -10,6 +10,7 @@ import Icon from '@mdi/react';
 import { mdiRocketLaunchOutline } from '@mdi/js';
 import { mdiCloseCircleOutline } from '@mdi/js';
 import { mdiCheckCircleOutline } from '@mdi/js';
+import { mdiSquare } from '@mdi/js';
 
 const mobileScreen = 640;
 
@@ -24,6 +25,9 @@ export default function Page() {
     const [inputMessageIndex, setInputMessageIndex] = useState<number | null>(
         null
     );
+    const [isAnimating, setIsAnimating] = useState<boolean>(false);
+    const [nodesCopy, setNodesCopy] = useState<NodeInterface[]>([]);
+    const [linksCopy, setLinksCopy] = useState<LinkInterface[]>([]);
 
     const sidePanelRef = useRef<HTMLDivElement>(null);
     const legendPanelRef = useRef<HTMLDivElement>(null);
@@ -73,6 +77,18 @@ export default function Page() {
         return regex.test(inputStringProcessed);
     };
 
+    const handleAnimate = () => {
+        setIsAnimating(true);
+        setNodesCopy([...nodes]);
+        setLinksCopy([...links]);
+    };
+
+    const stopAnimation = () => {
+        setIsAnimating(false);
+        setNodes([...nodesCopy]);
+        setLinks([...linksCopy]);
+    };
+
     // watchers
     useEffect(() => {
         setInputMessageIndex(null);
@@ -107,7 +123,6 @@ export default function Page() {
         return () => document.removeEventListener('click', handleClickOutside);
     }, []);
 
-    console.log(showLegendPanel);
     return (
         <div className="flex justify-center items-center min-h-screen min-w-screen">
             <div className="flex flex-col items-center w-full h-lvh">
@@ -134,19 +149,30 @@ export default function Page() {
                                     disabled={disableAnimateInput}
                                     type="text"
                                 />
-                                <button
-                                    className={`flex items-center gap-1 bg-sky-500 text-white px-2 rounded-full ${disableAnimateInput || disableAnimationButton ? 'cursor-not-allowed' : ''}`}
-                                    disabled={
-                                        disableAnimateInput ||
-                                        disableAnimationButton
-                                    }
-                                >
-                                    <Icon
-                                        path={mdiRocketLaunchOutline}
-                                        size={1}
-                                    />
-                                    Animate
-                                </button>
+                                {!isAnimating ? (
+                                    <button
+                                        onClick={handleAnimate}
+                                        className={`flex items-center gap-1 bg-sky-500 text-white px-2 rounded-full ${disableAnimateInput || disableAnimationButton ? 'cursor-not-allowed' : ''}`}
+                                        disabled={
+                                            disableAnimateInput ||
+                                            disableAnimationButton
+                                        }
+                                    >
+                                        <Icon
+                                            path={mdiRocketLaunchOutline}
+                                            size={1}
+                                        />
+                                        Animate
+                                    </button>
+                                ) : (
+                                    <button
+                                        onClick={stopAnimation}
+                                        className={`flex items-center gap-1 bg-sky-500 text-white px-2 rounded-full`}
+                                    >
+                                        <Icon path={mdiSquare} size={0.6} />
+                                        Stop
+                                    </button>
+                                )}
                             </div>
                             <div className="flex justify-center gap-1 h-3">
                                 {inputMessageIndex !== null && (
