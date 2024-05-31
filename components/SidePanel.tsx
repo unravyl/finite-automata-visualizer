@@ -20,7 +20,7 @@ import SidePanelItem from './SidePanelItem';
 const apps = {
     0: {
         title: 'Regex to DFA',
-        placeholder: 'Enter regex',
+        placeholder: 'Add regex',
         icon: mdiResistorNodes,
     },
     1: {
