@@ -40,9 +40,10 @@ function LegendPanel(props: PropsInterface) {
                         <h1 className="text-sky-500 text-md">Guidelines:</h1>
                         <div className="mt-[1rem] flex flex-col items-start justify-center gap-2">
                             {guideLine.map((guides, index) => (
-                                <h1 className="text-gray-500 text-sm">
-                                    {index + 1}. {guides}
-                                </h1>
+                                <div className="flex gap-2 text-gray-500 text-sm">
+                                    <p>{index + 1}.</p>
+                                    <p>{guides}</p>
+                                </div>
                             ))}
                         </div>
                     </div>

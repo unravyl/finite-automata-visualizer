@@ -157,7 +157,7 @@ export default function Page() {
                                     type="text"
                                 />
                                 {!isAnimating ? (
-                                    <div className="flex gap-2">
+                                    <div className="flex gap-1">
                                         <button
                                             onClick={handleAnimate}
                                             className={`flex items-center gap-1 bg-sky-500 text-white px-2 rounded-full ${disableAnimateInput || disableAnimationButton ? 'cursor-not-allowed' : ''}`}
