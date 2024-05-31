@@ -17,7 +17,7 @@ const mobileScreen = 640;
 export default function Page() {
     const [nodes, setNodes] = useState<NodeInterface[]>([]);
     const [links, setLinks] = useState<LinkInterface[]>([]);
-    const [showSidePanel, setShowSidePanel] = useState<boolean>(true);
+    const [showSidePanel, setShowSidePanel] = useState<boolean>(false);
     const [showLegendPanel, setShowLegendPanel] = useState<boolean>(false);
     const [showAnimatePanel, setShowAnimatePanel] = useState<boolean>(false);
     const [regexHeader, setRegexHeader] = useState<string>('');
@@ -26,6 +26,7 @@ export default function Page() {
         null
     );
     const [isAnimating, setIsAnimating] = useState<boolean>(false);
+    const [animationSpeed, setAnimationSpeed] = useState<number>(1);
     const [nodesCopy, setNodesCopy] = useState<NodeInterface[]>([]);
     const [linksCopy, setLinksCopy] = useState<LinkInterface[]>([]);
 
@@ -107,7 +108,6 @@ export default function Page() {
     }, [stringInput]);
 
     // created
-
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
             if (
@@ -123,6 +123,13 @@ export default function Page() {
         return () => document.removeEventListener('click', handleClickOutside);
     }, []);
 
+    useEffect(() => {
+        if (window.innerWidth >= mobileScreen) {
+            setShowSidePanel(true);
+            setShowLegendPanel(true);
+        }
+    }, []);
+
     return (
         <div className="flex justify-center items-center min-h-screen min-w-screen">
             <div className="flex flex-col items-center w-full h-lvh">
@@ -135,12 +142,12 @@ export default function Page() {
                 {showAnimatePanel && (
                     <section className="relative w-full flex justify-center">
                         <div className="absolute bottom-3 flex flex-col gap-2 w-[90%] max-w-[750px]">
-                            <div className="h-[50px] border flex items-stretch gap-3 pl-5 pr-2 py-2 rounded-full bg-gray-50">
+                            <div className="grow h-[50px] border flex items-stretch gap-3 pl-5 pr-2 py-2 rounded-full bg-gray-50">
                                 <input
                                     onChange={(e) =>
                                         setStringInput(e.target.value)
                                     }
-                                    className="grow min-w-[150px] outline-none bg-gray-50"
+                                    className="grow min-w-[10px] outline-none bg-gray-50"
                                     placeholder={
                                         !disableAnimateInput
                                             ? 'Enter string here'
@@ -150,20 +157,34 @@ export default function Page() {
                                     type="text"
                                 />
                                 {!isAnimating ? (
-                                    <button
-                                        onClick={handleAnimate}
-                                        className={`flex items-center gap-1 bg-sky-500 text-white px-2 rounded-full ${disableAnimateInput || disableAnimationButton ? 'cursor-not-allowed' : ''}`}
-                                        disabled={
-                                            disableAnimateInput ||
-                                            disableAnimationButton
-                                        }
-                                    >
-                                        <Icon
-                                            path={mdiRocketLaunchOutline}
-                                            size={1}
-                                        />
-                                        Animate
-                                    </button>
+                                    <div className="flex gap-2">
+                                        <button
+                                            onClick={handleAnimate}
+                                            className={`flex items-center gap-1 bg-sky-500 text-white px-2 rounded-full ${disableAnimateInput || disableAnimationButton ? 'cursor-not-allowed' : ''}`}
+                                            disabled={
+                                                disableAnimateInput ||
+                                                disableAnimationButton
+                                            }
+                                        >
+                                            <Icon
+                                                path={mdiRocketLaunchOutline}
+                                                size={1}
+                                            />
+                                            Animate
+                                        </button>
+                                        <button
+                                            onClick={() => {
+                                                const temp =
+                                                    (animationSpeed + 1) % 6;
+                                                setAnimationSpeed(
+                                                    temp === 0 ? 1 : temp
+                                                );
+                                            }}
+                                            className="text-xs w-[32px] flex items-center justify-center rounded-full border-2 bg-sky-50 border-sky-500 text-sky-500 px-3"
+                                        >
+                                            {animationSpeed}X
+                                        </button>
+                                    </div>
                                 ) : (
                                     <button
                                         onClick={stopAnimation}
@@ -174,7 +195,7 @@ export default function Page() {
                                     </button>
                                 )}
                             </div>
-                            <div className="flex justify-center gap-1 h-3">
+                            <div className="flex px-5 gap-1 h-3">
                                 {inputMessageIndex !== null && (
                                     <div
                                         className={`flex items-center gap-1 text-sm text-${inputMessage[inputMessageIndex].color}-500`}
@@ -229,12 +250,12 @@ export default function Page() {
                 <section ref={legendPanelRef}>
                     {showLegendPanel ? (
                         <i
-                            className="bx bx-exit text-sky-500 absolute z-[100] top-3 right-5 text-3xl cursor-pointer"
+                            className="bx bx-exit text-sky-500 absolute z-[100] top-3 right-2 text-3xl cursor-pointer"
                             onClick={() => setShowLegendPanel(false)}
                         ></i>
                     ) : (
                         <i
-                            className="bx bx-info-circle text-sky-500 absolute z-[100] right-5 top-3 text-3xl cursor-pointer"
+                            className="bx bx-info-circle text-sky-500 absolute z-[100] right-2 top-3 text-3xl cursor-pointer"
                             onClick={() => setShowLegendPanel(true)}
                         ></i>
                     )}

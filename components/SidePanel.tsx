@@ -290,68 +290,74 @@ function SidePanel(props: PropsInterface) {
                             )}
                         </div>
                     </div>
-                    <div className="relative z-[-1]">
-                        <form
-                            onSubmit={handleSubmit}
-                            className="flex items-center"
-                        >
-                            <input
-                                type="text"
-                                placeholder={apps[selectedApp].placeholder}
-                                className="rounded-l-md h-full w-full p-2 border border-gray-200 focus:outline-none focus:border-sky-500"
-                                onChange={handleInputChange}
-                                value={inputString}
-                                onKeyDown={(e) => {
-                                    if (e.key === 'Enter') {
-                                        handleSubmit(e);
-                                    }
-                                }}
-                            />
-                            <button
-                                type="submit"
-                                className={`rounded-r-md h-full p-2 bg-sky-500 text-white hover:bg-sky-600 transition duration-200
-                                            ${disableInputButton && 'cursor-no-drop'}`}
-                                disabled={disableInputButton}
+                    {selectedApp === 0 && (
+                        <div className="relative z-[-1]">
+                            <form
+                                onSubmit={handleSubmit}
+                                className="flex items-stretch"
                             >
-                                <Icon path={mdiRocketLaunchOutline} size={1} />
-                            </button>
-                        </form>
-                        {selectedApp === 1 && (
-                            <div className="p-1 h-[35px]">
-                                {!selectedRegex ? (
-                                    <p className="text-sky-500 text-xs">
-                                        Please select a regex to check the
-                                        string.
-                                    </p>
-                                ) : !isInputValid ? (
-                                    <p className="text-red-500 text-xs">
-                                        Only alphabetic characters are allowed.
-                                    </p>
-                                ) : stringChecker === null ? (
-                                    <p className="text-sky-500 text-xs">
-                                        {inputString.trim() === '' &&
-                                            'Please enter a string for validation'}
-                                    </p>
-                                ) : stringChecker === true ? (
-                                    <p className="text-green-500 text-xs flex gap-1">
-                                        <Icon
-                                            path={mdiCheckCircleOutline}
-                                            size={0.8}
-                                        />
-                                        {`The provided string is valid for ${selectedRegex}`}
-                                    </p>
-                                ) : (
-                                    <p className="text-red-500 text-xs flex gap-1">
-                                        <Icon
-                                            path={mdiCloseCircleOutline}
-                                            size={0.8}
-                                        />
-                                        {`The provided string is not valid for ${selectedRegex}`}
-                                    </p>
-                                )}
-                            </div>
-                        )}
-                    </div>
+                                <input
+                                    type="text"
+                                    placeholder={apps[selectedApp].placeholder}
+                                    className="rounded-l-md w-full p-2 border border-gray-200 focus:outline-none focus:border-sky-500"
+                                    onChange={handleInputChange}
+                                    value={inputString}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter') {
+                                            handleSubmit(e);
+                                        }
+                                    }}
+                                />
+                                <button
+                                    type="submit"
+                                    className={`rounded-r-md p-2 bg-sky-500 text-white hover:bg-sky-600 transition duration-200
+                                            ${disableInputButton && 'cursor-no-drop'}`}
+                                    disabled={disableInputButton}
+                                >
+                                    <Icon
+                                        path={mdiRocketLaunchOutline}
+                                        size={1}
+                                    />
+                                </button>
+                            </form>
+                            {/* {selectedApp === 1 && (
+                                <div className="p-1 h-[35px]">
+                                    {!selectedRegex ? (
+                                        <p className="text-sky-500 text-xs">
+                                            Please select a regex to check the
+                                            string.
+                                        </p>
+                                    ) : !isInputValid ? (
+                                        <p className="text-red-500 text-xs">
+                                            Only alphabetic characters are
+                                            allowed.
+                                        </p>
+                                    ) : stringChecker === null ? (
+                                        <p className="text-sky-500 text-xs">
+                                            {inputString.trim() === '' &&
+                                                'Please enter a string for validation'}
+                                        </p>
+                                    ) : stringChecker === true ? (
+                                        <p className="text-green-500 text-xs flex gap-1">
+                                            <Icon
+                                                path={mdiCheckCircleOutline}
+                                                size={0.8}
+                                            />
+                                            {`The provided string is valid for ${selectedRegex}`}
+                                        </p>
+                                    ) : (
+                                        <p className="text-red-500 text-xs flex gap-1">
+                                            <Icon
+                                                path={mdiCloseCircleOutline}
+                                                size={0.8}
+                                            />
+                                            {`The provided string is not valid for ${selectedRegex}`}
+                                        </p>
+                                    )}
+                                </div>
+                            )} */}
+                        </div>
+                    )}
 
                     <div className="flex flex-col gap-3 w-full mt-[1rem] [2rem] text-gray-500 overflow-y-auto">
                         {categorizedInputs.map(
