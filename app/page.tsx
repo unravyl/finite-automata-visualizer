@@ -25,7 +25,7 @@ export default function Page() {
         null
     );
     const [isAnimating, setIsAnimating] = useState<boolean>(false);
-    const [animationSpeed, setAnimationSpeed] = useState<number>(1);
+    const [animationSpeed, setAnimationSpeed] = useState<number>(2);
 
     const sidePanelRef = useRef<HTMLDivElement>(null);
     const legendPanelRef = useRef<HTMLDivElement>(null);
