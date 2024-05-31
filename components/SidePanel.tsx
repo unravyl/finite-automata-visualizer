@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { CSSTransition } from 'react-transition-group';
+import { useSearchParams } from 'next/navigation';
 
 import Icon from '@mdi/react';
 import { mdiResistorNodes } from '@mdi/js';
@@ -39,6 +40,8 @@ interface PropsInterface {
 function SidePanel(props: PropsInterface) {
     const { fetchDfaFromIdb, addDfaToIdb, getDfaFromIdb } = useDfaStore();
     const { show, setNodes, setLinks, setRegexHeader } = props;
+    const searchParams = useSearchParams();
+    const paramsRegex = searchParams.get('regex');
 
     const [inputs, setInputs] = useState<DFAStoreData[]>([]);
     const [isFetching, setIsFetching] = useState(false);
@@ -229,8 +232,6 @@ function SidePanel(props: PropsInterface) {
     };
 
     const getInputsFromIdb = async () => {
-        setNodes([]);
-        setLinks([]);
         setIsFetching(true);
         const all = await fetchDfaFromIdb();
         setInputs(all);
@@ -247,6 +248,20 @@ function SidePanel(props: PropsInterface) {
         setRegexHeader(regex);
     };
 
+    const initialize = async () => {
+        await getInputsFromIdb();
+        if (paramsRegex && validateRegex(paramsRegex) === '') {
+            const parser = new Parser(paramsRegex);
+            const firstPos = parser.firstPos;
+            const followPos = parser.followPos;
+            const { nodes, links } = generateNodesAndLinks(firstPos, followPos);
+            setNodes(nodes);
+            setLinks(links);
+            testLog(nodes, links, followPos);
+            setRegexHeader(paramsRegex);
+        }
+    };
+
     useEffect(() => {
         if (selectedInput?.regex) {
             setSelectedRegex(selectedInput.regex);
@@ -255,7 +270,7 @@ function SidePanel(props: PropsInterface) {
     }, [selectedInput]);
 
     useEffect(() => {
-        getInputsFromIdb();
+        initialize();
     }, []);
 
     useEffect(() => {

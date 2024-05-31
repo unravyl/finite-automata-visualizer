@@ -71,8 +71,11 @@ function SidePanelItem(props: SidePanelItemProps) {
                                 <button
                                     onClick={() => {
                                         navigator.clipboard.writeText(
-                                            'https://tinyurl.com/2x6wr6n8'
+                                            `http://localhost:3000/?regex=${input.regex}`
                                         );
+                                        // navigator.clipboard.writeText(
+                                        //     'https://tinyurl.com/2x6wr6n8'
+                                        // );
                                         setShowLinkCopied(true);
                                         setShowMenu(false);
                                         setTimeout(() => {
