@@ -76,7 +76,7 @@ function SidePanelItem(props: SidePanelItemProps) {
                                 <button
                                     onClick={() => {
                                         navigator.clipboard.writeText(
-                                            `http://localhost:3000/?regex=${input.regex}`
+                                            `https://favisualizer.vercel.app/?regex=${input.regex}`
                                         );
                                         // navigator.clipboard.writeText(
                                         //     'https://tinyurl.com/2x6wr6n8'
