@@ -182,7 +182,7 @@ export default function Page() {
     }, []);
 
     return (
-        <div className="flex justify-center items-center min-h-screen min-w-screen">
+        <div className="flex justify-center items-center min-h-lvh min-w-screen">
             <div className="flex flex-col items-center w-full h-lvh">
                 <div className="relative w-full flex justify-center">
                     <h1 className="absolute top-5 text-sky-500 text-3xl font-bold z-10">
@@ -252,7 +252,7 @@ export default function Page() {
                                 </button>
                             )}
                         </div>
-                        <div className="flex px-5 gap-1 h-3">
+                        <div className="flex px-5 gap-1 h-3 text-yellow-500">
                             {inputMessageIndex !== null && (
                                 <div
                                     className={`flex items-center gap-1 text-sm text-${inputMessage[inputMessageIndex].color}-500`}
