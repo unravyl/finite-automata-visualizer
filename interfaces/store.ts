@@ -17,4 +17,5 @@ export interface DFAStoreState {
         id: DFAStoreData['id']
     ) => Promise<DFAStoreData | undefined>;
     deleteDfaFromIdb: (id: DFAStoreData['id']) => Promise<void>;
+    deleteAllDfaFromIdb: () => Promise<void>;
 }

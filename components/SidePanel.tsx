@@ -38,7 +38,8 @@ interface PropsInterface {
 }
 
 function SidePanel(props: PropsInterface) {
-    const { fetchDfaFromIdb, addDfaToIdb, getDfaFromIdb } = useDfaStore();
+    const { fetchDfaFromIdb, addDfaToIdb, getDfaFromIdb, deleteAllDfaFromIdb } =
+        useDfaStore();
     const { show, setNodes, setLinks, setRegexHeader } = props;
     const searchParams = useSearchParams();
     const paramsRegex = searchParams.get('regex');
@@ -263,6 +264,11 @@ function SidePanel(props: PropsInterface) {
     };
 
     useEffect(() => {
+        const key = 'version_1';
+        if (!localStorage.getItem(key)) {
+            localStorage.setItem(key, 'true');
+            deleteAllDfaFromIdb();
+        }
         if (selectedInput?.regex) {
             setSelectedRegex(selectedInput.regex);
             setRegexHeader(selectedInput.regex);
@@ -290,7 +296,7 @@ function SidePanel(props: PropsInterface) {
         return () => {
             document.removeEventListener('click', handleClick);
         };
-    });
+    }, []);
 
     return (
         <div className="side-panel">
