@@ -4,11 +4,8 @@ import { useSearchParams } from 'next/navigation';
 
 import Icon from '@mdi/react';
 import { mdiResistorNodes } from '@mdi/js';
-import { mdiChevronDown } from '@mdi/js';
 import { mdiCheckAll } from '@mdi/js';
 import { mdiRocketLaunchOutline } from '@mdi/js';
-import { mdiCloseCircleOutline } from '@mdi/js';
-import { mdiCheckCircleOutline } from '@mdi/js';
 
 import Parser from '../classes/Parser';
 import { generateNodesAndLinks } from '../utils/graph';

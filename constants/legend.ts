@@ -1,4 +1,4 @@
-export const LegendContents = [
+export const LEGEND = [
     {
         title: 'Start State',
         description: 'S',

@@ -1,5 +1,5 @@
 import React from 'react';
-import { BaseEdge, BezierEdge, EdgeLabelRenderer, EdgeProps } from 'reactflow';
+import { BaseEdge, EdgeLabelRenderer, EdgeProps } from 'reactflow';
 import FloatingEdge from './FloatingEdge';
 
 export default function SelfConnecting(props: EdgeProps) {

@@ -1,7 +1,7 @@
 import React from 'react';
-import { Handle, Position } from 'reactflow';
+import { Handle, NodeProps, Position } from 'reactflow';
 
-function CircleNode(props) {
+function DFANode(props: NodeProps) {
     const { data } = props;
     const label = data.label;
     const active = data.active;
@@ -43,4 +43,4 @@ function CircleNode(props) {
     );
 }
 
-export default CircleNode;
+export default DFANode;

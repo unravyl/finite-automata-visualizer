@@ -1,4 +1,4 @@
-export const guideLine = [
+export const GUIDELINES = [
     'Concatenation: Represented by . (e.g., a.b means ab)',
     'Union (Or): Represented by | (e.g., a|b means either a or b)',
     'Kleene Star: Represented by * (e.g., a* means zero or more occurrences of a)',
