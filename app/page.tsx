@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, Suspense } from 'react';
 import { NodeInterface, LinkInterface } from '../interfaces/graph';
 import DFA from '../components/DFA';
 import SidePanel from '../components/SidePanel';
@@ -299,12 +299,14 @@ export default function Page() {
                             <path d="M9 3v18" />
                         </svg>
                     </button>
-                    <SidePanel
-                        show={showSidePanel}
-                        setNodes={setNodes}
-                        setLinks={setLinks}
-                        setRegexHeader={setRegexHeader}
-                    />
+                    <Suspense>
+                        <SidePanel
+                            show={showSidePanel}
+                            setNodes={setNodes}
+                            setLinks={setLinks}
+                            setRegexHeader={setRegexHeader}
+                        />
+                    </Suspense>
                 </section>
                 <section ref={legendPanelRef}>
                     {showLegendPanel ? (
