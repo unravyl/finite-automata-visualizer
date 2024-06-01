@@ -306,11 +306,15 @@ function SidePanel(props: PropsInterface) {
                 classNames="slide"
                 unmountOnExit
             >
-                <div className="flex flex-col gap-3 absolute top-0 left-0 py-2 px-3 w-[250px] h-full bg-gray-50 z-10">
+                <div className="flex flex-col gap-3 absolute top-0 left-0 py-2 px-3 w-[210px] h-full bg-gray-50 z-10">
                     <div className="flex flex-col w-full text-sky-500 mt-10">
-                        <h1 className="flex items-center justify-between text-md font-bold px-2">
+                        <h1 className="flex items-center justify-between text-md font-bold px-2 mt-5">
                             <div className="flex items-center gap-2">
-                                <Icon path={mdiResistorNodes} size={1} />
+                                <img
+                                    src="/favicon.svg"
+                                    alt="favicon"
+                                    className="w-6 h-6"
+                                />
                                 <span>Regex to DFA</span>
                             </div>
                             {/* <button
@@ -459,15 +463,12 @@ function SidePanel(props: PropsInterface) {
                                     </div>
                                 )
                         )}
-                    </div>
-
-                    {inputs.length === 0 && (
-                        <div className="grow flex flex-col items-center justify-center">
-                            <h1 className="text-sky-500 text-sm">
+                        {inputs.length === 0 && (
+                            <h1 className="text-sky-500 text-sm grow flex items-center justify-center">
                                 No inputs yet
                             </h1>
-                        </div>
-                    )}
+                        )}
+                    </div>
                 </div>
             </CSSTransition>
         </div>

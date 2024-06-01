@@ -13,6 +13,7 @@ import { mdiCheckCircleOutline } from '@mdi/js';
 import { mdiSquare } from '@mdi/js';
 
 const mobileScreen = 640;
+const laptopScreen = 1024;
 
 export default function Page() {
     const [nodes, setNodes] = useState<NodeInterface[]>([]);
@@ -166,7 +167,7 @@ export default function Page() {
             if (
                 sidePanelRef.current &&
                 !sidePanelRef.current.contains(e.target as Node) &&
-                window.innerWidth < mobileScreen
+                window.innerWidth < laptopScreen
             ) {
                 setShowSidePanel(false);
             }
@@ -177,9 +178,9 @@ export default function Page() {
 
     useEffect(() => {
         setBlinkSidePanel(
-            regexHeader.length === 0 && window.innerWidth < mobileScreen
+            regexHeader.length === 0 && window.innerWidth < laptopScreen
         );
-        if (window.innerWidth >= mobileScreen) {
+        if (window.innerWidth >= laptopScreen) {
             setShowSidePanel(true);
             setShowLegendPanel(true);
         }
