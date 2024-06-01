@@ -161,7 +161,6 @@ export default function Page() {
             if (
                 sidePanelRef.current &&
                 !sidePanelRef.current.contains(e.target as Node) &&
-                showSidePanel &&
                 window.innerWidth < mobileScreen
             ) {
                 setShowSidePanel(false);
