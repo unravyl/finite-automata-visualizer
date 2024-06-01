@@ -30,6 +30,7 @@ export default function Page() {
 
     const sidePanelRef = useRef<HTMLDivElement>(null);
     const legendPanelRef = useRef<HTMLDivElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
 
     const disableAnimateInput = regexHeader.length === 0;
 
@@ -138,6 +139,10 @@ export default function Page() {
         setIsAnimating(false);
     };
 
+    const closeKeyboard = () => {
+        inputRef.current.blur();
+    };
+
     // watchers
     useEffect(() => {
         setInputMessageIndex(null);
@@ -193,11 +198,13 @@ export default function Page() {
                     <div className="absolute bottom-3 flex flex-col gap-2 w-[90%] max-w-[750px]">
                         <div className="grow h-[50px] border flex items-stretch gap-3 pl-5 pr-2 py-2 rounded-full bg-gray-50">
                             <input
+                                ref={inputRef}
                                 onChange={(e) =>
                                     setStringInput(e.target.value.toLowerCase())
                                 }
                                 onKeyDown={(e) => {
                                     if (e.key === 'Enter') {
+                                        closeKeyboard();
                                         handleAnimate();
                                     }
                                 }}
@@ -213,7 +220,10 @@ export default function Page() {
                             {!isAnimating ? (
                                 <div className="flex gap-1">
                                     <button
-                                        onClick={handleAnimate}
+                                        onClick={() => {
+                                            closeKeyboard();
+                                            handleAnimate();
+                                        }}
                                         className={`flex items-center gap-1 bg-sky-500 text-white px-2 rounded-full ${disableAnimateInput || disableAnimationButton ? 'cursor-not-allowed' : ''}`}
                                         disabled={
                                             disableAnimateInput ||
