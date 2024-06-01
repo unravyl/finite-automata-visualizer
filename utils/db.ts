@@ -45,3 +45,10 @@ export const deleteData = async (id) => {
     await tx.store.delete(id);
     await tx.done;
 };
+
+export const clearData = async () => {
+    const db = await initDB();
+    const tx = db.transaction(STORE_NAME, 'readwrite');
+    await tx.store.clear();
+    await tx.done;
+};
