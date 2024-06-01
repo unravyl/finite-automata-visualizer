@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { CSSTransition } from 'react-transition-group';
+import { useSearchParams } from 'next/navigation';
 
 import Icon from '@mdi/react';
 import { mdiResistorNodes } from '@mdi/js';
@@ -14,11 +15,12 @@ import { generateNodesAndLinks } from '../utils/graph';
 import { useDfaStore } from '../store/dfaStore';
 import { testLog } from '../tests/log';
 import { DFAStoreData } from '../interfaces/store';
+import SidePanelItem from './SidePanelItem';
 
 const apps = {
     0: {
         title: 'Regex to DFA',
-        placeholder: 'Enter regex',
+        placeholder: 'Add regex',
         icon: mdiResistorNodes,
     },
     1: {
@@ -32,11 +34,14 @@ interface PropsInterface {
     show: boolean;
     setLinks: Function;
     setNodes: Function;
+    setRegexHeader: Function;
 }
 
 function SidePanel(props: PropsInterface) {
     const { fetchDfaFromIdb, addDfaToIdb, getDfaFromIdb } = useDfaStore();
-    const { show, setNodes, setLinks } = props;
+    const { show, setNodes, setLinks, setRegexHeader } = props;
+    const searchParams = useSearchParams();
+    const paramsRegex = searchParams.get('regex');
 
     const [inputs, setInputs] = useState<DFAStoreData[]>([]);
     const [isFetching, setIsFetching] = useState(false);
@@ -89,10 +94,9 @@ function SidePanel(props: PropsInterface) {
     ];
 
     const disableInputButton =
-    inputString.trim().length === 0 ||
-    (selectedApp === 1 && (!inputString || !isInputValid)) ||
-    (selectedApp === 0 && (!inputString || !isInputValid || !!regexError));
-
+        inputString.trim().length === 0 ||
+        (selectedApp === 1 && (!inputString || !isInputValid)) ||
+        (selectedApp === 0 && (!inputString || !isInputValid || !!regexError));
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -116,34 +120,34 @@ function SidePanel(props: PropsInterface) {
         if (!regex) {
             return '';
         }
-    
+
         // Check if the input starts with ".", "|", or "*"
         if (/^[.*|]/.test(regex)) {
             return 'Invalid regex pattern: Cannot start with ".", "|", or "*"';
         }
-    
+
         // Check if the input contains letters other than "a" or "b"
         if (/[^\Wa-b]/i.test(regex)) {
             return 'Regex can only contain alphabet letters "a" or "b"';
         }
-    
+
         // Check if the input contains characters other than "a", "b", ".", "*", "|", "(", ")"
         if (/[^ab.*|()]/.test(regex)) {
             return 'Invalid regex pattern';
         }
-    
+
         // Check if the input contains at least one "a" or "b"
         if (!/[ab]/i.test(regex)) {
             return 'Invalid regex pattern: At least one "a" or "b" is required';
         }
-    
+
         try {
             // Check if the input is a valid regular expression
             new RegExp(regex);
         } catch (e) {
             return 'Invalid regex pattern';
         }
-    
+
         if (regex.length > 1) {
             // Additional check for concatenation: "ab" or "ba"
             if (/ab|ba/.test(regex)) {
@@ -152,12 +156,9 @@ function SidePanel(props: PropsInterface) {
                 return 'Invalid regex pattern';
             }
         }
-    
+
         return '';
     };
-    
-    
-    
 
     const isValidRegex = (inputString: string): boolean => {
         if (!selectedRegex) {
@@ -226,6 +227,7 @@ function SidePanel(props: PropsInterface) {
         const dfaData = await addDfaToIdb(data);
         await getInputsFromIdb();
         setSelectedInput(dfaData.id);
+        setRegexHeader(inputString);
         setIsFetching(false);
     };
 
@@ -238,15 +240,37 @@ function SidePanel(props: PropsInterface) {
 
     const handleRegexClick = async (id: number, regex: string) => {
         setStringChecker(null);
-        setSelectedRegex(regex);
         setSelectedInput(id);
         const dfaData = await getDfaFromIdb(id);
-        setNodes(dfaData.nodes);
-        setLinks(dfaData.links);
+        console.log(dfaData);
+        setNodes(dfaData?.nodes || []);
+        setLinks(dfaData?.links || []);
+        setRegexHeader(regex);
+    };
+
+    const initialize = async () => {
+        await getInputsFromIdb();
+        if (paramsRegex && validateRegex(paramsRegex) === '') {
+            const parser = new Parser(paramsRegex);
+            const firstPos = parser.firstPos;
+            const followPos = parser.followPos;
+            const { nodes, links } = generateNodesAndLinks(firstPos, followPos);
+            setNodes(nodes);
+            setLinks(links);
+            testLog(nodes, links, followPos);
+            setRegexHeader(paramsRegex);
+        }
     };
 
     useEffect(() => {
-        getInputsFromIdb();
+        if (selectedInput?.regex) {
+            setSelectedRegex(selectedInput.regex);
+            setRegexHeader(selectedInput.regex);
+        }
+    }, [selectedInput]);
+
+    useEffect(() => {
+        initialize();
     }, []);
 
     useEffect(() => {
@@ -276,14 +300,14 @@ function SidePanel(props: PropsInterface) {
                 classNames="slide"
                 unmountOnExit
             >
-                <div className="flex flex-col gap-5 absolute top-0 left-0 py-2 px-3 w-[215px] h-full bg-gray-50 z-10">
+                <div className="flex flex-col gap-3 absolute top-0 left-0 py-2 px-3 w-[250px] h-full bg-gray-50 z-10">
                     <div className="flex flex-col w-full text-sky-500 mt-10">
                         <h1 className="flex items-center justify-between text-md font-bold px-2">
                             <div className="flex items-center gap-2">
-                                <Icon path={apps[selectedApp].icon} size={1} />
-                                <span>{apps[selectedApp].title}</span>
+                                <Icon path={mdiResistorNodes} size={1} />
+                                <span>Regex to DFA</span>
                             </div>
-                            <button
+                            {/* <button
                                 ref={dropBtnRef}
                                 onClick={() =>
                                     setShowAppsDropdown(!showAppsDropdown)
@@ -291,7 +315,7 @@ function SidePanel(props: PropsInterface) {
                                 className="rounded-full hover:bg-black/[.05] transition duration-200"
                             >
                                 <Icon path={mdiChevronDown} size={1} />
-                            </button>
+                            </button> */}
                         </h1>
                         <div className="relative">
                             {showAppsDropdown && (
@@ -328,75 +352,81 @@ function SidePanel(props: PropsInterface) {
                             )}
                         </div>
                     </div>
-                    <div className="relative z-[-1]">
-                        <form
-                            onSubmit={handleSubmit}
-                            className="flex items-center"
-                        >
-                            <input
-                                type="text"
-                                placeholder={apps[selectedApp].placeholder}
-                                className="rounded-l-md h-full w-full p-2 border border-gray-200 focus:outline-none focus:border-sky-500"
-                                onChange={handleInputChange}
-                                value={inputString}
-                                onKeyDown={(e) => {
-                                    if (e.key === 'Enter') {
-                                        handleSubmit(e);
-                                    }
-                                }}
-                            />
-                            <button
-                                type="submit"
-                                className={`rounded-r-md h-full p-2 bg-sky-500 text-white hover:bg-sky-600 transition duration-200
-                                            ${disableInputButton && 'cursor-no-drop'}`}
-                                disabled={disableInputButton}
+                    {selectedApp === 0 && (
+                        <div className="relative z-[-1]">
+                            <form
+                                onSubmit={handleSubmit}
+                                className="flex items-stretch"
                             >
-                                <Icon path={mdiRocketLaunchOutline} size={1} />
-                            </button>
-                        </form>
-                        {selectedApp === 0 && !isInputValid && (
-                            <p className="text-red-500 text-xs">
-                                {regexError}
-                            </p>
-                        )}
-                        {selectedApp === 1 && (
-                            <div className="p-1 h-[35px]">
-                                {!selectedRegex ? (
-                                    <p className="text-sky-500 text-xs">
-                                        Please select a regex to check the
-                                        string.
-                                    </p>
-                                ) : !isInputValid ? (
-                                    <p className="text-red-500 text-xs">
-                                        Only alphabetic characters are allowed.
-                                    </p>
-                                ) : stringChecker === null ? (
-                                    <p className="text-sky-500 text-xs">
-                                        {inputString.trim() === '' &&
-                                            'Please enter a string for validation'}
-                                    </p>
-                                ) : stringChecker === true ? (
-                                    <p className="text-green-500 text-xs flex gap-1">
-                                        <Icon
-                                            path={mdiCheckCircleOutline}
-                                            size={0.8}
-                                        />
-                                        {`The provided string is valid for ${selectedRegex}`}
-                                    </p>
-                                ) : (
-                                    <p className="text-red-500 text-xs flex gap-1">
-                                        <Icon
-                                            path={mdiCloseCircleOutline}
-                                            size={0.8}
-                                        />
-                                        {`The provided string is not valid for ${selectedRegex}`}
-                                    </p>
-                                )}
-                            </div>
-                        )}
-                    </div>
+                                <input
+                                    type="text"
+                                    placeholder={apps[selectedApp].placeholder}
+                                    className="rounded-l-md w-full p-2 border border-gray-200 focus:outline-none focus:border-sky-500"
+                                    onChange={handleInputChange}
+                                    value={inputString}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter') {
+                                            handleSubmit(e);
+                                        }
+                                    }}
+                                />
+                                <button
+                                    type="submit"
+                                    className={`rounded-r-md p-2 bg-sky-500 text-white hover:bg-sky-600 transition duration-200
+                                            ${disableInputButton && 'cursor-no-drop'}`}
+                                    disabled={disableInputButton}
+                                >
+                                    <Icon
+                                        path={mdiRocketLaunchOutline}
+                                        size={1}
+                                    />
+                                </button>
+                            </form>
+                            {selectedApp === 0 && !isInputValid && (
+                                <p className="text-red-500 text-xs px-2 pt-2">
+                                    {regexError}
+                                </p>
+                            )}
+                            {/* {selectedApp === 1 && (
+                                <div className="p-1 h-[35px]">
+                                    {!selectedRegex ? (
+                                        <p className="text-sky-500 text-xs">
+                                            Please select a regex to check the
+                                            string.
+                                        </p>
+                                    ) : !isInputValid ? (
+                                        <p className="text-red-500 text-xs">
+                                            Only alphabetic characters are
+                                            allowed.
+                                        </p>
+                                    ) : stringChecker === null ? (
+                                        <p className="text-sky-500 text-xs">
+                                            {inputString.trim() === '' &&
+                                                'Please enter a string for validation'}
+                                        </p>
+                                    ) : stringChecker === true ? (
+                                        <p className="text-green-500 text-xs flex gap-1">
+                                            <Icon
+                                                path={mdiCheckCircleOutline}
+                                                size={0.8}
+                                            />
+                                            {`The provided string is valid for ${selectedRegex}`}
+                                        </p>
+                                    ) : (
+                                        <p className="text-red-500 text-xs flex gap-1">
+                                            <Icon
+                                                path={mdiCloseCircleOutline}
+                                                size={0.8}
+                                            />
+                                            {`The provided string is not valid for ${selectedRegex}`}
+                                        </p>
+                                    )}
+                                </div>
+                            )} */}
+                        </div>
+                    )}
 
-                    <div className="flex flex-col gap-3 w-full mt-[1rem] [2rem] text-gray-500 overflow-y-auto">
+                    <div className="grow flex flex-col gap-3 w-full mt-[1rem] [2rem] text-gray-500 overflow-y-auto">
                         {categorizedInputs.map(
                             (item, index) =>
                                 item.inputs.length > 0 && (
@@ -408,18 +438,17 @@ function SidePanel(props: PropsInterface) {
                                             {item.title}
                                         </h1>
                                         {item.inputs.map((input) => (
-                                            <button
+                                            <SidePanelItem
                                                 key={input.id}
-                                                onClick={() =>
-                                                    handleRegexClick(
-                                                        input.id,
-                                                        input.regex
-                                                    )
+                                                input={input}
+                                                handleRegexClick={
+                                                    handleRegexClick
                                                 }
-                                                className={`flex items-center gap-2 p-2 rounded-md hover:bg-sky-100 hover:text-sky-500 ${selectedInput === input.id && 'bg-sky-100 text-sky-500'}`}
-                                            >
-                                                <span>{input.regex}</span>
-                                            </button>
+                                                selectedInput={selectedInput}
+                                                getInputsFromIdb={
+                                                    getInputsFromIdb
+                                                }
+                                            />
                                         ))}
                                     </div>
                                 )

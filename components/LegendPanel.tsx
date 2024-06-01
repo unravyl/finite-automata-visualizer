@@ -17,8 +17,8 @@ function LegendPanel(props: PropsInterface) {
                 classNames="slide"
                 unmountOnExit
             >
-                <div className="flex flex-col gap-5 absolute top-5 right-5 py-2 px-3 rounded-md w-[20rem] h-3/4 bg-gray-50 z-10">
-                    <div className="flex flex-col items-center justify-center w-full gap-2 mt-10 pl-5">
+                <div className="flex flex-col gap-5 absolute top-0 right-0 py-2 px-3 rounded-md w-[20rem] h-full bg-gray-50 z-10">
+                    <div className="flex flex-col items-center justify-center w-full gap-2 mt-10 px-5">
                         {LegendContents.map((content, index) => (
                             <div
                                 className="flex flex-1 items-center w-full justify-center"
@@ -36,13 +36,14 @@ function LegendPanel(props: PropsInterface) {
                         ))}
                     </div>
 
-                    <div className="grow flex flex-col items-start pb-2 justify-start pl-5">
+                    <div className="grow flex flex-col items-start pb-2 justify-start px-5">
                         <h1 className="text-sky-500 text-md">Guidelines:</h1>
                         <div className="mt-[1rem] flex flex-col items-start justify-center gap-2">
                             {guideLine.map((guides, index) => (
-                                <h1 className="text-gray-500 text-sm">
-                                    {index + 1}. {guides}
-                                </h1>
+                                <div className="flex gap-2 text-gray-500 text-sm">
+                                    <p>{index + 1}.</p>
+                                    <p>{guides}</p>
+                                </div>
                             ))}
                         </div>
                     </div>
