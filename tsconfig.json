@@ -23,7 +23,6 @@
         ".next/types/**/*.ts",
         "**/*.ts",
         "**/*.tsx",
-        "components/SplashScreen.tsx"
     ],
     "exclude": ["node_modules"]
 }
