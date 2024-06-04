@@ -177,13 +177,21 @@ export default function Page() {
     }, []);
 
     useEffect(() => {
-        setBlinkSidePanel(
-            regexHeader.length === 0 && window.innerWidth < laptopScreen
-        );
-        if (window.innerWidth >= laptopScreen) {
-            setShowSidePanel(true);
-            setShowLegendPanel(true);
-        }
+        const handleResize = () => {
+            setBlinkSidePanel(
+                regexHeader.length === 0 && window.innerWidth < laptopScreen
+            );
+            if (window.innerWidth >= laptopScreen) {
+                setShowSidePanel(true);
+                setShowLegendPanel(true);
+            } else {
+                setShowSidePanel(false);
+                setShowLegendPanel(false);
+            }
+        };
+        handleResize();
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
     }, []);
 
     return (
