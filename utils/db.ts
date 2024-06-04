@@ -38,3 +38,17 @@ export const getAllData = async () => {
     await tx.done;
     return allData;
 };
+
+export const deleteData = async (id) => {
+    const db = await initDB();
+    const tx = db.transaction(STORE_NAME, 'readwrite');
+    await tx.store.delete(id);
+    await tx.done;
+};
+
+export const clearData = async () => {
+    const db = await initDB();
+    const tx = db.transaction(STORE_NAME, 'readwrite');
+    await tx.store.clear();
+    await tx.done;
+};

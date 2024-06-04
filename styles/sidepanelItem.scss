@@ -1,0 +1,24 @@
+.side-panel-item {
+    .slide-enter {
+        opacity: 0;
+        transform: translateY(-50%);
+    }
+    .slide-enter-active {
+        transform: translateY(0);
+        opacity: 1;
+        transition:
+            transform 300ms,
+            opacity 300ms;
+    }
+    .slide-exit {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    .slide-exit-active {
+        transform: translateY(-50%);
+        opacity: 0;
+        transition:
+            transform 300ms,
+            opacity 300ms;
+    }
+}

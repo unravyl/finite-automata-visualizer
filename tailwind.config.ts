@@ -10,7 +10,14 @@ const config: Config = {
         './src/**/*.{js,ts,jsx,tsx,mdx}',
     ],
     theme: {
-        extend: {},
+        extend: {
+            colors: {
+                'custom-blue': '#6CA0DC',
+                'custom-gray': '#C5C6D0',
+                'custom-red': '#BC544D',
+                'custom-green': '#99EDC3',
+              },
+        },
     },
     plugins: [],
 };

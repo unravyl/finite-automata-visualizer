@@ -15,7 +15,7 @@ import 'reactflow/dist/style.css';
 import { NodeInterface, LinkInterface } from '../interfaces/graph';
 import SelfConnectingEdge from './SelfConnectingEdge';
 import FloatingEdge from './FloatingEdge';
-import CircleNode from './DFANode';
+import DFANode from './DFANode';
 
 interface PropsInterface {
     nodes: NodeInterface[];
@@ -23,7 +23,7 @@ interface PropsInterface {
 }
 
 const nodeTypes: NodeTypes = {
-    circle: CircleNode,
+    circle: DFANode,
 };
 
 const edgeTypes: EdgeTypes = {
@@ -43,10 +43,13 @@ const DFA = (props: PropsInterface) => {
                 ? 'D'
                 : node.id.toString();
 
+        const active = node?.active || false;
+
         return {
             id: node.id.toString(),
             data: {
                 label,
+                active,
             },
             position: {
                 x: 75 * index + 3.1 ** (index + 1),
@@ -60,6 +63,8 @@ const DFA = (props: PropsInterface) => {
         const edgeId = `${link.transition}-(${link.source.id})-(${link.target.id})`;
         const isLoop = link.source.id === link.target.id;
 
+        const active = link?.active || false;
+
         return {
             id: edgeId,
             source: link.source.id.toString(),
@@ -67,6 +72,9 @@ const DFA = (props: PropsInterface) => {
             label: link.transition,
             type: isLoop ? 'selfconnecting' : 'floating',
             markerEnd: { type: MarkerType.ArrowClosed },
+            data: {
+                active,
+            },
         } as Edge;
     });
 

@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
 @import 'sidepanel';
+@import 'legendpanel';
+@import 'sidepanelItem';
 
 @tailwind base;
 @tailwind components;
@@ -8,4 +10,61 @@
 body {
     margin: 0;
     font-family: 'Inter', sans-serif;
+}
+
+.bg-custom-blue {
+    background-color: #6ca0dc;
+}
+.bg-custom-gray {
+    background-color: #c5c6d0;
+}
+.bg-custom-red {
+    background-color: #bc544d;
+}
+.bg-custom-green {
+    background-color: #99edc3;
+}
+
+.border-custom-blue {
+    border-color: #0000ff;
+}
+.border-custom-black {
+    border-color: #000000;
+}
+.border-custom-red {
+    border-color: #ff0000;
+}
+.border-custom-green {
+    border-color: #008000;
+}
+
+$accent: #008ff5;
+
+.blink {
+    box-shadow: 0 0 0 4px rgba($accent, 0.25);
+    animation: blink 1s ease-in-out infinite;
+}
+
+@-webkit-keyframes blink {
+    0% {
+        box-shadow: 0 0 0 4px rgba($accent, 0.25);
+    }
+    50% {
+        box-shadow: 0 0 0 6px rgba($accent, 0.45);
+    }
+    100% {
+        box-shadow: 0 0 0 4px rgba($accent, 0.25);
+    }
+}
+
+@keyframes blink {
+    0% {
+        box-shadow: 0 0 0 4px rgba($accent, 0.25);
+    }
+    50% {
+        box-shadow: 0 0 0 6px rgba($accent, 0.45);
+    }
+    100% {
+        box-shadow: 0 0 0 4px rgba($accent, 0.25);
+    }
 }

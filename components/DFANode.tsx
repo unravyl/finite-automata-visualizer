@@ -1,9 +1,10 @@
 import React from 'react';
-import { Handle, Position } from 'reactflow';
+import { Handle, NodeProps, Position } from 'reactflow';
 
-function CircleNode(props) {
+function DFANode(props: NodeProps) {
     const { data } = props;
     const label = data.label;
+    const active = data.active;
     return (
         <div
             style={{
@@ -24,10 +25,15 @@ function CircleNode(props) {
                           ? '#6CA0DC'
                           : label === 'D'
                             ? '#BC544D'
-                            : '#C5C6D0',
+                            : label === 'PTR'
+                              ? '#FFFFA7'
+                              : '#C5C6D0',
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
+                boxShadow: active
+                    ? '0 0 150px 7px #fff, 0 0 10px 5px #0ff, 0 0 25px 12px #0ff'
+                    : 'none',
             }}
         >
             <Handle type="target" position={Position.Right} />
@@ -37,4 +43,4 @@ function CircleNode(props) {
     );
 }
 
-export default CircleNode;
+export default DFANode;

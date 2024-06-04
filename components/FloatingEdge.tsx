@@ -11,7 +11,8 @@ import { BaseEdge } from 'reactflow';
 import { getEdgeParams } from '../utils/reactflow';
 
 function FloatingEdge(props: EdgeProps) {
-    const { id, source, target, markerEnd, label } = props;
+    const { id, source, target, markerEnd, label, data } = props;
+    const active = data?.active || false;
 
     const sourceNode = useStore(
         useCallback((store) => store.nodeInternals.get(source), [source])
@@ -49,6 +50,9 @@ function FloatingEdge(props: EdgeProps) {
                         backgroundColor: '#8f94a1',
                         padding: '1px 9px',
                         borderRadius: '50%',
+                        boxShadow: active
+                            ? '0 0 150px 7px #fff, 0 0 10px 5px #0ff, 0 0 25px 12px #0ff'
+                            : 'none',
                     }}
                     className="nodrag nopan"
                 >
