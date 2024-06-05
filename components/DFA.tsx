@@ -83,8 +83,12 @@ const DFA = (props: PropsInterface) => {
         }
     };
 
+    const isBottomNode = (id: number) => {
+        return id % 2 === 0;
+    };
+
     const diagramNodes = nodes.map((node, index) => {
-        checkNodeBidirectionality(node);
+        const isBidirectional = checkNodeBidirectionality(node);
 
         const label = node.isFinalState
             ? 'F'
@@ -101,6 +105,7 @@ const DFA = (props: PropsInterface) => {
             data: {
                 label,
                 active,
+                isBidirectional,
             },
             position: {
                 x: 75 * index + 3.1 ** (index + 1),
@@ -111,24 +116,53 @@ const DFA = (props: PropsInterface) => {
     });
 
     const diagramEdges = links.map((link) => {
-        const edgeId = `${link.transition}-(${link.source.id})-(${link.target.id})`;
-        const isLoop = link.source.id === link.target.id;
+        const targetNodeId = link.target.id;
+        const sourceNodeId = link.source.id;
+
+        const edgeId = `${link.transition}-(${sourceNodeId})-(${targetNodeId})`;
+
+        const isSourceBottom = isBottomNode(sourceNodeId);
+        const isTargetBottom = isBottomNode(targetNodeId);
+
+        const isLoop = sourceNodeId === targetNodeId;
+        const isBidirectional = checkLinkBidirectionality(link);
 
         const active = link?.active || false;
 
+        const edgeType = isLoop
+            ? 'selfconnecting'
+            : isBidirectional
+              ? 'bidirectional'
+              : 'floating';
+
+        const sourceHandle = isLoop
+            ? 'selfConnectingSource'
+            : isBidirectional
+              ? !isSourceBottom
+                  ? 'bidirectionalBottomSource'
+                  : 'bidirectionalTopSource'
+              : null;
+
+        const targetHandle = isLoop
+            ? 'selfConnectingTarget'
+            : isBidirectional
+              ? !isTargetBottom
+                  ? 'bidirectionalBottomTarget'
+                  : 'bidirectionalTopTarget'
+              : null;
+
         return {
             id: edgeId,
-            source: link.source.id.toString(),
-            target: link.target.id.toString(),
+            source: sourceNodeId.toString(),
+            target: targetNodeId.toString(),
+            sourceHandle,
+            targetHandle,
             label: link.transition,
-            type: isLoop
-                ? 'selfconnecting'
-                : checkLinkBidirectionality(link)
-                  ? 'bidirectional'
-                  : 'floating',
+            type: edgeType,
             markerEnd: { type: MarkerType.ArrowClosed },
             data: {
                 active,
+                isBidirectional,
             },
         } as Edge;
     });
