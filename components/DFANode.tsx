@@ -2,9 +2,14 @@ import React from 'react';
 import { Handle, NodeProps, Position } from 'reactflow';
 
 function DFANode(props: NodeProps) {
-    const { data } = props;
+    const { data, id } = props;
     const label = data.label;
     const active = data.active;
+
+    const isBottomNode = () => {
+        return parseInt(id) % 2 === 0;
+    };
+
     return (
         <div
             style={{
@@ -37,8 +42,8 @@ function DFANode(props: NodeProps) {
             }}
         >
             <Handle type="target" position={Position.Right} />
-            <div>{label}</div>
             <Handle type="source" position={Position.Left} />
+            <div>{label}</div>
         </div>
     );
 }

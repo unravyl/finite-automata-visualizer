@@ -16,6 +16,7 @@ import { NodeInterface, LinkInterface } from '../interfaces/graph';
 import SelfConnectingEdge from './SelfConnectingEdge';
 import FloatingEdge from './FloatingEdge';
 import DFANode from './DFANode';
+import BiDirectionalEdge from './BidirectionalEdge';
 
 interface PropsInterface {
     nodes: NodeInterface[];
@@ -23,18 +24,68 @@ interface PropsInterface {
 }
 
 const nodeTypes: NodeTypes = {
-    circle: DFANode,
+    dfa: DFANode,
 };
 
 const edgeTypes: EdgeTypes = {
     selfconnecting: SelfConnectingEdge,
     floating: FloatingEdge,
+    bidirectional: BiDirectionalEdge,
 };
 
 const DFA = (props: PropsInterface) => {
     const { nodes, links } = props;
 
+    let bidirectionals = [];
+
+    const checkNodeBidirectionality = (node: NodeInterface) => {
+        const sources = links.filter((link) => {
+            return link.source.id === node.id;
+        });
+
+        const targets = links.filter((link) => {
+            return link.target.id === node.id;
+        });
+
+        if (sources.length === 0 || targets.length === 0) {
+            return null;
+        }
+
+        let isBirectional = false;
+
+        sources.forEach((sourceLink) => {
+            targets.forEach((targetLink) => {
+                if (
+                    sourceLink.source.id === targetLink.target.id &&
+                    sourceLink.target.id === targetLink.source.id &&
+                    sourceLink.source.id !== targetLink.source.id &&
+                    sourceLink.target.id !== targetLink.target.id
+                ) {
+                    if (!bidirectionals.includes(sourceLink)) {
+                        bidirectionals.push(sourceLink);
+                    }
+                    if (!bidirectionals.includes(targetLink)) {
+                        bidirectionals.push(targetLink);
+                    }
+                    isBirectional = true;
+                }
+            });
+        });
+
+        return isBirectional;
+    };
+
+    const checkLinkBidirectionality = (link: LinkInterface) => {
+        if (bidirectionals.includes(link)) {
+            return true;
+        } else {
+            return false;
+        }
+    };
+
     const diagramNodes = nodes.map((node, index) => {
+        checkNodeBidirectionality(node);
+
         const label = node.isFinalState
             ? 'F'
             : node.id === 1
@@ -55,7 +106,7 @@ const DFA = (props: PropsInterface) => {
                 x: 75 * index + 3.1 ** (index + 1),
                 y: index % 2 === 0 ? 100 : 350,
             },
-            type: 'circle',
+            type: 'dfa',
         } as Node;
     });
 
@@ -70,7 +121,11 @@ const DFA = (props: PropsInterface) => {
             source: link.source.id.toString(),
             target: link.target.id.toString(),
             label: link.transition,
-            type: isLoop ? 'selfconnecting' : 'floating',
+            type: isLoop
+                ? 'selfconnecting'
+                : checkLinkBidirectionality(link)
+                  ? 'bidirectional'
+                  : 'floating',
             markerEnd: { type: MarkerType.ArrowClosed },
             data: {
                 active,
