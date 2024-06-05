@@ -164,6 +164,7 @@ const DFA = (props: PropsInterface) => {
             data: {
                 active,
                 isBidirectional,
+                label: link.transition,
             },
         } as Edge;
     });
