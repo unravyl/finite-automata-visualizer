@@ -6,10 +6,6 @@ function DFANode(props: NodeProps) {
     const label = data.label;
     const active = data.active;
 
-    const isBottomNode = () => {
-        return parseInt(id) % 2 == 0;
-    };
-
     return (
         <div
             style={{
