@@ -65,14 +65,17 @@ export default function Page() {
         if (!regexHeader) {
             return false;
         }
+
         const regexPattern = regexHeader
             .replace(/\./g, '+')
             .replace(/e/g, '')
-            .replace(/ /g, '\\s*');
+            .replace(/ /g, '\\s*')
+            .replace(/\*\+/g, '*');
 
-        const inputStringProcessed = inputString.replace(/e/g, '');
+        let inputStringProcessed = inputString.replace(/e/g, '');
+        console.log('LOG REGEX CHECK', inputStringProcessed);
 
-        const regex = new RegExp(`^${regexPattern}$`);
+        let regex = new RegExp(`^${regexPattern}$`);
 
         return regex.test(inputStringProcessed);
     };
