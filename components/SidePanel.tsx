@@ -240,7 +240,6 @@ function SidePanel(props: PropsInterface) {
         setStringChecker(null);
         setSelectedInput(id);
         const dfaData = await getDfaFromIdb(id);
-        console.log(dfaData);
         setNodes(dfaData?.nodes || []);
         setLinks(dfaData?.links || []);
         setRegexHeader(dfaData ? regex : '');
