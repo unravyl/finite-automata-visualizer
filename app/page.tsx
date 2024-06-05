@@ -180,18 +180,26 @@ export default function Page() {
     }, []);
 
     useEffect(() => {
-        setBlinkSidePanel(
-            regexHeader.length === 0 && window.innerWidth < laptopScreen
-        );
-        if (window.innerWidth >= laptopScreen) {
-            setShowSidePanel(true);
-            setShowLegendPanel(true);
-        }
+        const handleResize = () => {
+            setBlinkSidePanel(
+                regexHeader.length === 0 && window.innerWidth < laptopScreen
+            );
+            if (window.innerWidth >= laptopScreen) {
+                setShowSidePanel(true);
+                setShowLegendPanel(true);
+            } else {
+                setShowSidePanel(false);
+                setShowLegendPanel(false);
+            }
+        };
+        handleResize();
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
     }, []);
 
     return (
-        <div className="flex justify-center items-center min-h-lvh min-w-screen">
-            <div className="flex flex-col items-center w-full h-lvh">
+        <div className="flex justify-center items-center min-h-svh min-w-screen">
+            <div className="flex flex-col items-center w-full h-svh">
                 <div className="relative w-full flex justify-center">
                     <h1 className="absolute top-5 text-sky-500 text-3xl font-bold z-10">
                         {regexHeader}
