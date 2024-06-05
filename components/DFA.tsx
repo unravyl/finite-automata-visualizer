@@ -17,7 +17,7 @@ import SelfConnectingEdge from './SelfConnectingEdge';
 import FloatingEdge from './FloatingEdge';
 import DFANode from './DFANode';
 import BiDirectionalEdge from './BidirectionalEdge';
-import { StateTypes } from '../constants/stateTypes';
+import { StateTypes } from '../constants/state';
 
 interface PropsInterface {
     nodes: NodeInterface[];
