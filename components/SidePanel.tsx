@@ -243,7 +243,7 @@ function SidePanel(props: PropsInterface) {
         console.log(dfaData);
         setNodes(dfaData?.nodes || []);
         setLinks(dfaData?.links || []);
-        setRegexHeader(regex);
+        setRegexHeader(dfaData ? regex : '');
     };
 
     const initialize = async () => {
