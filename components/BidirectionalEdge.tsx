@@ -44,7 +44,6 @@ export default function BiDirectionalEdge({
                 (e.source === target && e.target === source) ||
                 (e.target === source && e.source === target)
         );
-        console.log('LOG BI-EDGE EXISTS', edgeExists, source, target);
         return edgeExists;
     });
 
