@@ -1,6 +1,6 @@
 import { NodeInterface, LinkInterface } from '../interfaces/graph';
 import { FollowPosInterface } from '../interfaces/ast';
-import { FinalState } from '../constants/stateTypes';
+import { Transition } from '../constants/transitions';
 
 export const findNodeByTargetValues = (
     target: number[],
@@ -267,26 +267,26 @@ export const generateNodesAndLinks = (
         }
     });
 
-    let finalEdgesState = FinalState.NONE as FinalState;
+    let finalEdgesState = Transition.NONE as Transition;
 
     links.forEach((link) => {
         if (link.source === finalStateNode) {
             if (link.transition === 'a') {
-                if (finalEdgesState === FinalState.B) {
-                    finalEdgesState = FinalState.AB;
+                if (finalEdgesState === Transition.B) {
+                    finalEdgesState = Transition.AB;
                     return;
                 }
-                finalEdgesState = FinalState.A;
+                finalEdgesState = Transition.A;
             } else if (link.transition === 'b') {
-                if (finalEdgesState === FinalState.A) {
-                    finalEdgesState = FinalState.AB;
+                if (finalEdgesState === Transition.A) {
+                    finalEdgesState = Transition.AB;
                 }
-                finalEdgesState = FinalState.B;
+                finalEdgesState = Transition.B;
             }
         }
     });
 
-    if (finalEdgesState !== FinalState.AB) {
+    if (finalEdgesState !== Transition.AB) {
         if (deadState === null) {
             generateDeadState();
         }
@@ -294,12 +294,12 @@ export const generateNodesAndLinks = (
 
     let newLink = {} as LinkInterface;
 
-    if (finalEdgesState === FinalState.A) {
-        newLink = generateLink(finalStateNode, deadState, FinalState.B);
-    } else if (finalEdgesState === FinalState.B) {
-        newLink = generateLink(finalStateNode, deadState, FinalState.A);
-    } else if (finalEdgesState === FinalState.NONE) {
-        newLink = generateLink(finalStateNode, deadState, FinalState.AB);
+    if (finalEdgesState === Transition.A) {
+        newLink = generateLink(finalStateNode, deadState, Transition.B);
+    } else if (finalEdgesState === Transition.B) {
+        newLink = generateLink(finalStateNode, deadState, Transition.A);
+    } else if (finalEdgesState === Transition.NONE) {
+        newLink = generateLink(finalStateNode, deadState, Transition.AB);
     }
 
     links.push(newLink);
