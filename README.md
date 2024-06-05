@@ -18,6 +18,12 @@ Go to [our website](https://favisualizer.vercel.app/) and visualize your regular
 
 -   User can input a string and regular expresson, and the application will check if the input string is a member of the regular expression
 
+
+
+https://github.com/maxellmilay/finite-automata-visualizer/assets/82187749/d998cdca-dced-4c2c-8e0c-1ba5bdd8efda
+
+
+
 ## Implementation Algorithm?
 
 -   To know how the RegEx to DFA Diagram conversion works in detail, check out our [wiki](https://github.com/maxellmilay/finite-automata-visualizer/wiki/Core-Algorithm-of-the-RegEx-to-DFA-Conversion) !
