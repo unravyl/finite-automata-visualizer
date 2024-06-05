@@ -113,7 +113,6 @@ const checkDuplicateLink = (
         if (sourceId === existingSourceId && targetId === existingTargetId) {
             return index;
         } else {
-            console.log();
             return;
         }
     });
@@ -218,8 +217,6 @@ export const generateNodesAndLinks = (
                     currentNode,
                     targetNode
                 );
-
-                console.log('LOG DUPLICATES', duplicates);
 
                 if (duplicates !== null) {
                     duplicates.forEach((duplicateIndex) => {
