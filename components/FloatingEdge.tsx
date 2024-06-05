@@ -39,6 +39,14 @@ function FloatingEdge(props: EdgeProps) {
         targetY: ty,
     });
 
+    const isTransitionMoreThanOne = () => {
+        if (data.label.length > 1) {
+            return true;
+        }
+
+        return false;
+    };
+
     return (
         <>
             <BaseEdge id={id} path={edgePath} markerEnd={markerEnd} />
@@ -48,7 +56,9 @@ function FloatingEdge(props: EdgeProps) {
                         position: 'absolute',
                         transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
                         backgroundColor: '#8f94a1',
-                        padding: '1px 9px',
+                        padding: isTransitionMoreThanOne()
+                            ? '5px 6px'
+                            : '1px 9px',
                         borderRadius: '50%',
                         boxShadow: active
                             ? '0 0 150px 7px #fff, 0 0 10px 5px #0ff, 0 0 25px 12px #0ff'
