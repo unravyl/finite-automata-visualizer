@@ -7,7 +7,6 @@ function DFANode(props: NodeProps) {
     const active = data.active;
 
     const isBottomNode = () => {
-        console.log('LOG isBottomNode', parseInt(id) % 2 === 0);
         return parseInt(id) % 2 == 0;
     };
 

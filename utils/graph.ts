@@ -267,8 +267,6 @@ export const generateNodesAndLinks = (
         }
     });
 
-    console.log('LOG FINAL STATE NODE', finalStateNode);
-
     let finalEdgesState = Transition.NONE as Transition;
 
     links.forEach((link) => {
