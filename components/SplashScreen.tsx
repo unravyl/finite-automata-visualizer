@@ -63,7 +63,6 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ finishLoading }) => {
                 width={143} 
                 height={45.4} 
                 alt='' 
-                className='w-[143px] h-[45.4px] sm:w-[100px] sm:h-[30px] md:w-[120px] md:h-[38px]'
               />
             </div>
             <h1 id='title' data-text="FA&nbsp;Visualizer" className={`title`}>fa visualizers</h1>
