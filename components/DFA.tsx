@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactFlow, {
     Background,
     useNodesState,
@@ -17,6 +17,7 @@ import SelfConnectingEdge from './SelfConnectingEdge';
 import FloatingEdge from './FloatingEdge';
 import DFANode from './DFANode';
 import BiDirectionalEdge from './BidirectionalEdge';
+import { StateTypes } from '../constants/stateTypes';
 
 interface PropsInterface {
     nodes: NodeInterface[];
@@ -91,11 +92,11 @@ const DFA = (props: PropsInterface) => {
         const isBidirectional = checkNodeBidirectionality(node);
 
         const label = node.isFinalState
-            ? 'F'
+            ? StateTypes.FINAL
             : node.id === 1
-              ? 'S'
+              ? StateTypes.START
               : node.id === -1
-                ? 'D'
+                ? StateTypes.DEAD
                 : node.id.toString();
 
         const active = node?.active || false;
