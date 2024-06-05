@@ -73,7 +73,6 @@ export default function Page() {
             .replace(/\*\+/g, '*');
 
         let inputStringProcessed = inputString.replace(/e/g, '');
-        console.log('LOG REGEX CHECK', inputStringProcessed);
 
         let regex = new RegExp(`^${regexPattern}$`);
 
