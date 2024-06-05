@@ -157,7 +157,7 @@ export const generateNodesAndLinks = (
         const newDeadState = generateNode(deadStateId, [], 1, finalState);
         deadState = newDeadState;
         nodes.push(deadState);
-        const dead = generateLink(deadState, deadState, 'a,b');
+        const dead = generateLink(deadState, deadState, Transition.AB);
         links.push(dead);
     };
 
@@ -172,27 +172,27 @@ export const generateNodesAndLinks = (
 
         if (a.length !== 0) {
             potentialNewNodes.push({
-                transition: 'a',
+                transition: Transition.A,
                 list: a,
             });
         } else if (currentSymbol !== '#') {
             if (deadState === null) {
                 generateDeadState();
             }
-            const newLink = generateLink(currentNode, deadState, 'a');
+            const newLink = generateLink(currentNode, deadState, Transition.A);
             links.push(newLink);
         }
 
         if (b.length !== 0) {
             potentialNewNodes.push({
-                transition: 'b',
+                transition: Transition.B,
                 list: b,
             });
         } else if (currentSymbol !== '#') {
             if (deadState === null) {
                 generateDeadState();
             }
-            const newLink = generateLink(currentNode, deadState, 'b');
+            const newLink = generateLink(currentNode, deadState, Transition.B);
             links.push(newLink);
         }
 
@@ -267,21 +267,28 @@ export const generateNodesAndLinks = (
         }
     });
 
+    console.log('LOG FINAL STATE NODE', finalStateNode);
+
     let finalEdgesState = Transition.NONE as Transition;
 
     links.forEach((link) => {
         if (link.source === finalStateNode) {
-            if (link.transition === 'a') {
+            if (link.transition === Transition.A) {
                 if (finalEdgesState === Transition.B) {
                     finalEdgesState = Transition.AB;
                     return;
                 }
                 finalEdgesState = Transition.A;
-            } else if (link.transition === 'b') {
+            } else if (link.transition === Transition.B) {
                 if (finalEdgesState === Transition.A) {
                     finalEdgesState = Transition.AB;
                 }
                 finalEdgesState = Transition.B;
+            } else if (
+                link.transition === Transition.AB ||
+                link.transition === Transition.BA
+            ) {
+                finalEdgesState = Transition.AB;
             }
         }
     });
@@ -292,7 +299,7 @@ export const generateNodesAndLinks = (
         }
     }
 
-    let newLink = {} as LinkInterface;
+    let newLink = null;
 
     if (finalEdgesState === Transition.A) {
         newLink = generateLink(finalStateNode, deadState, Transition.B);
@@ -302,7 +309,9 @@ export const generateNodesAndLinks = (
         newLink = generateLink(finalStateNode, deadState, Transition.AB);
     }
 
-    links.push(newLink);
+    if (newLink !== null) {
+        links.push(newLink);
+    }
 
     return { nodes, links };
 };
