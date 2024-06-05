@@ -7,10 +7,12 @@ import SidePanel from '../components/SidePanel';
 import LegendPanel from '../components/LegendPanel';
 
 import Icon from '@mdi/react';
-import { mdiRocketLaunchOutline } from '@mdi/js';
-import { mdiCloseCircleOutline } from '@mdi/js';
-import { mdiCheckCircleOutline } from '@mdi/js';
-import { mdiSquare } from '@mdi/js';
+import {
+    mdiRocketLaunchOutline,
+    mdiCloseCircleOutline,
+    mdiCheckCircleOutline,
+    mdiSquare,
+} from '@mdi/js';
 
 const mobileScreen = 640;
 const laptopScreen = 1024;

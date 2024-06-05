@@ -1,7 +1,6 @@
 import { NodeInterface, LinkInterface } from '../interfaces/graph';
 import { FollowPosInterface } from '../interfaces/ast';
 import { Transition } from '../constants/transitions';
-import { link } from 'fs';
 
 export const findNodeByTargetValues = (
     target: number[],

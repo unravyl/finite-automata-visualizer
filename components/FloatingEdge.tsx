@@ -6,8 +6,8 @@ import {
     getBezierPath,
     EdgeProps,
     EdgeLabelRenderer,
+    BaseEdge,
 } from 'reactflow';
-import { BaseEdge } from 'reactflow';
 import { getEdgeParams } from '../utils/reactflow';
 
 function FloatingEdge(props: EdgeProps) {

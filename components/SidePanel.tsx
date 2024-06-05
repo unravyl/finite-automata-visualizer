@@ -3,9 +3,7 @@ import { CSSTransition } from 'react-transition-group';
 import { useSearchParams } from 'next/navigation';
 
 import Icon from '@mdi/react';
-import { mdiResistorNodes } from '@mdi/js';
-import { mdiCheckAll } from '@mdi/js';
-import { mdiRocketLaunchOutline } from '@mdi/js';
+import { mdiResistorNodes, mdiCheckAll, mdiRocketLaunchOutline } from '@mdi/js';
 
 import Parser from '../classes/Parser';
 import { generateNodesAndLinks } from '../utils/graph';
