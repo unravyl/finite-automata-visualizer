@@ -1,6 +1,7 @@
 import { NodeInterface, LinkInterface } from '../interfaces/graph';
 import { FollowPosInterface } from '../interfaces/ast';
 import { Transition } from '../constants/transitions';
+import { link } from 'fs';
 
 export const findNodeByTargetValues = (
     target: number[],
@@ -280,6 +281,7 @@ export const generateNodesAndLinks = (
             } else if (link.transition === Transition.B) {
                 if (finalEdgesState === Transition.A) {
                     finalEdgesState = Transition.AB;
+                    return;
                 }
                 finalEdgesState = Transition.B;
             } else if (
@@ -300,9 +302,9 @@ export const generateNodesAndLinks = (
     let newLink = null;
 
     if (finalEdgesState === Transition.A) {
-        newLink = generateLink(finalStateNode, deadState, Transition.A);
-    } else if (finalEdgesState === Transition.B) {
         newLink = generateLink(finalStateNode, deadState, Transition.B);
+    } else if (finalEdgesState === Transition.B) {
+        newLink = generateLink(finalStateNode, deadState, Transition.A);
     } else if (finalEdgesState === Transition.NONE) {
         newLink = generateLink(finalStateNode, deadState, Transition.AB);
     }
