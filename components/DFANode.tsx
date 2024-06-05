@@ -7,7 +7,8 @@ function DFANode(props: NodeProps) {
     const active = data.active;
 
     const isBottomNode = () => {
-        return parseInt(id) % 2 === 0;
+        console.log('LOG isBottomNode', parseInt(id) % 2 === 0);
+        return parseInt(id) % 2 == 0;
     };
 
     return (
@@ -41,8 +42,38 @@ function DFANode(props: NodeProps) {
                     : 'none',
             }}
         >
-            <Handle type="target" position={Position.Right} />
-            <Handle type="source" position={Position.Left} />
+            <Handle
+                id="bidirectionalBottomTarget"
+                type="target"
+                position={Position.Top}
+            />
+            <Handle
+                id="bidirectionalBottomSource"
+                type="source"
+                position={Position.Top}
+            />
+
+            <Handle
+                id="bidirectionalTopTarget"
+                type="target"
+                position={Position.Bottom}
+            />
+            <Handle
+                id="bidirectionalTopSource"
+                type="source"
+                position={Position.Bottom}
+            />
+
+            <Handle
+                id="selfConnectingTarget"
+                type="target"
+                position={Position.Right}
+            />
+            <Handle
+                id="selfConnectingSource"
+                type="source"
+                position={Position.Left}
+            />
             <div>{label}</div>
         </div>
     );
