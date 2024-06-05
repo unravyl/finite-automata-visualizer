@@ -1,5 +1,6 @@
 import { NodeInterface, LinkInterface } from '../interfaces/graph';
 import { FollowPosInterface } from '../interfaces/ast';
+import { FinalState } from '../constants/stateTypes';
 
 export const findNodeByTargetValues = (
     target: number[],
@@ -151,6 +152,15 @@ export const generateNodesAndLinks = (
 
     let nodeCount = 2;
 
+    const generateDeadState = () => {
+        const deadStateId = -1;
+        const newDeadState = generateNode(deadStateId, [], 1, finalState);
+        deadState = newDeadState;
+        nodes.push(deadState);
+        const dead = generateLink(deadState, deadState, 'a,b');
+        links.push(dead);
+    };
+
     while (queue.length > 0) {
         const currentNode = queue.shift();
 
@@ -167,17 +177,7 @@ export const generateNodesAndLinks = (
             });
         } else if (currentSymbol !== '#') {
             if (deadState === null) {
-                const deadStateId = -1;
-                const newDeadState = generateNode(
-                    deadStateId,
-                    [],
-                    1,
-                    finalState
-                );
-                deadState = newDeadState;
-                nodes.push(deadState);
-                const dead = generateLink(deadState, deadState, 'a,b');
-                links.push(dead);
+                generateDeadState();
             }
             const newLink = generateLink(currentNode, deadState, 'a');
             links.push(newLink);
@@ -190,21 +190,12 @@ export const generateNodesAndLinks = (
             });
         } else if (currentSymbol !== '#') {
             if (deadState === null) {
-                const deadStateId = -1;
-                const newDeadState = generateNode(
-                    deadStateId,
-                    [],
-                    1,
-                    finalState
-                );
-                deadState = newDeadState;
-                nodes.push(deadState);
-                const dead = generateLink(deadState, deadState, 'a,b');
-                links.push(dead);
+                generateDeadState();
             }
             const newLink = generateLink(currentNode, deadState, 'b');
             links.push(newLink);
         }
+
         potentialNewNodes.forEach((potential) => {
             if (isArrayPresent(potential.list, nodes)) {
                 const targetNode = findNodeByTargetValues(
@@ -238,6 +229,7 @@ export const generateNodesAndLinks = (
                     1,
                     finalState
                 );
+
                 nodeCount += 1;
                 nodes.push(newNode);
                 queue.push(newNode);
@@ -264,6 +256,53 @@ export const generateNodesAndLinks = (
             }
         });
     }
+
+    // Find final state
+
+    let finalStateNode = {} as NodeInterface;
+
+    nodes.forEach((node) => {
+        if (node.isFinalState) {
+            finalStateNode = node;
+        }
+    });
+
+    let finalEdgesState = FinalState.NONE as FinalState;
+
+    links.forEach((link) => {
+        if (link.source === finalStateNode) {
+            if (link.transition === 'a') {
+                if (finalEdgesState === FinalState.B) {
+                    finalEdgesState = FinalState.AB;
+                    return;
+                }
+                finalEdgesState = FinalState.A;
+            } else if (link.transition === 'b') {
+                if (finalEdgesState === FinalState.A) {
+                    finalEdgesState = FinalState.AB;
+                }
+                finalEdgesState = FinalState.B;
+            }
+        }
+    });
+
+    if (finalEdgesState !== FinalState.AB) {
+        if (deadState === null) {
+            generateDeadState();
+        }
+    }
+
+    let newLink = {} as LinkInterface;
+
+    if (finalEdgesState === FinalState.A) {
+        newLink = generateLink(finalStateNode, deadState, FinalState.B);
+    } else if (finalEdgesState === FinalState.B) {
+        newLink = generateLink(finalStateNode, deadState, FinalState.A);
+    } else if (finalEdgesState === FinalState.NONE) {
+        newLink = generateLink(finalStateNode, deadState, FinalState.AB);
+    }
+
+    links.push(newLink);
 
     return { nodes, links };
 };
