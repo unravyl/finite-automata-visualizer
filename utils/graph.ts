@@ -300,9 +300,9 @@ export const generateNodesAndLinks = (
     let newLink = null;
 
     if (finalEdgesState === Transition.A) {
-        newLink = generateLink(finalStateNode, deadState, Transition.B);
-    } else if (finalEdgesState === Transition.B) {
         newLink = generateLink(finalStateNode, deadState, Transition.A);
+    } else if (finalEdgesState === Transition.B) {
+        newLink = generateLink(finalStateNode, deadState, Transition.B);
     } else if (finalEdgesState === Transition.NONE) {
         newLink = generateLink(finalStateNode, deadState, Transition.AB);
     }
