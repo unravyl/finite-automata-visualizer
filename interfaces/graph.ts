@@ -1,6 +1,4 @@
-import { SimulationLinkDatum, SimulationNodeDatum } from 'd3';
-
-export interface NodeInterface extends SimulationNodeDatum {
+export interface NodeInterface {
     id: number;
     values: number[];
     group: number;
@@ -8,8 +6,7 @@ export interface NodeInterface extends SimulationNodeDatum {
     active?: boolean; // for highlighting (optional)
 }
 
-export interface LinkInterface
-    extends SimulationLinkDatum<SimulationNodeDatum> {
+export interface LinkInterface {
     source: NodeInterface;
     target: NodeInterface;
     transition: string;
