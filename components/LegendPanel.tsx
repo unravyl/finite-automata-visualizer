@@ -19,7 +19,8 @@ function LegendPanel(props: PropsInterface) {
                 unmountOnExit
             >
                 <div className="flex flex-col overflow-y-auto justify-evenly gap-5 absolute top-0 right-0 py-2 px-3 rounded-md w-[20rem] h-full bg-gray-50 z-10">
-                    <div className="flex flex-col items-center justify-center w-full gap-2 mt-10 px-5">
+                    <div className="flex flex-col justify-center w-full gap-2 mt-10 px-5">
+                    <h2 className='text-gray-500 text-md'>&Sigma; = &#x2774; a, b &#x2775;</h2>
                         {LEGEND.map((content, index) => (
                             <div
                                 className="flex flex-1 items-center w-full justify-center"
