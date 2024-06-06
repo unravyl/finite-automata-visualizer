@@ -32,7 +32,7 @@ export default function RootLayout({
                 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
                 <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'></link>
             </head>
-            <body className='overflow-hidden'>{children}</body>
+            <body className='overflow-hidden h-svh'>{children}</body>
         </html>
     );
 }
