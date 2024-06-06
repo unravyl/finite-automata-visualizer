@@ -12,15 +12,26 @@
     _::-webkit-full-page-media,
     _:future,
     :root .safari_only {
-        padding-bottom: 65px;
+        .animation-input {
+            padding-bottom: 65px;
+        }
     }
 }
 
 body {
     margin: 0;
     font-family: 'Inter', sans-serif;
-    max-height: -webkit-fill-available;
 }
+
+// _::-webkit-full-page-media,
+// _:future,
+// :root .safari_only {
+//     .animation-input {
+//         @media screen and (max-width: 767px) {
+//             padding-bottom: 65px;
+//         }
+//     }
+// }
 
 .bg-custom-blue {
     background-color: #6ca0dc;
