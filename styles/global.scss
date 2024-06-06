@@ -34,49 +34,54 @@ body {
 // }
 
 .pop-over-style {
-    background-color: #0ea5e9 !important;
+    background-color: rgb(224 242 254) !important;
     padding: 12px 24px !important;
-    color: white !important;
+    color: #0ea5e9 !important;
 
     .driver-popover-arrow-side-left.driver-popover-arrow {
-        border-left-color: #0ea5e9;
+        border-left-color: rgb(224 242 254);
     }
     .driver-popover-arrow-side-right.driver-popover-arrow {
-        border-right-color: #0ea5e9;
+        border-right-color: rgb(224 242 254);
     }
 
     .driver-popover-arrow-side-top.driver-popover-arrow {
-        border-top-color: #0ea5e9;
+        border-top-color: rgb(224 242 254);
     }
 
     .driver-popover-arrow-side-bottom.driver-popover-arrow {
-        border-bottom-color: #0ea5e9;
+        border-bottom-color: rgb(224 242 254);
     }
 
     .driver-popover-title {
-        color: white;
+        color: #0ea5e9;
         padding-right: 1rem;
     }
     .driver-popover-description {
-        color: rgb(226, 226, 226);
+        color: rgb(32, 32, 32);
         font-size: 16px;
     }
     .driver-popover-close-btn {
-        color: white !important;
+        color: #0ea5e9 !important;
     }
 
     .driver-popover-navigation-btns {
         .driver-popover-prev-btn {
             font-size: 18px !important;
-            background-color: #afe2fa;
-            color: black;
+            color: #0ea5e9;
             border-radius: 5px;
+            border: solid 2px #0ea5e9 !important;
+            background-color: rgb(224 242 254);
             padding: 8px 12px !important;
+            text-shadow: none !important;
         }
         .driver-popover-next-btn {
             font-size: 18px !important;
-            color: black;
+            color: white;
+            text-shadow: none !important;
             border-radius: 5px;
+            border: solid 2px #0ea5e9 !important;
+            background-color: #0ea5e9;
             padding: 8px 12px !important;
         }
     }
