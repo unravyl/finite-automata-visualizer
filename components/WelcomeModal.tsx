@@ -29,10 +29,10 @@ function WelcomeModal(props: PropsInterface) {
     });
 
     return (
-        <div className="absolute w-screen h-full bg-black opacity-60 z-[99999]">
+        <div className="absolute w-screen h-full bg-black/60 z-[99999]">
             <div
                 ref={modalRef}
-                className="absolute bg-white w-[350px] h-max px-8 py-5 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col gap-3 rounded-md shadow-lg"
+                className="absolute bg-white min-w-[350px] max-w-[400px] h-max px-8 py-5 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col gap-3 rounded-md shadow-lg"
             >
                 <div className="flex items-center gap-3 justify-center">
                     <Image
@@ -45,7 +45,7 @@ function WelcomeModal(props: PropsInterface) {
                         Welcome to FA <br /> Visualizer
                     </h1>
                 </div>
-                <p>
+                <p className="text-lg">
                     This interactive website helps you visualize{' '}
                     <a
                         className="text-sky-500"
@@ -58,7 +58,7 @@ function WelcomeModal(props: PropsInterface) {
                     a DFA from a regex, then test strings to see if they are
                     accepted by the automaton!
                 </p>
-                <p>
+                <p className="text-lg">
                     Click on the{' '}
                     <span className="text-sky-500">"Get Started"</span> button
                     to run the demo and learn

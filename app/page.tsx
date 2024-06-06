@@ -433,7 +433,8 @@ export default function Page() {
                                             closeKeyboard();
                                             handleAnimate();
                                         }}
-                                        className={`flex items-center gap-1 bg-sky-500 text-white px-2 rounded-full ${disableAnimateInput || disableAnimationButton ? 'cursor-not-allowed' : ''}`}
+                                        className={`flex items-center gap-1 bg-sky-500 text-white px-2 rounded-full ${disableAnimateInput || disableAnimationButton ? 'cursor-not-allowed' : ''}
+                                            ${blinkAnimationButton ? 'blink' : ''}`}
                                         disabled={
                                             disableAnimateInput ||
                                             disableAnimationButton
