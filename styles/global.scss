@@ -33,6 +33,34 @@ body {
 //     }
 // }
 
+.pop-over-style {
+    background-color: #0ea5e9 !important;
+    padding: 12px 24px !important;
+
+    .driver-popover-arrow-side-left.driver-popover-arrow {
+        border-left-color: #0ea5e9;
+    }
+    .driver-popover-arrow-side-right.driver-popover-arrow {
+        border-right-color: #0ea5e9;
+    }
+
+    .driver-popover-arrow-side-top.driver-popover-arrow {
+        border-top-color: #0ea5e9;
+    }
+
+    .driver-popover-arrow-side-bottom.driver-popover-arrow {
+        border-bottom-color: #0ea5e9;
+    }
+
+    .driver-popover-title {
+        color: white;
+    }
+    .driver-popover-description {
+        color: rgb(226, 226, 226);
+        font-size: 16px;
+    }
+}
+
 .bg-custom-blue {
     background-color: #6ca0dc;
 }

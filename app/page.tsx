@@ -5,6 +5,8 @@ import { NodeInterface, LinkInterface } from '../interfaces/graph';
 import DFA from '../components/DFA';
 import SidePanel from '../components/SidePanel';
 import LegendPanel from '../components/LegendPanel';
+import { driver } from 'driver.js';
+import 'driver.js/dist/driver.css';
 
 import Icon from '@mdi/react';
 import {
@@ -198,6 +200,24 @@ export default function Page() {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
+    useEffect(() => {
+        const steps = [
+            {
+                element: '#side-panel-button',
+                popover: {
+                    title: 'Open the side panel bitch',
+                    description: 'hatdog hatdo hatdo hatdo',
+                },
+            },
+        ];
+        const driverObj = driver({
+            steps,
+            popoverClass: 'pop-over-style',
+            disableActiveInteraction: false,
+        });
+        driverObj.drive();
+    }, []);
+
     return (
         <div className="main-page flex justify-center items-center min-h-svh min-w-screen">
             <div className="flex flex-col items-center w-full h-svh">
@@ -298,6 +318,7 @@ export default function Page() {
                 </section>
                 <section ref={sidePanelRef}>
                     <button
+                        id="side-panel-button"
                         className={`text-gray-800 absolute z-20 ml-2 mt-2.5 top-0 left-0 p-1 rounded-md hover:bg-black/[.05] transition duration-200 ${blinkSidePanel ? 'blink' : ''}`}
                         onClick={() => {
                             setShowSidePanel(!showSidePanel);
