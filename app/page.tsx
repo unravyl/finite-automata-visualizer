@@ -199,8 +199,8 @@ export default function Page() {
     }, []);
 
     return (
-        <div className="flex justify-center items-center h-svh min-w-screen">
-            <div className="flex flex-col items-center w-full h-svh">
+        <div className="flex justify-center items-center h-dvh min-w-screen">
+            <div className="flex flex-col items-center w-full h-dvh">
                 <div className="relative w-full flex justify-center">
                     <h1 className="absolute top-5 text-sky-500 text-3xl font-bold z-10">
                         {regexHeader}
