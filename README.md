@@ -1,5 +1,7 @@
 # Finite Automata Visualizer
 
+https://github.com/maxellmilay/finite-automata-visualizer/assets/82187749/47b1b46f-feeb-4349-ba24-2c1436ec0150
+
 ## How To Access?
 
 Go to [our website](https://favisualizer.vercel.app/) and visualize your regular expression into a diagram!
