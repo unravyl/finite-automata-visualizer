@@ -27,6 +27,7 @@ const apps = {
 };
 
 interface PropsInterface {
+    isAnimating: boolean;
     show: boolean;
     setLinks: Function;
     setNodes: Function;
@@ -37,7 +38,7 @@ interface PropsInterface {
 function SidePanel(props: PropsInterface) {
     const { fetchDfaFromIdb, addDfaToIdb, getDfaFromIdb, deleteAllDfaFromIdb } =
         useDfaStore();
-    const { show, setNodes, setLinks, setRegexHeader, demoString } = props;
+    const { show, setNodes, setLinks, setRegexHeader, demoString, isAnimating } = props;
     const searchParams = useSearchParams();
     const paramsRegex = searchParams.get('regex');
 
@@ -103,7 +104,7 @@ function SidePanel(props: PropsInterface) {
     const disableInputButton =
         inputString.trim().length === 0 ||
         (selectedApp === 1 && (!inputString || !isInputValid)) ||
-        (selectedApp === 0 && (!inputString || !isInputValid || !!regexError));
+        (selectedApp === 0 && (!inputString || !isInputValid || !!regexError)) || isAnimating;
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -371,7 +372,7 @@ function SidePanel(props: PropsInterface) {
                         </div>
                     </div>
                     {selectedApp === 0 && (
-                        <div className="relative z-[-1]">
+                        <div className="relative z-[-1]" >
                             <form
                                 onSubmit={handleSubmit}
                                 className="flex items-stretch"
@@ -451,12 +452,14 @@ function SidePanel(props: PropsInterface) {
                                     <div
                                         className="flex flex-col gap-1 w-full"
                                         key={`${index}-${item.title}`}
+                                       
                                     >
                                         <h1 className="text-xs text-sky-500">
                                             {item.title}
                                         </h1>
                                         {item.inputs.map((input) => (
                                             <SidePanelItem
+                                                isAnimating={isAnimating}
                                                 key={input.id}
                                                 input={input}
                                                 handleRegexClick={

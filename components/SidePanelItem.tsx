@@ -13,11 +13,12 @@ interface SidePanelItemProps {
     handleRegexClick: Function;
     selectedInput: number;
     getInputsFromIdb: Function;
+    isAnimating: boolean;
 }
 
 function SidePanelItem(props: SidePanelItemProps) {
     const { deleteDfaFromIdb } = useDfaStore();
-    const { input, handleRegexClick, selectedInput, getInputsFromIdb } = props;
+    const { input, handleRegexClick, selectedInput, getInputsFromIdb,isAnimating } = props;
 
     const [showMenu, setShowMenu] = useState(false);
     const [showLinkCopied, setShowLinkCopied] = useState(false);
@@ -40,7 +41,8 @@ function SidePanelItem(props: SidePanelItemProps) {
             <button
                 key={input.id}
                 onClick={() => handleRegexClick(input.id, input.regex)}
-                className={`w-full flex items-center justify-between gap-2 p-2 rounded-md hover:bg-sky-100 hover:text-sky-500 ${selectedInput === input.id && 'bg-sky-100 text-sky-500'}`}
+                disabled={isAnimating}
+                className={`w-full flex items-center justify-between gap-2 p-2 rounded-md ${isAnimating ? 'cursor-not-allowed': ''} hover:bg-sky-100 hover:text-sky-500 ${selectedInput === input.id && 'bg-sky-100 text-sky-500'}`}
             >
                 <span className="w-[90%] text-start truncate">
                     {input.regex}

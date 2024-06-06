@@ -57,12 +57,12 @@ export default function Page() {
             color: 'red',
         },
         {
-            message: `String is valid for ${regexHeader}`,
+            message: `String '${stringInput}' is valid for ${regexHeader}`,
             icon: mdiCheckCircleOutline,
             color: 'green',
         },
         {
-            message: `String is not valid for ${regexHeader}`,
+            message: `String '${stringInput}' is not valid for ${regexHeader}`,
             icon: mdiCloseCircleOutline,
             color: 'yellow',
         },
@@ -551,6 +551,7 @@ export default function Page() {
                     </button>
                     <Suspense>
                         <SidePanel
+                            isAnimating={isAnimating}
                             show={showSidePanel}
                             setNodes={setNodes}
                             setLinks={setLinks}
