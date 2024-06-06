@@ -8,9 +8,18 @@
 @tailwind components;
 @tailwind utilities;
 
+@media screen and (max-width: 767px) {
+    _::-webkit-full-page-media,
+    _:future,
+    :root .safari_only {
+        padding-bottom: 65px;
+    }
+}
+
 body {
     margin: 0;
     font-family: 'Inter', sans-serif;
+    max-height: -webkit-fill-available;
 }
 
 .bg-custom-blue {
