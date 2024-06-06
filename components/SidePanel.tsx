@@ -32,14 +32,12 @@ interface PropsInterface {
     setNodes: Function;
     setRegexHeader: Function;
     demoString: string;
-    demoInputs: Array<any>;
 }
 
 function SidePanel(props: PropsInterface) {
     const { fetchDfaFromIdb, addDfaToIdb, getDfaFromIdb, deleteAllDfaFromIdb } =
         useDfaStore();
-    const { show, setNodes, setLinks, setRegexHeader, demoString, demoInputs } =
-        props;
+    const { show, setNodes, setLinks, setRegexHeader, demoString } = props;
     const searchParams = useSearchParams();
     const paramsRegex = searchParams.get('regex');
 
@@ -255,8 +253,6 @@ function SidePanel(props: PropsInterface) {
     };
 
     const initialize = async () => {
-        if (demoInputs.length > 0) return;
-        console.log(demoInputs, 'this was called');
         await getInputsFromIdb();
         if (paramsRegex && validateRegex(paramsRegex) === '') {
             const parser = new Parser(paramsRegex);
