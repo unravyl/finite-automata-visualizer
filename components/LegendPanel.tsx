@@ -9,7 +9,6 @@ interface PropsInterface {
 }
 
 function LegendPanel(props: PropsInterface) {
-    const [showCaption, setShowCaption] = useState(false);
     const { show } = props;
     return (
         <div className="legend-panel">
@@ -51,12 +50,10 @@ function LegendPanel(props: PropsInterface) {
                     </div>
                     <div className='text-black px-5 pb-4'>
                         <Link href='https://github.com/maxellmilay/finite-automata-visualizer' className='relative flex  gap-5 mb-2'   target='_blank'>
-                            <i className={`bx bxl-github text-sky-500 z-1 hover:scale-125 transition-all text-[2.5rem]`}
-                            onMouseEnter={() => setShowCaption(true)}
-                            onMouseLeave={()=> setShowCaption(false)}
+                            <i className={`bx bxl-github text-sky-500 z-1 hover:scale-125 transition-all text-[2.5rem] peer`}
                             ></i>
-                            <div className='flex items-center justify-center transition-all'>
-                            {showCaption && <p className='text-white opacity-50 flex h-[1.8rem] items-center justify-center text-[0.7rem] rounded-md border-1 bg-sky-500 w-[6rem]'>Visit our Repo</p>}
+                            <div className='items-center justify-center transition-all peer-hover:flex hidden'>
+                            <p className='text-white opacity-50 flex h-[1.8rem] items-center peer-hover justify-center text-[0.7rem] rounded-md border-1 bg-sky-500 w-[6rem]'>Visit our Repo</p>
                             </div>
                         </Link>
                         <div className='text-gray text-sky-500 text-md'>Contributors</div>

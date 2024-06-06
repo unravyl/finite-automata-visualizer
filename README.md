@@ -11,16 +11,18 @@ Go to [our website](https://favisualizer.vercel.app/) and visualize your regular
 -   User can input a regular expression, and the application will generate a definite finite automaton representation of it
 
 <p align="center">
-  <img src="./public/images/conversion_demo_1.png"/>
-</p>
-<p></p>
-<p align="center">
-  <img src="./public/images/conversion_demo_2.png"/>
+  <img src="./public/images/demo.png"/>
 </p>
 
 2. **String Validation**
 
 -   User can input a string and regular expresson, and the application will check if the input string is a member of the regular expression
+
+
+
+https://github.com/maxellmilay/finite-automata-visualizer/assets/82187749/d998cdca-dced-4c2c-8e0c-1ba5bdd8efda
+
+
 
 ## Implementation Algorithm?
 

@@ -14,6 +14,14 @@ export default function SelfConnecting(props: EdgeProps) {
     const radiusY = 50;
     const edgePath = `M ${sourceX} ${sourceY} A ${radiusX} ${radiusY} 0 1 0 ${targetX} ${targetY}`;
 
+    const isTransitionMoreThanOne = () => {
+        if (data.label.length > 1) {
+            return true;
+        }
+
+        return false;
+    };
+
     return (
         <>
             <BaseEdge id={id} path={edgePath} markerEnd={markerEnd} />
@@ -23,7 +31,9 @@ export default function SelfConnecting(props: EdgeProps) {
                         position: 'absolute',
                         transform: `translate(-50%, -50%) translate(${(sourceX + targetX) / 2}px,${sourceY + 75}px)`,
                         backgroundColor: '#8f94a1',
-                        padding: '5px 6px',
+                        padding: isTransitionMoreThanOne()
+                            ? '5px 6px'
+                            : '1px 9px',
                         borderRadius: '50%',
                         boxShadow: active
                             ? '0 0 150px 7px #fff, 0 0 10px 5px #0ff, 0 0 25px 12px #0ff'

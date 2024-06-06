@@ -1,5 +1,6 @@
 import { NodeInterface, LinkInterface } from '../interfaces/graph';
 import { FollowPosInterface } from '../interfaces/ast';
+import { Transition } from '../constants/transitions';
 
 export const findNodeByTargetValues = (
     target: number[],
@@ -113,7 +114,6 @@ const checkDuplicateLink = (
         if (sourceId === existingSourceId && targetId === existingTargetId) {
             return index;
         } else {
-            console.log();
             return;
         }
     });
@@ -152,6 +152,15 @@ export const generateNodesAndLinks = (
 
     let nodeCount = 2;
 
+    const generateDeadState = () => {
+        const deadStateId = -1;
+        const newDeadState = generateNode(deadStateId, [], 1, finalState);
+        deadState = newDeadState;
+        nodes.push(deadState);
+        const dead = generateLink(deadState, deadState, Transition.AB);
+        links.push(dead);
+    };
+
     while (queue.length > 0) {
         const currentNode = queue.shift();
 
@@ -163,49 +172,30 @@ export const generateNodesAndLinks = (
 
         if (a.length !== 0) {
             potentialNewNodes.push({
-                transition: 'a',
+                transition: Transition.A,
                 list: a,
             });
         } else if (currentSymbol !== '#') {
             if (deadState === null) {
-                const deadStateId = -1;
-                const newDeadState = generateNode(
-                    deadStateId,
-                    [],
-                    1,
-                    finalState
-                );
-                deadState = newDeadState;
-                nodes.push(deadState);
-                const dead = generateLink(deadState, deadState, 'a,b');
-                links.push(dead);
+                generateDeadState();
             }
-            const newLink = generateLink(currentNode, deadState, 'a');
+            const newLink = generateLink(currentNode, deadState, Transition.A);
             links.push(newLink);
         }
 
         if (b.length !== 0) {
             potentialNewNodes.push({
-                transition: 'b',
+                transition: Transition.B,
                 list: b,
             });
         } else if (currentSymbol !== '#') {
             if (deadState === null) {
-                const deadStateId = -1;
-                const newDeadState = generateNode(
-                    deadStateId,
-                    [],
-                    1,
-                    finalState
-                );
-                deadState = newDeadState;
-                nodes.push(deadState);
-                const dead = generateLink(deadState, deadState, 'a,b');
-                links.push(dead);
+                generateDeadState();
             }
-            const newLink = generateLink(currentNode, deadState, 'b');
+            const newLink = generateLink(currentNode, deadState, Transition.B);
             links.push(newLink);
         }
+
         potentialNewNodes.forEach((potential) => {
             if (isArrayPresent(potential.list, nodes)) {
                 const targetNode = findNodeByTargetValues(
@@ -218,8 +208,6 @@ export const generateNodesAndLinks = (
                     currentNode,
                     targetNode
                 );
-
-                console.log('LOG DUPLICATES', duplicates);
 
                 if (duplicates !== null) {
                     duplicates.forEach((duplicateIndex) => {
@@ -241,6 +229,7 @@ export const generateNodesAndLinks = (
                     1,
                     finalState
                 );
+
                 nodeCount += 1;
                 nodes.push(newNode);
                 queue.push(newNode);
@@ -266,6 +255,61 @@ export const generateNodesAndLinks = (
                 }
             }
         });
+    }
+
+    // Find final state
+
+    let finalStateNode = {} as NodeInterface;
+
+    nodes.forEach((node) => {
+        if (node.isFinalState) {
+            finalStateNode = node;
+        }
+    });
+
+    let finalEdgesState = Transition.NONE as Transition;
+
+    links.forEach((link) => {
+        if (link.source === finalStateNode) {
+            if (link.transition === Transition.A) {
+                if (finalEdgesState === Transition.B) {
+                    finalEdgesState = Transition.AB;
+                    return;
+                }
+                finalEdgesState = Transition.A;
+            } else if (link.transition === Transition.B) {
+                if (finalEdgesState === Transition.A) {
+                    finalEdgesState = Transition.AB;
+                    return;
+                }
+                finalEdgesState = Transition.B;
+            } else if (
+                link.transition === Transition.AB ||
+                link.transition === Transition.BA
+            ) {
+                finalEdgesState = Transition.AB;
+            }
+        }
+    });
+
+    if (finalEdgesState !== Transition.AB) {
+        if (deadState === null) {
+            generateDeadState();
+        }
+    }
+
+    let newLink = null;
+
+    if (finalEdgesState === Transition.A) {
+        newLink = generateLink(finalStateNode, deadState, Transition.B);
+    } else if (finalEdgesState === Transition.B) {
+        newLink = generateLink(finalStateNode, deadState, Transition.A);
+    } else if (finalEdgesState === Transition.NONE) {
+        newLink = generateLink(finalStateNode, deadState, Transition.AB);
+    }
+
+    if (newLink !== null) {
+        links.push(newLink);
     }
 
     return { nodes, links };

@@ -2,9 +2,10 @@ import React from 'react';
 import { Handle, NodeProps, Position } from 'reactflow';
 
 function DFANode(props: NodeProps) {
-    const { data } = props;
+    const { data, id } = props;
     const label = data.label;
     const active = data.active;
+
     return (
         <div
             style={{
@@ -36,9 +37,39 @@ function DFANode(props: NodeProps) {
                     : 'none',
             }}
         >
-            <Handle type="target" position={Position.Right} />
+            <Handle
+                id="bidirectionalBottomTarget"
+                type="target"
+                position={Position.Top}
+            />
+            <Handle
+                id="bidirectionalBottomSource"
+                type="source"
+                position={Position.Top}
+            />
+
+            <Handle
+                id="bidirectionalTopTarget"
+                type="target"
+                position={Position.Bottom}
+            />
+            <Handle
+                id="bidirectionalTopSource"
+                type="source"
+                position={Position.Bottom}
+            />
+
+            <Handle
+                id="selfConnectingTarget"
+                type="target"
+                position={Position.Right}
+            />
+            <Handle
+                id="selfConnectingSource"
+                type="source"
+                position={Position.Left}
+            />
             <div>{label}</div>
-            <Handle type="source" position={Position.Left} />
         </div>
     );
 }

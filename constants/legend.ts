@@ -6,7 +6,7 @@ export const LEGEND = [
         bgClass: 'bg-custom-blue',
     },
     {
-        title: 'Set of States - First and Final State',
+        title: 'Normal State',
         description: 'N',
         borderClass: 'border-custom-black',
         bgClass: 'bg-custom-gray',

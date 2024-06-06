@@ -3,9 +3,7 @@ import { CSSTransition } from 'react-transition-group';
 import { useSearchParams } from 'next/navigation';
 
 import Icon from '@mdi/react';
-import { mdiResistorNodes } from '@mdi/js';
-import { mdiCheckAll } from '@mdi/js';
-import { mdiRocketLaunchOutline } from '@mdi/js';
+import { mdiResistorNodes, mdiCheckAll, mdiRocketLaunchOutline } from '@mdi/js';
 
 import Parser from '../classes/Parser';
 import { generateNodesAndLinks } from '../utils/graph';
@@ -240,10 +238,9 @@ function SidePanel(props: PropsInterface) {
         setStringChecker(null);
         setSelectedInput(id);
         const dfaData = await getDfaFromIdb(id);
-        console.log(dfaData);
         setNodes(dfaData?.nodes || []);
         setLinks(dfaData?.links || []);
-        setRegexHeader(regex);
+        setRegexHeader(dfaData ? regex : '');
     };
 
     const initialize = async () => {

@@ -7,10 +7,12 @@ import SidePanel from '../components/SidePanel';
 import LegendPanel from '../components/LegendPanel';
 
 import Icon from '@mdi/react';
-import { mdiRocketLaunchOutline } from '@mdi/js';
-import { mdiCloseCircleOutline } from '@mdi/js';
-import { mdiCheckCircleOutline } from '@mdi/js';
-import { mdiSquare } from '@mdi/js';
+import {
+    mdiRocketLaunchOutline,
+    mdiCloseCircleOutline,
+    mdiCheckCircleOutline,
+    mdiSquare,
+} from '@mdi/js';
 
 const mobileScreen = 640;
 const laptopScreen = 1024;
@@ -65,14 +67,16 @@ export default function Page() {
         if (!regexHeader) {
             return false;
         }
+
         const regexPattern = regexHeader
             .replace(/\./g, '+')
             .replace(/e/g, '')
-            .replace(/ /g, '\\s*');
+            .replace(/ /g, '\\s*')
+            .replace(/\*\+/g, '*');
 
-        const inputStringProcessed = inputString.replace(/e/g, '');
+        let inputStringProcessed = inputString.replace(/e/g, '');
 
-        const regex = new RegExp(`^${regexPattern}$`);
+        let regex = new RegExp(`^${regexPattern}$`);
 
         return regex.test(inputStringProcessed);
     };
