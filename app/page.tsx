@@ -199,7 +199,7 @@ export default function Page() {
     }, []);
 
     return (
-        <div className="main-page flex justify-center items-center min-h-svh min-w-screen">
+        <div className="flex justify-center items-center h-svh min-w-screen">
             <div className="flex flex-col items-center w-full h-svh">
                 <div className="relative w-full flex justify-center">
                     <h1 className="absolute top-5 text-sky-500 text-3xl font-bold z-10">
@@ -207,8 +207,8 @@ export default function Page() {
                     </h1>
                 </div>
                 {nodes && links && <DFA nodes={nodes} links={links} />}
-                <section className="relative w-full flex justify-center">
-                    <div className="animation-input absolute pb-3 bottom-0 flex flex-col gap-2 w-[90%] max-w-[750px]">
+                <section className="absolute bottom-3  w-full flex justify-center">
+                    <div className="flex flex-col gap-2 w-[90%] max-w-[750px]">
                         <div className="grow h-[50px] border flex items-stretch gap-3 pl-5 pr-2 py-2 rounded-full bg-gray-50">
                             <input
                                 ref={inputRef}
