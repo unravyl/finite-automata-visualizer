@@ -90,17 +90,17 @@ export default function Page() {
     };
 
     const isValidRegex = (inputString: string): boolean => {
-
-        const finalNode = nodes.some(node => node.isFinalState === true && node.id === animationLastIndex);
+        const finalNode = nodes.some(
+            (node) =>
+                node.isFinalState === true && node.id === animationLastIndex
+        );
 
         if (finalNode) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     };
-
 
     const pause = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
@@ -127,7 +127,6 @@ export default function Page() {
             setNodes(tempNodes);
             await pause(delay);
             setNodes([...nodesCopy]);
-
 
             const char = stringInput[i];
             let nextNode = null;
@@ -171,14 +170,12 @@ export default function Page() {
         inputRef.current.blur();
     };
 
-
-
-    const setAnInput = (e)=> {
+    const setAnInput = (e) => {
         setAnimationLastIndex(0);
         setStringInput(e.target.value.toLowerCase());
         setInputMessageIndex(null);
-    }
-    
+    };
+
     // watchers
     useEffect(() => {
         setInputMessageIndex(null);
@@ -196,13 +193,12 @@ export default function Page() {
         if (animationLastIndex && isValidRegex(stringInput)) {
             setInputMessageIndex(1);
             return;
-        } 
+        }
         if (animationLastIndex && !isValidRegex(stringInput)) {
             setInputMessageIndex(2);
             return;
-        } 
+        }
     }, [animationLastIndex, stringInput, regexHeader]);
-
 
     // created
     useEffect(() => {
@@ -436,6 +432,7 @@ export default function Page() {
                         >
                             <input
                                 ref={inputRef}
+                                value={stringInput}
                                 onChange={setAnInput}
                                 onKeyDown={(e) => {
                                     if (e.key === 'Enter') {
@@ -462,7 +459,8 @@ export default function Page() {
                                             closeKeyboard();
                                             handleAnimate();
                                         }}
-                                        className={`flex items-center gap-1 bg-sky-500 text-white px-2 rounded-full ${disableAnimateInput || disableAnimationButton || !isValidStringFromSigma(stringInput) ? 'cursor-not-allowed' : ''}`}
+                                        className={`flex items-center gap-1 bg-sky-500 text-white px-2 rounded-full ${disableAnimateInput || disableAnimationButton || !isValidStringFromSigma(stringInput) ? 'cursor-not-allowed' : ''}
+                                            ${blinkAnimationButton ? 'blink' : ''}`}
                                         disabled={
                                             disableAnimateInput ||
                                             disableAnimationButton ||

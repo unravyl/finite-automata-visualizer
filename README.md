@@ -1,4 +1,8 @@
-# Finite Automata Visualizer
+<p>
+  <img src="./public/images/banner.png"/>
+</p>
+
+https://github.com/maxellmilay/finite-automata-visualizer/assets/82187749/47b1b46f-feeb-4349-ba24-2c1436ec0150
 
 ## How To Access?
 
@@ -18,11 +22,7 @@ Go to [our website](https://favisualizer.vercel.app/) and visualize your regular
 
 -   User can input a string and regular expresson, and the application will check if the input string is a member of the regular expression
 
-
-
 https://github.com/maxellmilay/finite-automata-visualizer/assets/82187749/d998cdca-dced-4c2c-8e0c-1ba5bdd8efda
-
-
 
 ## Implementation Algorithm?
 
