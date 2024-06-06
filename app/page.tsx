@@ -387,7 +387,7 @@ export default function Page() {
                     </h1>
                 </div>
                 {nodes && links && <DFA nodes={nodes} links={links} />}
-                <section className="absolute bottom-3 w-full flex justify-center">
+                <section className="fixed bottom-3 w-full flex justify-center">
                     <div className="flex flex-col gap-2 w-[90%] max-w-[750px]">
                         <div
                             id="animation-input"

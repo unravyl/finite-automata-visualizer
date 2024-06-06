@@ -47,7 +47,7 @@ export default function RootLayout({
                     rel="stylesheet"
                 ></link>
             </head>
-            <body className="overflow-hidden h-dvh">{children}</body>
+            <body className="overflow-hidden">{children}</body>
         </html>
     );
 }

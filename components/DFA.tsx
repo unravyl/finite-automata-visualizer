@@ -177,7 +177,7 @@ const DFA = (props: PropsInterface) => {
     }, [nodes, links]);
 
     return (
-        <div className="h-lvh w-full">
+        <div className="h-dvh w-full">
             <ReactFlow
                 nodes={nodeState}
                 nodeTypes={nodeTypes}
