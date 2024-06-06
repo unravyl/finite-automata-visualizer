@@ -35,6 +35,8 @@ export default function Page() {
     const [blinkSidePanel, setBlinkSidePanel] = useState<boolean>(false);
     const [isAnimating, setIsAnimating] = useState<boolean>(false);
     const [animationSpeed, setAnimationSpeed] = useState<number>(2);
+    const [blinkAnimationButton, setBlinkAnimationButton] =
+        useState<boolean>(false);
 
     const [isRunningDemo, setIsRunningDemo] = useState<boolean>(false);
     const [demoString, setDemoString] = useState<string>('');
@@ -366,7 +368,7 @@ export default function Page() {
                 setNodes(demoSelectedRegex.nodes);
                 setLinks(demoSelectedRegex.links);
                 setRegexHeader(demoSelectedRegex.regex);
-
+                setBlinkAnimationButton(true);
                 driverObj.destroy();
             },
         });
@@ -425,6 +427,9 @@ export default function Page() {
                                 <div className="flex gap-1">
                                     <button
                                         onClick={() => {
+                                            if (blinkAnimationButton) {
+                                                setBlinkAnimationButton(false);
+                                            }
                                             closeKeyboard();
                                             handleAnimate();
                                         }}

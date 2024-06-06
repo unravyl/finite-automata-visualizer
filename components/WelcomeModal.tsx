@@ -80,13 +80,13 @@ function WelcomeModal(props: PropsInterface) {
                 <div className="flex justify-end items-stretch gap-3">
                     <button
                         onClick={close}
-                        className="px-5 py-3 rounded-md bg-sky-100 border-2 border-sky-500 text-sky-500"
+                        className="w-[50%] px-5 py-3 rounded-md bg-sky-100 border-2 border-sky-500 text-sky-500"
                     >
                         Close
                     </button>
                     <button
                         onClick={runDemo}
-                        className="px-5 py-3 rounded-md bg-sky-500 text-white border-2 border-sky-500"
+                        className="w-[50%] px-5 py-3 rounded-md bg-sky-500 text-white border-2 border-sky-500"
                     >
                         Get Started
                     </button>
