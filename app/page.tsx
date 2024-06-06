@@ -287,10 +287,10 @@ export default function Page() {
                         if (window.innerWidth <= mobileScreen) {
                             setShowSidePanel(false);
                             setTimeout(() => {
-                                driverObj.moveNext();
+                                driverObj.movePrevious();
                             }, 300);
                         } else {
-                            driverObj.moveNext();
+                            driverObj.movePrevious();
                         }
                     },
                 },
@@ -300,7 +300,7 @@ export default function Page() {
                 popover: {
                     title: 'Open the side panel bitch',
                     description: 'change string input',
-                    onPrevClick: () => {
+                    onNextClick: () => {
                         if (window.innerWidth <= mobileScreen) {
                             setShowSidePanel(false);
                             setTimeout(() => {
@@ -314,8 +314,18 @@ export default function Page() {
                 onHighlightStarted: () => {
                     setDemoString(demoSelectedRegex.regex);
                 },
-                onDeselected: () => {
-                    setDemoString('');
+            },
+            {
+                element: '#main-page',
+                popover: {
+                    title: 'Open the side panel bitch',
+                    description: 'change string input',
+                    onNextClick: () => {},
+                },
+                onHighlightStarted: () => {
+                    setRegexHeader(demoSelectedRegex.regex);
+                    setNodes(demoSelectedRegex.nodes);
+                    setLinks(demoSelectedRegex.links);
                 },
             },
         ];
@@ -325,10 +335,12 @@ export default function Page() {
             disableActiveInteraction: true,
             nextBtnText: 'Next',
             prevBtnText: 'Back',
+            doneBtnText: 'Close',
             onDestroyStarted: () => {
                 console.log('end');
                 setIsRunningDemo(false);
                 setDemoString('');
+
                 driverObj.destroy();
             },
         });
@@ -337,7 +349,10 @@ export default function Page() {
     }, []);
 
     return (
-        <div className="main-page flex justify-center items-center min-h-svh min-w-screen">
+        <div
+            id="main-page"
+            className="main-page flex justify-center items-center min-h-svh min-w-screen"
+        >
             <div className="flex flex-col items-center w-full h-svh">
                 <div className="relative w-full flex justify-center">
                     <h1 className="absolute top-5 text-sky-500 text-3xl font-bold z-10">
@@ -474,7 +489,7 @@ export default function Page() {
                 <section ref={legendPanelRef}>
                     {showLegendPanel ? (
                         <i
-                            className="bx bx-exit text-sky-500 absolute z-[100] top-3 right-2 text-3xl cursor-pointer"
+                            className="bx bx-exit text-sky-500 absolute z-[100] top-3 right-3 text-3xl cursor-pointer"
                             onClick={() => setShowLegendPanel(false)}
                         ></i>
                     ) : (
