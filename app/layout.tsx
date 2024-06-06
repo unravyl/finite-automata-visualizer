@@ -35,7 +35,7 @@ export default function RootLayout({
                     name="keywords"
                     content="FA Visualizer, finite automata, automata theory, DFA, NFA"
                 />
-                <meta name="author" content="moon2" />
+                <meta name="author" content="Neal Rigga" />
                 <meta name="og:image" content="/images/metapic.png" />
                 <meta
                     name="og:title"
@@ -47,7 +47,7 @@ export default function RootLayout({
                     rel="stylesheet"
                 ></link>
             </head>
-            <body className='overflow-hidden h-dvh'>{children}</body>
+            <body className="overflow-hidden h-dvh">{children}</body>
         </html>
     );
 }
