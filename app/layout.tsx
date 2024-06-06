@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import '../styles/global.scss';
 import { usePathname } from 'next/navigation';
 import SplashScreen from '../components/SplashScreen';
+import { Analytics } from '@vercel/analytics/react';
 
 export default function RootLayout({
     children,
@@ -47,7 +48,7 @@ export default function RootLayout({
                     rel="stylesheet"
                 ></link>
             </head>
-            <body className='overflow-hidden'>
+            <body className="overflow-hidden">
                 {isLoading && isHome ? (
                     <SplashScreen finishLoading={() => setIsLoading(false)} />
                 ) : (
