@@ -207,7 +207,7 @@ export default function Page() {
                     </h1>
                 </div>
                 {nodes && links && <DFA nodes={nodes} links={links} />}
-                <section className="absolute bottom-3 w-full flex justify-center">
+                <section className="fixed bottom-3 w-full flex justify-center">
                     <div className="flex flex-col gap-2 w-[90%] max-w-[750px]">
                         <div className="grow h-[50px] border flex items-stretch gap-3 pl-5 pr-2 py-2 rounded-full bg-gray-50">
                             <input
