@@ -354,7 +354,7 @@ export default function Page() {
                     description: 'Let us animate the string input!',
                 },
                 onHighlightStarted: () => {
-                    setStringInput('bbbab');
+                    setStringInput('baaaaba');
                 },
             },
         ];
@@ -369,7 +369,7 @@ export default function Page() {
                 console.log('end');
                 setIsRunningDemo(false);
                 setDemoString('');
-                setStringInput('bbbab');
+                setStringInput('baaaaba');
                 setNodes(demoSelectedRegex.nodes);
                 setLinks(demoSelectedRegex.links);
                 setRegexHeader(demoSelectedRegex.regex);
