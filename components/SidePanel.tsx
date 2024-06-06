@@ -65,6 +65,8 @@ function SidePanel(props: PropsInterface) {
         setInputString(demoString);
         if (demoString) {
             setInputs(demoManyRegex);
+        } else {
+            initialize();
         }
     }, [demoString]);
 

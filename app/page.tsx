@@ -205,7 +205,7 @@ export default function Page() {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    useEffect(() => {
+    const runDemo = () => {
         const steps = [
             {
                 element: '#info-button',
@@ -369,6 +369,10 @@ export default function Page() {
         });
         setIsRunningDemo(true);
         driverObj.drive();
+    };
+
+    useEffect(() => {
+        runDemo();
     }, []);
 
     return (
