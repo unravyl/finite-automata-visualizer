@@ -5,6 +5,11 @@ import { NodeInterface, LinkInterface } from '../interfaces/graph';
 import DFA from '../components/DFA';
 import SidePanel from '../components/SidePanel';
 import LegendPanel from '../components/LegendPanel';
+import WelcomeModal from '../components/WelcomeModal';
+
+import { driver } from 'driver.js';
+import 'driver.js/dist/driver.css';
+import { demoSelectedRegex } from '../constants/demo';
 
 import Icon from '@mdi/react';
 import {
@@ -15,7 +20,7 @@ import {
 } from '@mdi/js';
 
 const mobileScreen = 640;
-const laptopScreen = 1024;
+const laptopScreen = 1280;
 
 export default function Page() {
     const [nodes, setNodes] = useState<NodeInterface[]>([]);
@@ -30,11 +35,18 @@ export default function Page() {
     const [blinkSidePanel, setBlinkSidePanel] = useState<boolean>(false);
     const [isAnimating, setIsAnimating] = useState<boolean>(false);
     const [animationSpeed, setAnimationSpeed] = useState<number>(2);
+    const [blinkAnimationButton, setBlinkAnimationButton] =
+        useState<boolean>(false);
+
+    const [isRunningDemo, setIsRunningDemo] = useState<boolean>(false);
+    const [demoString, setDemoString] = useState<string>('');
 
     const sidePanelRef = useRef<HTMLDivElement>(null);
     const legendPanelRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const [animationLastIndex, setAnimationLastIndex] = useState<number>();
+
+    const [showWelcomeModal, setShowWelcomeModal] = useState<boolean>(false);
 
     const disableAnimateInput = regexHeader.length === 0;
 
@@ -225,8 +237,191 @@ export default function Page() {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
+    const runDemo = () => {
+        const steps = [
+            {
+                element: '#info-button',
+                popover: {
+                    title: 'Toggle Info Panel',
+                    description: 'This button toggles the info panel',
+                    onNextClick: () => {
+                        if (!showLegendPanel) {
+                            setShowLegendPanel(true);
+                            setTimeout(() => {
+                                driverObj.moveNext();
+                            }, 300);
+                        } else {
+                            driverObj.moveNext();
+                        }
+                    },
+                },
+            },
+            {
+                element: '#info-panel',
+                popover: {
+                    title: 'Info Panel',
+                    description:
+                        'This panel contains the legend and guidelines',
+                    onNextClick: () => {
+                        if (window.innerWidth <= mobileScreen) {
+                            setShowLegendPanel(false);
+                            setTimeout(() => {
+                                driverObj.moveNext();
+                            }, 300);
+                        } else {
+                            driverObj.moveNext();
+                        }
+                    },
+                    onPrevClick: () => {
+                        if (window.innerWidth <= laptopScreen) {
+                            setShowLegendPanel(false);
+                            setTimeout(() => {
+                                driverObj.movePrevious();
+                            }, 300);
+                        } else {
+                            driverObj.movePrevious();
+                        }
+                    },
+                },
+            },
+            {
+                element: '#side-panel-button',
+                popover: {
+                    title: 'Toggle Side Panel',
+                    description: 'This button toggles the side panel',
+                    onPrevClick: () => {
+                        if (!showLegendPanel) {
+                            setShowLegendPanel(true);
+                            setTimeout(() => {
+                                driverObj.movePrevious();
+                            }, 100);
+                        } else {
+                            driverObj.movePrevious();
+                        }
+                    },
+                    onNextClick: () => {
+                        if (!showSidePanel) {
+                            setShowSidePanel(true);
+                            setTimeout(() => {
+                                driverObj.moveNext();
+                            }, 300);
+                        } else {
+                            driverObj.moveNext();
+                        }
+                    },
+                },
+                onDeselected: () => {
+                    setBlinkSidePanel(false);
+                },
+            },
+            {
+                element: '#side-panel',
+                popover: {
+                    title: 'Side Panel',
+                    description:
+                        'This panel contains all your regex input, and add more regex',
+                    onPrevClick: () => {
+                        if (window.innerWidth <= mobileScreen) {
+                            setShowSidePanel(false);
+                            setTimeout(() => {
+                                driverObj.movePrevious();
+                            }, 300);
+                        } else {
+                            driverObj.movePrevious();
+                        }
+                    },
+                },
+            },
+            {
+                element: '#side-panel',
+                popover: {
+                    title: 'Regex Input',
+                    description: "Let's input a regex!",
+                    onNextClick: () => {
+                        if (window.innerWidth <= mobileScreen) {
+                            setShowSidePanel(false);
+                            setTimeout(() => {
+                                driverObj.moveNext();
+                            }, 300);
+                        } else {
+                            driverObj.moveNext();
+                        }
+                    },
+                },
+                onHighlightStarted: () => {
+                    setDemoString(demoSelectedRegex.regex);
+                },
+            },
+            {
+                element: '#main-page',
+                popover: {
+                    title: 'DFA graph',
+                    description: 'WOAH! Look at that DFA graph!',
+                    onPrevClick: () => {
+                        if (window.innerWidth <= mobileScreen) {
+                            setShowSidePanel(true);
+                            setTimeout(() => {
+                                driverObj.movePrevious();
+                            }, 300);
+                        } else {
+                            driverObj.movePrevious();
+                        }
+                    },
+                },
+                onHighlightStarted: () => {
+                    setRegexHeader(demoSelectedRegex.regex);
+                    setNodes(demoSelectedRegex.nodes);
+                    setLinks(demoSelectedRegex.links);
+                },
+            },
+            {
+                element: '#animation-input',
+                popover: {
+                    title: 'Input string animation',
+                    description: 'Let us animate the string input!',
+                },
+                onHighlightStarted: () => {
+                    setStringInput('baaaaba');
+                },
+            },
+        ];
+        const driverObj = driver({
+            steps,
+            popoverClass: 'pop-over-style',
+            disableActiveInteraction: true,
+            nextBtnText: 'Next',
+            prevBtnText: 'Back',
+            doneBtnText: 'Close',
+            onDestroyStarted: () => {
+                console.log('end');
+                setIsRunningDemo(false);
+                setDemoString('');
+                setStringInput('baaaaba');
+                setNodes(demoSelectedRegex.nodes);
+                setLinks(demoSelectedRegex.links);
+                setRegexHeader(demoSelectedRegex.regex);
+                setBlinkAnimationButton(true);
+                setBlinkSidePanel(false);
+                driverObj.destroy();
+            },
+        });
+        setIsRunningDemo(true);
+        driverObj.drive();
+    };
+
+    useEffect(() => {
+        const key = 'show_welcome';
+        const value = JSON.parse(localStorage.getItem(key) || 'true');
+        if (value) {
+            setShowWelcomeModal(true);
+        }
+    }, []);
+
     return (
-        <div className="flex justify-center items-center h-full min-w-screen">
+        <div
+            id="main-page"
+            className="flex justify-center items-center h-full min-w-screen"
+        >
             <div className="flex flex-col items-center w-full h-full">
                 <div className="relative w-full flex justify-center">
                     <h1 className="absolute top-5 text-sky-500 text-3xl font-bold z-10">
@@ -236,7 +431,10 @@ export default function Page() {
                 {nodes && links && <DFA nodes={nodes} links={links} />}
                 <section className="fixed bottom-3 w-full flex justify-center">
                     <div className="flex flex-col gap-2 w-[90%] max-w-[750px]">
-                        <div className="grow h-[50px] border flex items-stretch gap-3 pl-5 pr-2 py-2 rounded-full bg-gray-50">
+                        <div
+                            id="animation-input"
+                            className="grow h-[50px] border flex items-stretch gap-3 pl-5 pr-2 py-2 rounded-full bg-gray-50"
+                        >
                             <input
                                 ref={inputRef}
                                 onChange={setAnInput}
@@ -259,6 +457,9 @@ export default function Page() {
                                 <div className="flex gap-1">
                                     <button
                                         onClick={() => {
+                                            if (blinkAnimationButton) {
+                                                setBlinkAnimationButton(false);
+                                            }
                                             closeKeyboard();
                                             handleAnimate();
                                         }}
@@ -324,8 +525,10 @@ export default function Page() {
                 </section>
                 <section ref={sidePanelRef}>
                     <button
+                        id="side-panel-button"
                         className={`text-gray-800 absolute z-20 ml-2 mt-2.5 top-0 left-0 p-1 rounded-md hover:bg-black/[.05] transition duration-200 ${blinkSidePanel ? 'blink' : ''}`}
                         onClick={() => {
+                            if (isRunningDemo) return;
                             setShowSidePanel(!showSidePanel);
                             if (blinkSidePanel) {
                                 setBlinkSidePanel(false);
@@ -353,17 +556,20 @@ export default function Page() {
                             setNodes={setNodes}
                             setLinks={setLinks}
                             setRegexHeader={setRegexHeader}
+                            demoString={demoString}
                         />
                     </Suspense>
                 </section>
                 <section ref={legendPanelRef}>
                     {showLegendPanel ? (
                         <i
-                            className="bx bx-exit text-sky-500 absolute z-[100] top-3 right-2 text-3xl cursor-pointer"
+                            id="info-button"
+                            className="bx bx-exit text-sky-500 absolute z-[100] top-3 right-3 text-3xl cursor-pointer"
                             onClick={() => setShowLegendPanel(false)}
                         ></i>
                     ) : (
                         <i
+                            id="info-button"
                             className="bx bx-info-circle text-sky-500 absolute z-[100] right-2 top-3 text-3xl cursor-pointer"
                             onClick={() => setShowLegendPanel(true)}
                         ></i>
@@ -371,6 +577,15 @@ export default function Page() {
                     <LegendPanel show={showLegendPanel} />
                 </section>
             </div>
+            {showWelcomeModal && (
+                <WelcomeModal
+                    close={() => setShowWelcomeModal(false)}
+                    runDemo={() => {
+                        setShowWelcomeModal(false);
+                        runDemo();
+                    }}
+                />
+            )}
         </div>
     );
 }
