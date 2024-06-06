@@ -47,18 +47,23 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ finishLoading }) => {
           <div className='flex flex-col items-center'>
             <div className='flex gap-10'>
               <div
-                className={`border-solid rounded-full w-24 h-24 border-white border-[15px] ${
+                className={`border-solid rounded-full lg:w-24 lg:h-24 w-20 h-20 border-white border-[15px] ${
                   showFirstCircle ? 'visible transition duration-500 opacity-100' : 'opacity-0'
                 }`}
               />
               <div
-                className={`border-solid rounded-full w-24 h-24 border-white border-[15px] ${
+                className={`border-solid rounded-full lg:w-24 lg:h-24 w-20 h-20 border-white border-[15px] ${
                   showSecondCircle ? 'visible transition duration-500 opacity-100' : 'opacity-0'
                 }`}
               />
             </div>
-            <div className={`-ml-2 -mt-1 ${showArrow ? 'visible transition duration-500 opacity-100' : 'opacity-0'}`}>
-              <Image src="/images/arrow.png" width={143} height={45.4} alt='' />
+            <div className={`lg:-ml-2 -mt-1 ${showArrow ? 'visible transition duration-500 opacity-100' : 'opacity-0'}`}>
+              <Image 
+                src="/images/arrow.png" 
+                width={143} 
+                height={45.4} 
+                alt='' 
+              />
             </div>
             <h1 id='title' data-text="FA&nbsp;Visualizer" className={`title`}>fa visualizers</h1>
           </div>

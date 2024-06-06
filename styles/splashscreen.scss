@@ -29,3 +29,10 @@
   }
   
 }
+
+@media (max-width: 992px) {
+  .title {
+    font-size: 2.5rem;
+    --webkit-text-stroke: 6px #0EA5E9;
+  }
+}
