@@ -11,6 +11,7 @@ import { useDfaStore } from '../store/dfaStore';
 import { testLog } from '../tests/log';
 import { DFAStoreData } from '../interfaces/store';
 import SidePanelItem from './SidePanelItem';
+import { demoManyRegex } from '../constants/demo';
 
 const apps = {
     0: {
@@ -30,12 +31,15 @@ interface PropsInterface {
     setLinks: Function;
     setNodes: Function;
     setRegexHeader: Function;
+    demoString: string;
+    demoInputs: Array<any>;
 }
 
 function SidePanel(props: PropsInterface) {
     const { fetchDfaFromIdb, addDfaToIdb, getDfaFromIdb, deleteAllDfaFromIdb } =
         useDfaStore();
-    const { show, setNodes, setLinks, setRegexHeader } = props;
+    const { show, setNodes, setLinks, setRegexHeader, demoString, demoInputs } =
+        props;
     const searchParams = useSearchParams();
     const paramsRegex = searchParams.get('regex');
 
@@ -58,6 +62,13 @@ function SidePanel(props: PropsInterface) {
         const today = new Date();
         return inputDate.getDate() === today.getDate();
     });
+
+    useEffect(() => {
+        setInputString(demoString);
+        if (demoString) {
+            setInputs(demoManyRegex);
+        }
+    }, [demoString]);
 
     const inputsSevenDays = inputs.filter((input) => {
         const inputDate = new Date(input.when);
@@ -244,6 +255,8 @@ function SidePanel(props: PropsInterface) {
     };
 
     const initialize = async () => {
+        if (demoInputs.length > 0) return;
+        console.log(demoInputs, 'this was called');
         await getInputsFromIdb();
         if (paramsRegex && validateRegex(paramsRegex) === '') {
             const parser = new Parser(paramsRegex);
@@ -300,7 +313,10 @@ function SidePanel(props: PropsInterface) {
                 classNames="slide"
                 unmountOnExit
             >
-                <div className="flex flex-col gap-3 absolute top-0 left-0 py-2 px-3 w-[210px] h-full bg-gray-50 z-10">
+                <div
+                    id="side-panel"
+                    className="flex flex-col gap-3 absolute top-0 left-0 py-2 px-3 w-[210px] h-full bg-gray-50 z-10"
+                >
                     <div className="flex flex-col w-full text-sky-500 mt-10">
                         <h1 className="flex items-center justify-between text-md font-bold px-2 mt-5">
                             <div className="flex items-center gap-2">
@@ -363,11 +379,11 @@ function SidePanel(props: PropsInterface) {
                                 className="flex items-stretch"
                             >
                                 <input
+                                    value={inputString}
                                     type="text"
                                     placeholder={apps[selectedApp].placeholder}
                                     className="rounded-l-md w-full p-2 border border-gray-200 focus:outline-none focus:border-sky-500"
                                     onChange={handleInputChange}
-                                    value={inputString}
                                     onKeyDown={(e) => {
                                         if (e.key === 'Enter') {
                                             handleSubmit(e);
