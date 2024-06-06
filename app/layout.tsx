@@ -47,7 +47,13 @@ export default function RootLayout({
                     rel="stylesheet"
                 ></link>
             </head>
-            <body className="overflow-hidden">{children}</body>
+            <body className='overflow-hidden'>
+                {isLoading && isHome ? (
+                    <SplashScreen finishLoading={() => setIsLoading(false)} />
+                ) : (
+                    <>{children}</>
+                )}
+            </body>
         </html>
     );
 }
