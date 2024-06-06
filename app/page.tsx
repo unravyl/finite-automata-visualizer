@@ -5,8 +5,10 @@ import { NodeInterface, LinkInterface } from '../interfaces/graph';
 import DFA from '../components/DFA';
 import SidePanel from '../components/SidePanel';
 import LegendPanel from '../components/LegendPanel';
+
 import { driver } from 'driver.js';
 import 'driver.js/dist/driver.css';
+import { demoSelectedRegex } from '../constants/demo';
 
 import Icon from '@mdi/react';
 import {
@@ -32,6 +34,9 @@ export default function Page() {
     const [blinkSidePanel, setBlinkSidePanel] = useState<boolean>(false);
     const [isAnimating, setIsAnimating] = useState<boolean>(false);
     const [animationSpeed, setAnimationSpeed] = useState<number>(2);
+
+    const [isRunningDemo, setIsRunningDemo] = useState<boolean>(false);
+    const [demoString, setDemoString] = useState<string>('');
 
     const sidePanelRef = useRef<HTMLDivElement>(null);
     const legendPanelRef = useRef<HTMLDivElement>(null);
@@ -203,10 +208,47 @@ export default function Page() {
     useEffect(() => {
         const steps = [
             {
-                element: '#side-panel-button',
+                element: '#info-button',
                 popover: {
                     title: 'Open the side panel bitch',
                     description: 'hatdog hatdo hatdo hatdo',
+                    onNextClick: () => {
+                        if (!showLegendPanel) {
+                            setShowLegendPanel(true);
+                            setTimeout(() => {
+                                driverObj.moveNext();
+                            }, 300);
+                        } else {
+                            driverObj.moveNext();
+                        }
+                    },
+                },
+            },
+            {
+                element: '#info-panel',
+                popover: {
+                    title: 'Open the side panel bitch',
+                    description: 'hatdog hatdo hatdo hatdo',
+                    onNextClick: () => {
+                        if (window.innerWidth <= mobileScreen) {
+                            setShowLegendPanel(false);
+                            setTimeout(() => {
+                                driverObj.moveNext();
+                            }, 300);
+                        } else {
+                            driverObj.moveNext();
+                        }
+                    },
+                    onPrevClick: () => {
+                        if (window.innerWidth <= mobileScreen) {
+                            setShowLegendPanel(false);
+                            setTimeout(() => {
+                                driverObj.movePrevious();
+                            }, 300);
+                        } else {
+                            driverObj.movePrevious();
+                        }
+                    },
                 },
             },
             {
@@ -214,16 +256,83 @@ export default function Page() {
                 popover: {
                     title: 'Open the side panel bitch',
                     description: 'hatdog hatdo hatdo hatdo',
+                    onPrevClick: () => {
+                        if (!showLegendPanel) {
+                            setShowLegendPanel(true);
+                            setTimeout(() => {
+                                driverObj.movePrevious();
+                            }, 100);
+                        } else {
+                            driverObj.movePrevious();
+                        }
+                    },
+                    onNextClick: () => {
+                        if (!showSidePanel) {
+                            setShowSidePanel(true);
+                            setTimeout(() => {
+                                driverObj.moveNext();
+                            }, 300);
+                        } else {
+                            driverObj.moveNext();
+                        }
+                    },
+                },
+            },
+            {
+                element: '#side-panel',
+                popover: {
+                    title: 'Open the side panel bitch',
+                    description: 'hatdog hatdo hatdo hatdo',
+                    onPrevClick: () => {
+                        if (window.innerWidth <= mobileScreen) {
+                            setShowSidePanel(false);
+                            setTimeout(() => {
+                                driverObj.moveNext();
+                            }, 300);
+                        } else {
+                            driverObj.moveNext();
+                        }
+                    },
+                },
+            },
+            {
+                element: '#side-panel',
+                popover: {
+                    title: 'Open the side panel bitch',
+                    description: 'change string input',
+                    onPrevClick: () => {
+                        if (window.innerWidth <= mobileScreen) {
+                            setShowSidePanel(false);
+                            setTimeout(() => {
+                                driverObj.moveNext();
+                            }, 300);
+                        } else {
+                            driverObj.moveNext();
+                        }
+                    },
+                },
+                onHighlightStarted: () => {
+                    setDemoString(demoSelectedRegex.regex);
+                },
+                onDeselected: () => {
+                    setDemoString('');
                 },
             },
         ];
         const driverObj = driver({
             steps,
             popoverClass: 'pop-over-style',
-            disableActiveInteraction: false,
+            disableActiveInteraction: true,
             nextBtnText: 'Next',
             prevBtnText: 'Back',
+            onDestroyStarted: () => {
+                console.log('end');
+                setIsRunningDemo(false);
+                setDemoString('');
+                driverObj.destroy();
+            },
         });
+        setIsRunningDemo(true);
         driverObj.drive();
     }, []);
 
@@ -330,6 +439,7 @@ export default function Page() {
                         id="side-panel-button"
                         className={`text-gray-800 absolute z-20 ml-2 mt-2.5 top-0 left-0 p-1 rounded-md hover:bg-black/[.05] transition duration-200 ${blinkSidePanel ? 'blink' : ''}`}
                         onClick={() => {
+                            if (isRunningDemo) return;
                             setShowSidePanel(!showSidePanel);
                             if (blinkSidePanel) {
                                 setBlinkSidePanel(false);
@@ -357,6 +467,7 @@ export default function Page() {
                             setNodes={setNodes}
                             setLinks={setLinks}
                             setRegexHeader={setRegexHeader}
+                            demoString={demoString}
                         />
                     </Suspense>
                 </section>
@@ -368,6 +479,7 @@ export default function Page() {
                         ></i>
                     ) : (
                         <i
+                            id="info-button"
                             className="bx bx-info-circle text-sky-500 absolute z-[100] right-2 top-3 text-3xl cursor-pointer"
                             onClick={() => setShowLegendPanel(true)}
                         ></i>
