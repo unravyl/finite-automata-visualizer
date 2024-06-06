@@ -35,7 +35,7 @@ export default function RootLayout({
                     name="keywords"
                     content="FA Visualizer, finite automata, automata theory, DFA, NFA"
                 />
-                <meta name="author" content="Super Nigga" />
+                <meta name="author" content="Neal Rigga" />
                 <meta name="og:image" content="/images/metapic.png" />
                 <meta
                     name="og:title"
