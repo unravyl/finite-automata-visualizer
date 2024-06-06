@@ -41,8 +41,8 @@ function WelcomeModal(props: PropsInterface) {
                         height={45}
                         alt=""
                     />
-                    <h1 className="text-2xl text-sky-500 font-bold">
-                        Welcome to FA <br /> Visualizer
+                    <h1 className="text-3xl text-sky-500 font-bold">
+                        Welcome to FA <br /> Visualizer!
                     </h1>
                 </div>
                 <p className="text-lg">
@@ -56,12 +56,12 @@ function WelcomeModal(props: PropsInterface) {
                     </a>{' '}
                     and understand how they work with regular expressions. Build
                     a DFA from a regex, then test strings to see if they are
-                    accepted by the automaton!
+                    accepted by the automaton ;&#x29;
                 </p>
                 <p className="text-lg">
                     Click on the{' '}
                     <span className="text-sky-500">"Get Started"</span> button
-                    to run the demo and learn
+                    to run the demo and learn!
                 </p>
                 <div className="flex items-center gap-2 text-gray-800">
                     <input

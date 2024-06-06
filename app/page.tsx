@@ -215,8 +215,8 @@ export default function Page() {
             {
                 element: '#info-button',
                 popover: {
-                    title: 'Open the side panel bitch',
-                    description: 'hatdog hatdo hatdo hatdo',
+                    title: 'Toggle Info Panel',
+                    description: 'This button toggles the info panel',
                     onNextClick: () => {
                         if (!showLegendPanel) {
                             setShowLegendPanel(true);
@@ -232,8 +232,9 @@ export default function Page() {
             {
                 element: '#info-panel',
                 popover: {
-                    title: 'Open the side panel bitch',
-                    description: 'hatdog hatdo hatdo hatdo',
+                    title: 'Info Panel',
+                    description:
+                        'This panel contains the legend and guidelines',
                     onNextClick: () => {
                         if (window.innerWidth <= mobileScreen) {
                             setShowLegendPanel(false);
@@ -259,8 +260,8 @@ export default function Page() {
             {
                 element: '#side-panel-button',
                 popover: {
-                    title: 'Open the side panel bitch',
-                    description: 'hatdog hatdo hatdo hatdo',
+                    title: 'Toggle Side Panel',
+                    description: 'This button toggles the side panel',
                     onPrevClick: () => {
                         if (!showLegendPanel) {
                             setShowLegendPanel(true);
@@ -282,12 +283,16 @@ export default function Page() {
                         }
                     },
                 },
+                onDeselected: () => {
+                    setBlinkSidePanel(false);
+                },
             },
             {
                 element: '#side-panel',
                 popover: {
-                    title: 'Open the side panel bitch',
-                    description: 'hatdog hatdo hatdo hatdo',
+                    title: 'Side Panel',
+                    description:
+                        'This panel contains all your regex input, and add more regex',
                     onPrevClick: () => {
                         if (window.innerWidth <= mobileScreen) {
                             setShowSidePanel(false);
@@ -303,8 +308,8 @@ export default function Page() {
             {
                 element: '#side-panel',
                 popover: {
-                    title: 'Open the side panel bitch',
-                    description: 'change string input',
+                    title: 'Regex Input',
+                    description: "Let's input a regex!",
                     onNextClick: () => {
                         if (window.innerWidth <= mobileScreen) {
                             setShowSidePanel(false);
@@ -323,8 +328,8 @@ export default function Page() {
             {
                 element: '#main-page',
                 popover: {
-                    title: 'Open the side panel bitch',
-                    description: 'change string input',
+                    title: 'DFA graph',
+                    description: 'WOAH! Look at that DFA graph!',
                     onPrevClick: () => {
                         if (window.innerWidth <= mobileScreen) {
                             setShowSidePanel(true);
@@ -345,8 +350,8 @@ export default function Page() {
             {
                 element: '#animation-input',
                 popover: {
-                    title: 'Open the side panel bitch',
-                    description: 'change string input',
+                    title: 'Input string animation',
+                    description: 'Let us animate the string input!',
                 },
                 onHighlightStarted: () => {
                     setStringInput('bbbab');
@@ -369,6 +374,7 @@ export default function Page() {
                 setLinks(demoSelectedRegex.links);
                 setRegexHeader(demoSelectedRegex.regex);
                 setBlinkAnimationButton(true);
+                setBlinkSidePanel(false);
                 driverObj.destroy();
             },
         });
