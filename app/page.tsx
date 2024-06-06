@@ -209,11 +209,20 @@ export default function Page() {
                     description: 'hatdog hatdo hatdo hatdo',
                 },
             },
+            {
+                element: '#side-panel-button',
+                popover: {
+                    title: 'Open the side panel bitch',
+                    description: 'hatdog hatdo hatdo hatdo',
+                },
+            },
         ];
         const driverObj = driver({
             steps,
             popoverClass: 'pop-over-style',
             disableActiveInteraction: false,
+            nextBtnText: 'Next',
+            prevBtnText: 'Back',
         });
         driverObj.drive();
     }, []);

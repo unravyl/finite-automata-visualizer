@@ -36,6 +36,7 @@ body {
 .pop-over-style {
     background-color: #0ea5e9 !important;
     padding: 12px 24px !important;
+    color: white !important;
 
     .driver-popover-arrow-side-left.driver-popover-arrow {
         border-left-color: #0ea5e9;
@@ -54,10 +55,27 @@ body {
 
     .driver-popover-title {
         color: white;
+        padding-right: 1rem;
     }
     .driver-popover-description {
         color: rgb(226, 226, 226);
         font-size: 16px;
+    }
+
+    .driver-popover-navigation-btns {
+        .driver-popover-prev-btn {
+            font-size: 18px !important;
+            background-color: #afe2fa;
+            color: black;
+            border-radius: 5px;
+            padding: 8px 12px !important;
+        }
+        .driver-popover-next-btn {
+            font-size: 18px !important;
+            color: black;
+            border-radius: 5px;
+            padding: 8px 12px !important;
+        }
     }
 }
 
