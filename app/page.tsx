@@ -84,7 +84,6 @@ export default function Page() {
     const isValidStringFromSigma = (stringInput: string): boolean => {
         // Define the regular expression pattern to match only 'a' and 'b'
         const pattern = /^[ab]*$/;
-        console.log(stringInput,'gg', pattern.test(stringInput));
     
         // Test the stringInput against the pattern
         return pattern.test(stringInput);
@@ -135,7 +134,7 @@ export default function Page() {
             const tempLinks = links.map((link) => {
                 if (
                     link.source.id === currNode &&
-                    (link.transition === char || link.transition === 'a,b')
+                    (link.transition === char || link.transition === 'a,b' || link.transition === 'b,a')
                 ) {
                     nextNode = link.target.id;
                     return {
@@ -171,6 +170,7 @@ export default function Page() {
     const closeKeyboard = () => {
         inputRef.current.blur();
     };
+
 
 
     const setAnInput = (e)=> {
@@ -393,7 +393,6 @@ export default function Page() {
             prevBtnText: 'Back',
             doneBtnText: 'Close',
             onDestroyStarted: () => {
-                console.log('end');
                 setIsRunningDemo(false);
                 setDemoString('');
                 setStringInput('baaaaba');
