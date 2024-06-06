@@ -5,6 +5,7 @@ import { NodeInterface, LinkInterface } from '../interfaces/graph';
 import DFA from '../components/DFA';
 import SidePanel from '../components/SidePanel';
 import LegendPanel from '../components/LegendPanel';
+import WelcomeModal from '../components/WelcomeModal';
 
 import { driver } from 'driver.js';
 import 'driver.js/dist/driver.css';
@@ -41,6 +42,8 @@ export default function Page() {
     const sidePanelRef = useRef<HTMLDivElement>(null);
     const legendPanelRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
+
+    const [showWelcomeModal, setShowWelcomeModal] = useState<boolean>(false);
 
     const disableAnimateInput = regexHeader.length === 0;
 
@@ -372,7 +375,11 @@ export default function Page() {
     };
 
     useEffect(() => {
-        runDemo();
+        const key = 'show_welcome';
+        const value = JSON.parse(localStorage.getItem(key) || 'true');
+        if (value) {
+            setShowWelcomeModal(true);
+        }
     }, []);
 
     return (
@@ -520,6 +527,7 @@ export default function Page() {
                 <section ref={legendPanelRef}>
                     {showLegendPanel ? (
                         <i
+                            id="info-button"
                             className="bx bx-exit text-sky-500 absolute z-[100] top-3 right-3 text-3xl cursor-pointer"
                             onClick={() => setShowLegendPanel(false)}
                         ></i>
@@ -533,6 +541,15 @@ export default function Page() {
                     <LegendPanel show={showLegendPanel} />
                 </section>
             </div>
+            {showWelcomeModal && (
+                <WelcomeModal
+                    close={() => setShowWelcomeModal(false)}
+                    runDemo={() => {
+                        setShowWelcomeModal(false);
+                        runDemo();
+                    }}
+                />
+            )}
         </div>
     );
 }
