@@ -19,7 +19,7 @@ import {
 } from '@mdi/js';
 
 const mobileScreen = 640;
-const laptopScreen = 1024;
+const laptopScreen = 1280;
 
 export default function Page() {
     const [nodes, setNodes] = useState<NodeInterface[]>([]);
@@ -240,7 +240,7 @@ export default function Page() {
                         }
                     },
                     onPrevClick: () => {
-                        if (window.innerWidth <= mobileScreen) {
+                        if (window.innerWidth <= laptopScreen) {
                             setShowLegendPanel(false);
                             setTimeout(() => {
                                 driverObj.movePrevious();
@@ -320,12 +320,31 @@ export default function Page() {
                 popover: {
                     title: 'Open the side panel bitch',
                     description: 'change string input',
-                    onNextClick: () => {},
+                    onPrevClick: () => {
+                        if (window.innerWidth <= mobileScreen) {
+                            setShowSidePanel(true);
+                            setTimeout(() => {
+                                driverObj.movePrevious();
+                            }, 300);
+                        } else {
+                            driverObj.movePrevious();
+                        }
+                    },
                 },
                 onHighlightStarted: () => {
                     setRegexHeader(demoSelectedRegex.regex);
                     setNodes(demoSelectedRegex.nodes);
                     setLinks(demoSelectedRegex.links);
+                },
+            },
+            {
+                element: '#animation-input',
+                popover: {
+                    title: 'Open the side panel bitch',
+                    description: 'change string input',
+                },
+                onHighlightStarted: () => {
+                    setStringInput('bbbab');
                 },
             },
         ];
@@ -340,6 +359,10 @@ export default function Page() {
                 console.log('end');
                 setIsRunningDemo(false);
                 setDemoString('');
+                setStringInput('bbbab');
+                setNodes(demoSelectedRegex.nodes);
+                setLinks(demoSelectedRegex.links);
+                setRegexHeader(demoSelectedRegex.regex);
 
                 driverObj.destroy();
             },
@@ -362,9 +385,13 @@ export default function Page() {
                 {nodes && links && <DFA nodes={nodes} links={links} />}
                 <section className="absolute bottom-3 w-full flex justify-center">
                     <div className="flex flex-col gap-2 w-[90%] max-w-[750px]">
-                        <div className="grow h-[50px] border flex items-stretch gap-3 pl-5 pr-2 py-2 rounded-full bg-gray-50">
+                        <div
+                            id="animation-input"
+                            className="grow h-[50px] border flex items-stretch gap-3 pl-5 pr-2 py-2 rounded-full bg-gray-50"
+                        >
                             <input
                                 ref={inputRef}
+                                value={stringInput}
                                 onChange={(e) =>
                                     setStringInput(e.target.value.toLowerCase())
                                 }
