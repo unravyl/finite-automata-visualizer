@@ -34,6 +34,7 @@ export default function Page() {
     const sidePanelRef = useRef<HTMLDivElement>(null);
     const legendPanelRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
+    const [animationLastIndex, setAnimationLastIndex] = useState<number>();
 
     const disableAnimateInput = regexHeader.length === 0;
 
@@ -53,6 +54,11 @@ export default function Page() {
             icon: mdiCloseCircleOutline,
             color: 'yellow',
         },
+        {
+            message: 'Alphabhet a and b only are allowed.',
+            icon: mdiCloseCircleOutline,
+            color: 'red',
+        },
     ];
 
     const isValidStringInput = (input: string) => {
@@ -63,23 +69,27 @@ export default function Page() {
     const disableAnimationButton =
         stringInput.length === 0 || isValidStringInput(stringInput) === false;
 
+    const isValidStringFromSigma = (stringInput: string): boolean => {
+        // Define the regular expression pattern to match only 'a' and 'b'
+        const pattern = /^[ab]*$/;
+        console.log(stringInput,'gg', pattern.test(stringInput));
+    
+        // Test the stringInput against the pattern
+        return pattern.test(stringInput);
+    };
+
     const isValidRegex = (inputString: string): boolean => {
-        if (!regexHeader) {
+
+        const finalNode = nodes.some(node => node.isFinalState === true && node.id === animationLastIndex);
+
+        if (finalNode) {
+            return true;
+        }
+        else {
             return false;
         }
-
-        const regexPattern = regexHeader
-            .replace(/\./g, '+')
-            .replace(/e/g, '')
-            .replace(/ /g, '\\s*')
-            .replace(/\*\+/g, '*');
-
-        let inputStringProcessed = inputString.replace(/e/g, '');
-
-        let regex = new RegExp(`^${regexPattern}$`);
-
-        return regex.test(inputStringProcessed);
     };
+
 
     const pause = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
@@ -106,6 +116,7 @@ export default function Page() {
             setNodes(tempNodes);
             await pause(delay);
             setNodes([...nodesCopy]);
+
 
             const char = stringInput[i];
             let nextNode = null;
@@ -138,6 +149,7 @@ export default function Page() {
             }
             return node;
         });
+        setAnimationLastIndex(currNode);
         setNodes(tempNodes);
         await pause(delay);
         setNodes([...nodesCopy]);
@@ -148,6 +160,13 @@ export default function Page() {
         inputRef.current.blur();
     };
 
+
+    const setAnInput = (e)=> {
+        setAnimationLastIndex(0);
+        setStringInput(e.target.value.toLowerCase());
+        setInputMessageIndex(null);
+    }
+    
     // watchers
     useEffect(() => {
         setInputMessageIndex(null);
@@ -158,12 +177,20 @@ export default function Page() {
             setInputMessageIndex(0);
             return;
         }
-        if (isValidRegex(stringInput)) {
-            setInputMessageIndex(1);
-        } else {
-            setInputMessageIndex(2);
+        if (!isValidStringFromSigma(stringInput)) {
+            setInputMessageIndex(3);
+            return;
         }
-    }, [stringInput, regexHeader]);
+        if (animationLastIndex && isValidRegex(stringInput)) {
+            setInputMessageIndex(1);
+            return;
+        } 
+        if (animationLastIndex && !isValidRegex(stringInput)) {
+            setInputMessageIndex(2);
+            return;
+        } 
+    }, [animationLastIndex, stringInput, regexHeader]);
+
 
     // created
     useEffect(() => {
@@ -212,9 +239,7 @@ export default function Page() {
                         <div className="grow h-[50px] border flex items-stretch gap-3 pl-5 pr-2 py-2 rounded-full bg-gray-50">
                             <input
                                 ref={inputRef}
-                                onChange={(e) =>
-                                    setStringInput(e.target.value.toLowerCase())
-                                }
+                                onChange={setAnInput}
                                 onKeyDown={(e) => {
                                     if (e.key === 'Enter') {
                                         closeKeyboard();
@@ -237,10 +262,11 @@ export default function Page() {
                                             closeKeyboard();
                                             handleAnimate();
                                         }}
-                                        className={`flex items-center gap-1 bg-sky-500 text-white px-2 rounded-full ${disableAnimateInput || disableAnimationButton ? 'cursor-not-allowed' : ''}`}
+                                        className={`flex items-center gap-1 bg-sky-500 text-white px-2 rounded-full ${disableAnimateInput || disableAnimationButton || !isValidStringFromSigma(stringInput) ? 'cursor-not-allowed' : ''}`}
                                         disabled={
                                             disableAnimateInput ||
-                                            disableAnimationButton
+                                            disableAnimationButton ||
+                                            !isValidStringFromSigma(stringInput)
                                         }
                                     >
                                         <Icon
