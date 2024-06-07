@@ -202,36 +202,38 @@ export default function Page() {
         }
     }, [animationLastIndex, stringInput, regexHeader]);
 
-    // useEffect(() => {
-    //     const handleClickOutside = (e: MouseEvent) => {
-    //         if (
-    //             sidePanelRef.current &&
-    //             !sidePanelRef.current.contains(e.target as Node) &&
-    //             window.innerWidth < laptopScreen
-    //         ) {
-    //             setShowSidePanel(false);
-    //         }
-    //     };
-    //     document.addEventListener('click', handleClickOutside);
-    //     return () => document.removeEventListener('click', handleClickOutside);
-    // }, []);
-
     useEffect(() => {
-        const handleResize = () => {
-            setBlinkSidePanel(
-                regexHeader.length === 0 && window.innerWidth < laptopScreen
-            );
-            if (window.innerWidth >= laptopScreen) {
-                setShowSidePanel(true);
-                setShowLegendPanel(true);
-            } else {
+        const handleClickOutside = (e: MouseEvent) => {
+            if (
+                sidePanelRef.current &&
+                !sidePanelRef.current.contains(e.target as Node) &&
+                window.innerWidth < laptopScreen
+            ) {
                 setShowSidePanel(false);
-                setShowLegendPanel(false);
             }
         };
-        handleResize();
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
+        document.addEventListener('click', handleClickOutside);
+        return () => document.removeEventListener('click', handleClickOutside);
+    }, []);
+
+    useEffect(() => {
+        // const handleResize = () => {
+        //     console.log('sheldon gwapo');
+
+        // };
+        // handleResize();
+        // window.addEventListener('resize', handleResize);
+        // return () => window.removeEventListener('resize', handleResize);
+        setBlinkSidePanel(
+            regexHeader.length === 0 && window.innerWidth < laptopScreen
+        );
+        if (window.innerWidth >= laptopScreen) {
+            setShowSidePanel(true);
+            setShowLegendPanel(true);
+        } else {
+            setShowSidePanel(false);
+            setShowLegendPanel(false);
+        }
     }, []);
 
     const runDemo = () => {

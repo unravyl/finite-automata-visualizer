@@ -196,6 +196,7 @@ function SidePanel(props: PropsInterface) {
     };
 
     const handleInputChange = (e) => {
+        console.log('heree');
         const input = e.target.value.toLowerCase();
         if (selectedApp === 0) {
             const error = validateRegex(input);
