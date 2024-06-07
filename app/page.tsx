@@ -202,20 +202,19 @@ export default function Page() {
         }
     }, [animationLastIndex, stringInput, regexHeader]);
 
-    // created
-    // useEffect(() => {
-    //     const handleClickOutside = (e: MouseEvent) => {
-    //         if (
-    //             sidePanelRef.current &&
-    //             !sidePanelRef.current.contains(e.target as Node) &&
-    //             window.innerWidth < laptopScreen
-    //         ) {
-    //             setShowSidePanel(false);
-    //         }
-    //     };
-    //     document.addEventListener('click', handleClickOutside);
-    //     return () => document.removeEventListener('click', handleClickOutside);
-    // }, []);
+    useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+            if (
+                sidePanelRef.current &&
+                !sidePanelRef.current.contains(e.target as Node) &&
+                window.innerWidth < laptopScreen
+            ) {
+                setShowSidePanel(false);
+            }
+        };
+        document.addEventListener('click', handleClickOutside);
+        return () => document.removeEventListener('click', handleClickOutside);
+    }, []);
 
     useEffect(() => {
         const handleResize = () => {
