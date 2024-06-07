@@ -521,7 +521,7 @@ export default function Page() {
                         </div>
                     </div>
                 </section>
-                <section ref={sidePanelRef}>
+                <section>
                     <button
                         id="side-panel-button"
                         className={`text-gray-800 absolute z-20 ml-2 mt-2.5 top-0 left-0 p-1 rounded-md hover:bg-black/[.05] transition duration-200 ${blinkSidePanel ? 'blink' : ''}`}
