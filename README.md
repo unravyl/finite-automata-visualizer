@@ -31,6 +31,7 @@ https://github.com/maxellmilay/finite-automata-visualizer/assets/82187749/d998cd
 ## Techstack
 
 -   NextJS
+-   Reactflow
 
 ## Contributors
 
