@@ -84,7 +84,7 @@ export default function Page() {
     const isValidStringFromSigma = (stringInput: string): boolean => {
         // Define the regular expression pattern to match only 'a' and 'b'
         const pattern = /^[ab]*$/;
-    
+
         // Test the stringInput against the pattern
         return pattern.test(stringInput);
     };
@@ -133,7 +133,9 @@ export default function Page() {
             const tempLinks = links.map((link) => {
                 if (
                     link.source.id === currNode &&
-                    (link.transition === char || link.transition === 'a,b' || link.transition === 'b,a')
+                    (link.transition === char ||
+                        link.transition === 'a,b' ||
+                        link.transition === 'b,a')
                 ) {
                     nextNode = link.target.id;
                     return {
@@ -201,19 +203,19 @@ export default function Page() {
     }, [animationLastIndex, stringInput, regexHeader]);
 
     // created
-    useEffect(() => {
-        const handleClickOutside = (e: MouseEvent) => {
-            if (
-                sidePanelRef.current &&
-                !sidePanelRef.current.contains(e.target as Node) &&
-                window.innerWidth < laptopScreen
-            ) {
-                setShowSidePanel(false);
-            }
-        };
-        document.addEventListener('click', handleClickOutside);
-        return () => document.removeEventListener('click', handleClickOutside);
-    }, []);
+    // useEffect(() => {
+    //     const handleClickOutside = (e: MouseEvent) => {
+    //         if (
+    //             sidePanelRef.current &&
+    //             !sidePanelRef.current.contains(e.target as Node) &&
+    //             window.innerWidth < laptopScreen
+    //         ) {
+    //             setShowSidePanel(false);
+    //         }
+    //     };
+    //     document.addEventListener('click', handleClickOutside);
+    //     return () => document.removeEventListener('click', handleClickOutside);
+    // }, []);
 
     useEffect(() => {
         const handleResize = () => {
