@@ -38,7 +38,14 @@ interface PropsInterface {
 function SidePanel(props: PropsInterface) {
     const { fetchDfaFromIdb, addDfaToIdb, getDfaFromIdb, deleteAllDfaFromIdb } =
         useDfaStore();
-    const { show, setNodes, setLinks, setRegexHeader, demoString, isAnimating } = props;
+    const {
+        show,
+        setNodes,
+        setLinks,
+        setRegexHeader,
+        demoString,
+        isAnimating,
+    } = props;
     const searchParams = useSearchParams();
     const paramsRegex = searchParams.get('regex');
 
@@ -104,7 +111,9 @@ function SidePanel(props: PropsInterface) {
     const disableInputButton =
         inputString.trim().length === 0 ||
         (selectedApp === 1 && (!inputString || !isInputValid)) ||
-        (selectedApp === 0 && (!inputString || !isInputValid || !!regexError)) || isAnimating;
+        (selectedApp === 0 &&
+            (!inputString || !isInputValid || !!regexError)) ||
+        isAnimating;
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -336,43 +345,9 @@ function SidePanel(props: PropsInterface) {
                                 <Icon path={mdiChevronDown} size={1} />
                             </button> */}
                         </h1>
-                        <div className="relative">
-                            {showAppsDropdown && (
-                                <div
-                                    ref={dropRef}
-                                    className="absolute w-full bg-white p-2"
-                                >
-                                    {Object.keys(apps).map(
-                                        (app) =>
-                                            parseInt(app) !== selectedApp && (
-                                                <button
-                                                    key={app}
-                                                    onClick={() => {
-                                                        setSelectedApp(
-                                                            parseInt(app)
-                                                        );
-                                                        setShowAppsDropdown(
-                                                            false
-                                                        );
-                                                    }}
-                                                    className="flex gap-2 items-center p-2 rounded-md w-full hover:bg-gray-100"
-                                                >
-                                                    <Icon
-                                                        path={apps[app].icon}
-                                                        size={1}
-                                                    />
-                                                    <span>
-                                                        {apps[app].title}
-                                                    </span>
-                                                </button>
-                                            )
-                                    )}
-                                </div>
-                            )}
-                        </div>
                     </div>
                     {selectedApp === 0 && (
-                        <div className="relative z-[-1]" >
+                        <div className="">
                             <form
                                 onSubmit={handleSubmit}
                                 className="flex items-stretch"
@@ -452,7 +427,6 @@ function SidePanel(props: PropsInterface) {
                                     <div
                                         className="flex flex-col gap-1 w-full"
                                         key={`${index}-${item.title}`}
-                                       
                                     >
                                         <h1 className="text-xs text-sky-500">
                                             {item.title}
