@@ -67,7 +67,7 @@ export default function Page() {
             color: 'yellow',
         },
         {
-            message: 'Alphabhet a and b only are allowed.',
+            message: 'Alphabhet a, b, and e only are allowed.',
             icon: mdiCloseCircleOutline,
             color: 'red',
         },
@@ -83,7 +83,7 @@ export default function Page() {
 
     const isValidStringFromSigma = (stringInput: string): boolean => {
         // Define the regular expression pattern to match only 'a' and 'b'
-        const pattern = /^[ab]*$/;
+        const pattern = /^[abe]*$/;
 
         // Test the stringInput against the pattern
         return pattern.test(stringInput);
@@ -105,9 +105,17 @@ export default function Page() {
     const pause = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
     const handleAnimate = async () => {
+        console.log('animating');
         if (!isValidStringInput(stringInput)) {
             return;
         }
+
+        if (stringInput === 'e'){
+            console.log(nodes, 'nodes');
+            setAnimationLastIndex(1);
+            return;
+        }
+
         setIsAnimating(true);
         const nodesCopy = [...nodes];
         const linksCopy = [...links];
